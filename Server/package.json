@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Smart hotel app server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaorHadadLD/SHS-SmartHotel.git"
+  },
+  "author": "Raphael Benoliel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaorHadadLD/SHS-SmartHotel/issues"
+  },
+  "homepage": "https://github.com/MaorHadadLD/SHS-SmartHotel#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
