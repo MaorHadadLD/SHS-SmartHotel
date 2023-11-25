@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
   const [showStaffLogin, setShowStaffLogin] = useState(false);
   const [employeeNumber, setEmployeeNumber] = useState('');
   const [password, setPassword] = useState('');
+  const navigation = useNavigation();
 
   const handleGuestLogin = () => {
     // Handle Guest Login Logic
+    navigation.navigate('HotelSelection')
+    
   };
 
   const handleStaffLogin = () => {
