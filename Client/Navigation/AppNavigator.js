@@ -12,7 +12,7 @@ export default function AppNavigator() {
    <NavigationContainer>
         <Stack.Navigator initialRouteName="SHS">
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Hotel Selection" component={HotelSelection} />
+        <Stack.Screen name="HotelSelection" component={HotelSelection} />
         </Stack.Navigator>
    </NavigationContainer>
   )
