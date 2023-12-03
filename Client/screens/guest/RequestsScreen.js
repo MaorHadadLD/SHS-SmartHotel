@@ -1,13 +1,27 @@
 import { FlatList } from "react-native";
-import {React} from "react"
 import {ClassDpCategories} from "../../data/ClassDpData";
 import DpClassCategoryGridTil from "../../components/DpClassCategoryGridTil";
 
-function renderClassDpCategoryItem(itemData) {
-    return <DpClassCategoryGridTil title={itemData.item.title} color={itemData.item.color}/>;
-}
 
-function RequestsScreen() {
+
+function RequestsScreen({ navigation }) {
+
+    function renderClassDpCategoryItem(itemData) {
+
+        function pressHandler() {
+            navigation.navigate('RequestsMn', {
+                categoyId: itemData.item.id,
+            });
+        }
+    
+        return <DpClassCategoryGridTil 
+        title={itemData.item.title} 
+        color={itemData.item.color} 
+        onPress={pressHandler}
+        // navigation={navigation}
+        />;
+    }
+
     return (
         <FlatList 
         data={ClassDpCategories}
