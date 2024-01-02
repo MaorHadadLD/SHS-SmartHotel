@@ -1,5 +1,5 @@
 import ClassDpCategory from "../models/ClassDpCategory";
-import Request from "../models/Request";
+import Request from "../models/ClassRequest";
 
 export const ClassDpCategories = [
     new ClassDpCategory('c1','Reception','#f5428d'),
