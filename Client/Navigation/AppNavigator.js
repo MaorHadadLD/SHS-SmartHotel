@@ -17,7 +17,8 @@ export default function AppNavigator() {
       <StatusBar style='auto' />
       <NavigationContainer>
           <Stack.Navigator initialRouteName="SHS">
-            {/* <Stack.Screen name="Login" component={Login} /> */}
+            { <Stack.Screen name="Login" component={Login} /> }
+            { <Stack.Screen name="HotelSelection" component={HotelSelection} /> }
             <Stack.Screen name="RequestsScreen" 
             component={RequestsScreen}
             options={{
@@ -25,11 +26,9 @@ export default function AppNavigator() {
             headerStyle: {backgroundColor: 'green'},
             headerTintColor: 'white',
             contentStyle: {backgroundColor: 'white'}
-
           }}
           />
           { <Stack.Screen name="RequestsMnOverview" component={RequestsMnOverview} /> }
-            {/* <Stack.Screen name="HotelSelection" component={HotelSelection} /> */}
         </Stack.Navigator>
       </NavigationContainer>
    </>
