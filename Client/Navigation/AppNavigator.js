@@ -28,7 +28,7 @@ export default function AppNavigator() {
 
           }}
           />
-          { <Stack.Screen name="RequestsMn" component={RequestsMnOverview} /> }
+          { <Stack.Screen name="RequestsMnOverview" component={RequestsMnOverview} /> }
             {/* <Stack.Screen name="HotelSelection" component={HotelSelection} /> */}
         </Stack.Navigator>
       </NavigationContainer>

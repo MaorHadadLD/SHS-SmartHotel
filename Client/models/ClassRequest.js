@@ -1,7 +1,7 @@
 class ClassRequest {
     constructor(id, departmentId, requestNotice) {
       this.id = id;
-      this.categories = departmentId;
+      this.departmentId = departmentId;
       this.requestNotice = requestNotice;
     }
   }

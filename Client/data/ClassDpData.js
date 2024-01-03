@@ -1,11 +1,13 @@
 import ClassDpCategory from "../models/ClassDpCategory";
 import Request from "../models/ClassRequest";
 
+//This page contains the data of the departments in the hotel and the data of the requests
+
 export const ClassDpCategories = [
-    new ClassDpCategory('c1','Reception','#f5428d'),
-    new ClassDpCategory('c2','Room Service','#f5a442'),
-    new ClassDpCategory('c3','Cleaning Room','#368dff'),
-    new ClassDpCategory('c4','Pool Bar','#yellow'),
+    new ClassDpCategory('c1','Reception','white'),
+    new ClassDpCategory('c2','Room Service','white'),
+    new ClassDpCategory('c3','Cleaning Room','white'),
+    new ClassDpCategory('c4','Pool Bar','white'),
 ];
 
 export const Requests = [
