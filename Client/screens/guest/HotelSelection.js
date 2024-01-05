@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
 import React from 'react'
 import { HotelModel } from '../../data/HotelData';
 import HotelItem from '../../components/HotelItem';
@@ -11,7 +11,7 @@ function HotelSelection({ navigation }) {
     }
 
     return <HotelItem
-      name={itemData.item.name}
+      hotelName={itemData.item.hotelName}
       city={itemData.item.city}
       onPress={pressHandler}
     />;

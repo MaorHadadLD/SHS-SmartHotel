@@ -1,6 +1,6 @@
 import { Pressable, View, Text, StyleSheet, Platform } from "react-native";
 
-function HotelItem({hotelName, color, onPress}) {
+function HotelItem({hotelName, city, color, onPress}) {
 
     return (
         <View style={styles.gridItem}>
@@ -11,6 +11,7 @@ function HotelItem({hotelName, color, onPress}) {
 
                 <View style={[styles.innerContainer, {backgroundColor: color}]}>
                     <Text style={styles.titel}>{hotelName}</Text>
+                    <Text style={styles.titel}>{city}</Text>
                 </View>
             </Pressable>
         </View>
