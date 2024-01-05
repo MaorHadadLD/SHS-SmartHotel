@@ -1,6 +1,6 @@
 import { Pressable, View, Text, StyleSheet, Platform } from "react-native";
 
-function HotelItem() {
+function HotelItem({hotelName, color, onPress}) {
 
     return (
         <View style={styles.gridItem}>
@@ -8,8 +8,9 @@ function HotelItem() {
                 pressed ? styles.buttonPressed : null,]}
                 onPress={onPress}
                 >
+
                 <View style={[styles.innerContainer, {backgroundColor: color}]}>
-                    <Text style={styles.name}>{name}</Text>
+                    <Text style={styles.titel}>{hotelName}</Text>
                 </View>
             </Pressable>
         </View>
@@ -45,7 +46,7 @@ const styles =StyleSheet.create({
         justifyContent: 'center',
         alignItems:'center'
     },
-    name: {
+    titel: {
         fontWeight: 'bold',
         fontSize: 18
     }

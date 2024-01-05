@@ -1,6 +1,6 @@
 class ClassHotel {
-    constructor(name, id, city){
-        this.name = name;
+    constructor(hotelName, id, city){
+        this.hotelName = hotelName;
         this.id = id;
         this.city = city;
     }
