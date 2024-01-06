@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Modal, TouchableOpacity, TouchableHighlight, Platform } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Modal, TouchableOpacity, Platform } from 'react-native';
 import { HotelModel } from '../../data/HotelData';
 import HotelItem from '../../components/HotelItem';
 
@@ -19,15 +19,11 @@ function HotelSelection({ navigation }) {
     });
   };
 
-  const renderClassHotelItem = ({ item }) => {
-    const Touchable = Platform.OS === 'ios' ? TouchableOpacity : TouchableHighlight;
-
-    return (
-      <Touchable onPress={() => handleSelectHotel(item)}>
-        <HotelItem hotelName={item.hotelName} city={item.city} />
-      </Touchable>
-    );
-  };
+  const renderClassHotelItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleSelectHotel(item)}>
+      <HotelItem hotelName={item.hotelName} city={item.city} />
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
