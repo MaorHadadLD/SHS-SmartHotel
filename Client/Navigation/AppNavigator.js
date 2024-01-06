@@ -6,8 +6,9 @@ import { StatusBar } from 'expo-status-bar';
 
 import Login from '../screens/Login';
 import HotelSelection from '../screens/guest/HotelSelection';
-import RequestsScreen from '../screens/guest/RequestsScreen';
+import HotelServicesScreen from '../screens/guest/HotelServicesScreen';
 import RequestsMnOverview from '../screens/guest/RequestsMnOverview';
+import ClinetMainMenu from '../screens/guest/ClientMainMenu';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,8 +20,9 @@ export default function AppNavigator() {
           <Stack.Navigator initialRouteName="SHS">
             { <Stack.Screen name="Login" component={Login} /> }
             { <Stack.Screen name="HotelSelection" component={HotelSelection} /> }
-            <Stack.Screen name="RequestsScreen" 
-            component={RequestsScreen}
+            { <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} /> }
+            <Stack.Screen name="HotelServicesScreen" 
+            component={HotelServicesScreen}
             options={{
             title: 'Departments menu',
             headerStyle: {backgroundColor: 'green'},

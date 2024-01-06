@@ -7,7 +7,7 @@ function HotelSelection({ navigation }) {
 
   function renderClassHotelItem(itemData) {
     function pressHandler() {
-      navigation.navigate('RequestsScreen');
+      navigation.navigate('ClientMainMenu');
     }
 
     return <HotelItem
