@@ -28,7 +28,8 @@ function ClientMainMenu({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Welcome to {selectedHotel ? selectedHotel.hotelName : 'your hotel'}</Text>
+      <Text style={styles.header}> Welcome to {selectedHotel ? `${selectedHotel.hotelName}, ${selectedHotel.city}` : 'your hotel'} </Text>
+
 
       <FlatList
         data={menuItems}
