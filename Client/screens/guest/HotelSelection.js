@@ -7,7 +7,13 @@ function HotelSelection({ navigation }) {
 
   function renderClassHotelItem(itemData) {
     function pressHandler() {
-      navigation.navigate('ClientMainMenu');
+      navigation.navigate('ClientMainMenu', {
+        selectedHotel: {
+          hotelName: itemData.item.hotelName,
+          city: itemData.item.city,
+          // Add other relevant data if needed
+        }
+      });
     }
 
     return <HotelItem
@@ -27,4 +33,4 @@ function HotelSelection({ navigation }) {
   );
 };
 
-export default HotelSelection
+export default HotelSelection;

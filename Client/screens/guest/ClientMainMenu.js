@@ -1,37 +1,41 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 
-// Importing hotelName from the appropriate location
-import { hotelName } from "../../components/HotelItem";
+function ClientMainMenu({ navigation, route }) {
 
-function ClientMainMenu({ navigation }) {
+  const { selectedHotel } = route.params || {};
 
   const handleNavigate = (screen) => {
-    navigation.navigate(screen);
+    navigation.navigate(screen, { selectedHotel });
   };
 
   // Menu items data
   const menuItems = [
-    { title: "Hotel Information", screen: "HotelInfoScreen" },
-    { title: "Room Key", screen: "RoomKeyScreen" },
-    { title: "Hotel Services", screen: "HotelServicesScreen" },
-    { title: "Nearby Activities", screen: "NearbyActivitiesScreen" },
+    { id: '1', title: "Hotel Information", screen: "HotelInfoScreen" },
+    { id: '2', title: "Room Key", screen: "RoomKeyScreen" },
+    { id: '3', title: "Hotel Services", screen: "HotelServicesScreen" },
+    { id: '4', title: "Nearby Activities", screen: "NearbyActivitiesScreen" },
   ];
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.menuItem}
+      onPress={() => handleNavigate(item.screen)}
+    >
+      <Text style={styles.menuItemText}>{item.title}</Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Welcome to {hotelName}</Text>
+      <Text style={styles.header}>Welcome to {selectedHotel ? selectedHotel.hotelName : 'your hotel'}</Text>
 
-      {/* Render menu items */}
-      {menuItems.map((item, index) => (
-        <TouchableOpacity
-          key={index}
-          style={styles.menuItem}
-          onPress={() => handleNavigate(item.screen)}
-        >
-          <Text style={styles.menuItemText}>{item.title}</Text>
-        </TouchableOpacity>
-      ))}
+      <FlatList
+        data={menuItems}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={styles.flatListContainer}
+      />
     </View>
   );
 }
@@ -45,6 +49,9 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     marginBottom: 20,
+  },
+  flatListContainer: {
+    paddingBottom: 20,
   },
   menuItem: {
     height: 80,
