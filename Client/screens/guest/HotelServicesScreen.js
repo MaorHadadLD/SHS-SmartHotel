@@ -8,7 +8,7 @@ import DpClassCategoryGridTil from "../../components/DpClassCategoryGridTil";
 
 */
 
-function RequestsScreen({ navigation }) {
+function HotelServicesScreen({ navigation }) {
 
     function renderClassDpCategoryItem(itemData) {
 
@@ -36,4 +36,4 @@ function RequestsScreen({ navigation }) {
     );
 };
 
-export default RequestsScreen;
+export default HotelServicesScreen;

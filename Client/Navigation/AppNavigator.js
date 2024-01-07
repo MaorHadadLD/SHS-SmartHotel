@@ -9,6 +9,8 @@ import HotelSelection from '../screens/guest/HotelSelection';
 import HotelServicesScreen from '../screens/guest/HotelServicesScreen';
 import RequestsMnOverview from '../screens/guest/RequestsMnOverview';
 import ClinetMainMenu from '../screens/guest/ClientMainMenu';
+import HotelInfoScreen from '../screens/guest/HotelInfoScreen';
+import SpaScreen from '../screens/guest/SpaScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +23,7 @@ export default function AppNavigator() {
             { <Stack.Screen name="Login" component={Login} /> }
             { <Stack.Screen name="HotelSelection" component={HotelSelection} /> }
             { <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} /> }
+            { <Stack.Screen name="HotelInfoScreen" component={HotelInfoScreen} /> }
             <Stack.Screen name="HotelServicesScreen" 
             component={HotelServicesScreen}
             options={{
@@ -30,6 +33,7 @@ export default function AppNavigator() {
             contentStyle: {backgroundColor: 'white'}
           }}
           />
+          { <Stack.Screen name="SpaScreen" component={SpaScreen} /> }
           { <Stack.Screen name="RequestsMnOverview" component={RequestsMnOverview} /> }
         </Stack.Navigator>
       </NavigationContainer>

@@ -9,7 +9,6 @@ export const ClassDpCategories = [
     new ClassDpCategory('c3','Cleaning Room','white'),
     new ClassDpCategory('c4','Pool Bar','white'),
     new ClassDpCategory('c5','Dining Room','white'),
-    new ClassDpCategory('c6','Spa','white'),
 ];
 
 export const Requests = [

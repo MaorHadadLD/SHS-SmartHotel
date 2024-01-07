@@ -9,13 +9,14 @@ function ClientMainMenu({ navigation, route }) {
     navigation.navigate(screen, { selectedHotel });
   };
 
-  // Menu items data
+  // Menu items data Spa
   const menuItems = [
     { id: '1', title: "Hotel Information", screen: "HotelInfoScreen" },
     { id: '2', title: "Room Key", screen: "RoomKeyScreen" },
     { id: '3', title: "Hotel Services", screen: "HotelServicesScreen" },
     { id: '4', title: "Nearby Activities", screen: "NearbyActivitiesScreen" },
-    { id: '5', title: "check out", screen: "checkOutScreen" },
+    { id: '5', title: "Spa", screen: "SpaScreen" },
+    { id: '6', title: "check out", screen: "checkOutScreen" },
   ];
 
   const renderItem = ({ item }) => (
