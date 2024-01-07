@@ -15,6 +15,7 @@ function ClientMainMenu({ navigation, route }) {
     { id: '2', title: "Room Key", screen: "RoomKeyScreen" },
     { id: '3', title: "Hotel Services", screen: "HotelServicesScreen" },
     { id: '4', title: "Nearby Activities", screen: "NearbyActivitiesScreen" },
+    { id: '5', title: "check out", screen: "checkOutScreen" },
   ];
 
   const renderItem = ({ item }) => (
