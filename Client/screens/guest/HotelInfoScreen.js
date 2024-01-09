@@ -1,6 +1,6 @@
 // HotelInfoScreen.js
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 
 const HotelInfoScreen = ({ route }) => {
   const {
@@ -29,7 +29,7 @@ const HotelInfoScreen = ({ route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.heading}>Hotel Information - {hotelName}</Text>
 
       <View style={styles.infoContainer}>
@@ -93,7 +93,7 @@ const HotelInfoScreen = ({ route }) => {
       </View>
 
       {/* Repeat for other properties */}
-    </View>
+    </ScrollView>
   );
 };
 
