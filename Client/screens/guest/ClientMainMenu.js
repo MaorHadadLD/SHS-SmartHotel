@@ -2,12 +2,13 @@ import React from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 
 function ClientMainMenu({ navigation, route }) {
-
   const { selectedHotel } = route.params || {};
+  const { hotelName, city } = selectedHotel || {};
 
   const handleNavigate = (screen) => {
     navigation.navigate(screen, { selectedHotel });
   };
+  
 
   // Menu items data Spa
   const menuItems = [
@@ -30,8 +31,7 @@ function ClientMainMenu({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}> Welcome to {selectedHotel ? `${selectedHotel.hotelName}, ${selectedHotel.city}` : 'your hotel'} </Text>
-
+      <Text style={styles.header}> Welcome to {hotelName ? `${hotelName}, ${city}` : 'your hotel'} </Text>
 
       <FlatList
         data={menuItems}

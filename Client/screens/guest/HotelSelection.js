@@ -14,7 +14,20 @@ function HotelSelection({ navigation }) {
       selectedHotel: {
         hotelName: item.hotelName,
         city: item.city,
-        // Add other relevant data if needed
+        //I want the information shown below to be displayed on the "Hotel Information" screen
+        breakfastInfo: item.breakfastInfo,
+        dinnerInfo: item.dinnerInfo,
+        lobbyBarInfo: item.lobbyBarInfo,
+        spaInfo: item.spaInfo,
+        wifiInfo: item.wifiInfo,
+        gymInfo: item.gymInfo,
+        entertainmentInfo: item.entertainmentInfo,
+        poolInfo: item.poolInfo,
+        PoolBarInfo: item.PoolBarInfo,
+        SynagogueInfo: item.SynagogueInfo,
+        KeyOnSaturday: item.KeyOnSaturday,
+        checkOutInfo: item.checkOutInfo,
+        // up to here
       },
     });
   };
@@ -36,7 +49,7 @@ function HotelSelection({ navigation }) {
           <Text style={styles.modalTitle}>Hotel List</Text>
           <FlatList
             data={HotelModel}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.hotelId}
             renderItem={renderClassHotelItem}
             numColumns={1}
             key={(item, index) => index.toString()}
