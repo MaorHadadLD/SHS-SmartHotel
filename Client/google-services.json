@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "886248898529",
+    "project_id": "smarthotel-a2786",
+    "storage_bucket": "smarthotel-a2786.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886248898529:android:6ac74b22af99377bca1ca0",
+        "android_client_info": {
+          "package_name": "com.shs.smarthotel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqHwm3IjdA9WEl2RuNB4HWgv7DSiUgTf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
