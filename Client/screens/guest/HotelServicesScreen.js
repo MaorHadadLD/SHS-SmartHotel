@@ -1,40 +1,38 @@
-import { FlatList } from "react-native";
-import {ClassDpCategories} from "../../data/ClassDpData";
-import DpClassCategoryGridTil from "../../components/DpClassCategoryGridTil";
-
-
-/*
-    On this page, the names of the hotel's departments will appear to the customer.
-     After the customer clicks on a certain department, he will be transferred to the request page of the department he selected.
-
-*/
+// Import necessary modules from react-native
+import React from 'react';
+import { FlatList } from 'react-native';
+import { ClassDpCategories } from '../../data/ClassDpData';
+import DpClassCategoryGridTil from '../../components/DpClassCategoryGridTil';
 
 function HotelServicesScreen({ navigation }) {
-
-    function renderClassDpCategoryItem(itemData) {
-
-        function pressHandler() {
-            navigation.navigate('RequestsMnOverview', {
-                departmentId: itemData.item.id,
-            });
-        }
-    
-        return <DpClassCategoryGridTil 
-            title={itemData.item.title} 
-            color={itemData.item.color} 
-            onPress={pressHandler}
-            // navigation={navigation}
-        />;
+  function renderClassDpCategoryItem(itemData) {
+    function pressHandler() {
+      if (itemData.item.title === 'Dining Room') {
+        navigation.navigate('DiningRoomScreen');
+      } else {
+        navigation.navigate('RequestsMnOverview', {
+          departmentId: itemData.item.id,
+        });
+      }
     }
 
     return (
-        <FlatList 
-        data={ClassDpCategories}
-        keyExtractor={(item) => item.id}
-        renderItem={renderClassDpCategoryItem} 
-        numColumns={2}
-        />
+      <DpClassCategoryGridTil
+        title={itemData.item.title}
+        color={itemData.item.color}
+        onPress={pressHandler}
+      />
     );
-};
+  }
+
+  return (
+    <FlatList
+      data={ClassDpCategories}
+      keyExtractor={(item) => item.id}
+      renderItem={renderClassDpCategoryItem}
+      numColumns={2}
+    />
+  );
+}
 
 export default HotelServicesScreen;
