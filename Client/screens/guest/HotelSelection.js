@@ -14,7 +14,6 @@ function HotelSelection({ navigation }) {
       selectedHotel: {
         hotelName: item.hotelName,
         city: item.city,
-        //I want the information shown below to be displayed on the "Hotel Information" screen
         breakfastInfo: item.breakfastInfo,
         dinnerInfo: item.dinnerInfo,
         lobbyBarInfo: item.lobbyBarInfo,
@@ -27,7 +26,6 @@ function HotelSelection({ navigation }) {
         SynagogueInfo: item.SynagogueInfo,
         KeyOnSaturday: item.KeyOnSaturday,
         checkOutInfo: item.checkOutInfo,
-        // up to here
       },
     });
   };

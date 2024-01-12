@@ -1,19 +1,21 @@
-const express = require('express')
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const app = express()
+const app = express();
 
-app.use(express.json())
+// Use body-parser middleware with a specified limit
+app.use(bodyParser.json({ limit: '50mb' }));
 
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 8000;
 app.listen(port, () => {
-    console.log(`app is listen to ${port}`)
-})
+    console.log(`app is listening on ${port}`);
+});
 
 app.get('/login', async (req, res) => {
-    console.log('login')
-    res.send("your'e logged in")
-})
+    console.log('login');
+    res.send("you're logged in");
+});
 
 app.get('/*', async (req, res) => {
-    res.send('SHS server')
-})
+    res.send('SHS server');
+});

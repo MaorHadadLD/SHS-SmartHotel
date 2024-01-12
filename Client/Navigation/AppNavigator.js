@@ -11,6 +11,7 @@ import RequestsMnOverview from '../screens/guest/RequestsMnOverview';
 import ClinetMainMenu from '../screens/guest/ClientMainMenu';
 import HotelInfoScreen from '../screens/guest/HotelInfoScreen';
 import SpaScreen from '../screens/guest/SpaScreen';
+import DiningRoomScreen from '../screens/guest/DiningRoomSceern'
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,7 @@ export default function AppNavigator() {
           />
           { <Stack.Screen name="SpaScreen" component={SpaScreen} /> }
           { <Stack.Screen name="RequestsMnOverview" component={RequestsMnOverview} /> }
+          { <Stack.Screen name="DiningRoomScreen" component={DiningRoomScreen} /> }
         </Stack.Navigator>
       </NavigationContainer>
    </>

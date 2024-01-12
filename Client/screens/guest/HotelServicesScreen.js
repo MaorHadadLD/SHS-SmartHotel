@@ -2,6 +2,7 @@ import { FlatList } from "react-native";
 import {ClassDpCategories} from "../../data/ClassDpData";
 import DpClassCategoryGridTil from "../../components/DpClassCategoryGridTil";
 
+
 /*
     On this page, the names of the hotel's departments will appear to the customer.
      After the customer clicks on a certain department, he will be transferred to the request page of the department he selected.

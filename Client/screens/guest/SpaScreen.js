@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Modal, TextInput } from "react-native";
 import RNPickerSelect from 'react-native-picker-select';
+import { getDatabase, ref, push } from "firebase/database";
+import firebaseApp from "../../firebaseConfig";
+
+// firebaseApp
+
+
 
 function SpaScreen({ navigation, route }) {
   const { selectedHotel } = route.params || {};
@@ -20,12 +26,16 @@ function SpaScreen({ navigation, route }) {
     const slots = [];
     let currentTime = new Date();
     currentTime.setHours(spaOperatingHours.start, 0, 0, 0);
-
+  
     while (currentTime.getHours() < spaOperatingHours.end) {
-      slots.push(new Date(currentTime));
+      if (currentTime.getTime() !== selectedTime?.getTime()) {
+        slots.push({ time: new Date(currentTime), disabled: false });
+      } else {
+        slots.push({ time: new Date(currentTime), disabled: true });
+      }
       currentTime.setMinutes(currentTime.getMinutes() + massageDuration);
     }
-
+  
     setAvailableTimeSlots(slots);
   };
 
@@ -39,13 +49,18 @@ function SpaScreen({ navigation, route }) {
   };
 
   const handleBookingConfirmation = () => {
-    // Implement booking confirmation logic here
-    // You can send the selected options to a server, update state, etc.
-    console.log("Selected Time:", selectedTime);
-    console.log("Massage Type:", massageType);
-    console.log("Therapist Gender:", therapistGender);
-    console.log("Second Therapist Gender:", secondTherapistGender);
-    console.log("Additional Comments:", additionalComments);
+    // Create an object with appointment details
+    const appointmentData = {
+      time: selectedTime,
+      massageType: massageType,
+      therapistGender: therapistGender,
+      secondTherapistGender: secondTherapistGender,
+      additionalComments: additionalComments,
+    };
+
+    const db = getDatabase(firebaseApp);
+    const appointmentsRef = ref(db, 'appointments');
+    push(appointmentsRef, appointmentData);
 
     // Reset state and close the modal
     setModalVisible(false);
@@ -58,10 +73,14 @@ function SpaScreen({ navigation, route }) {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
-      style={styles.timeSlotItem}
-      onPress={() => handleTimeSlotSelection(item)}
+      style={[
+        styles.timeSlotItem,
+        item.disabled && { backgroundColor: '#ccc' }, // Change the background color for disabled slots
+      ]}
+      onPress={() => handleTimeSlotSelection(item.time)}
+      disabled={item.disabled} // Disable TouchableOpacity for disabled slots
     >
-      <Text style={styles.timeSlotText}>{item.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+      <Text style={styles.timeSlotText}>{item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
     </TouchableOpacity>
   );
 
@@ -71,7 +90,7 @@ function SpaScreen({ navigation, route }) {
 
       <FlatList
         data={availableTimeSlots}
-        keyExtractor={(item) => item.toString()}
+        keyExtractor={(item, index) => index.toString()}  // Ensure keys are unique
         renderItem={renderItem}
         contentContainerStyle={styles.flatListContainer}
       />
@@ -89,7 +108,7 @@ function SpaScreen({ navigation, route }) {
             <RNPickerSelect
               placeholder={{
                 label: 'Select Massage Type',
-                value: null,
+                value: 'Select Massage Type',
                 color: '#9EA0A4',
               }}
               items={[
@@ -104,7 +123,7 @@ function SpaScreen({ navigation, route }) {
             <RNPickerSelect
               placeholder={{
                 label: 'Select Therapist Gender',
-                value: null,
+                value: 'Select Therapist Gender',
                 color: '#9EA0A4',
               }}
               items={[
@@ -165,27 +184,30 @@ function SpaScreen({ navigation, route }) {
 }
 
 const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-      fontSize: 16,
-      paddingVertical: 12,
-      paddingHorizontal: 10,
-      borderWidth: 1,
-      borderColor: 'gray',
-      borderRadius: 4,
-      color: 'black',
-      paddingRight: 30,
-    },
-    inputAndroid: {
-      fontSize: 16,
-      paddingHorizontal: 10,
-      paddingVertical: 8,
-      borderWidth: 0.5,
-      borderColor: 'purple',
-      borderRadius: 8,
-      color: 'black',
-      paddingRight: 30,
-    },
-  });
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#007bff', // Use the borderColor from picker style
+    borderRadius: 4,
+    color: 'black',
+    paddingRight: 30,
+    backgroundColor: '#fafafa', // Use the backgroundColor from picker style
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: '#007bff', // Use the borderColor from picker style
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30,
+    backgroundColor: '#fafafa', // Use the backgroundColor from picker style
+  },
+});
+
 
 const styles = StyleSheet.create({
   container: {
