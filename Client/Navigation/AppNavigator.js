@@ -1,5 +1,4 @@
-// import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
@@ -17,32 +16,44 @@ import StaffHomeScreen from '../screens/staff/StaffHomeScreen';
 
 const Stack = createNativeStackNavigator();
 
+const GuestStack = () => (
+  <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="HotelSelection" component={HotelSelection} />
+        <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} />
+        <Stack.Screen name="HotelInfoScreen" component={HotelInfoScreen} />
+        <Stack.Screen name="HotelServicesScreen" 
+          component={HotelServicesScreen}
+          options={{
+          title: 'Departments menu',
+          headerStyle: { backgroundColor: 'green' },
+          headerTintColor: 'white',
+          contentStyle: { backgroundColor: 'white' }
+        }} />
+        <Stack.Screen name="SpaScreen" component={SpaScreen} />
+        <Stack.Screen name="RequestsMnOverview" component={RequestsMnOverview} />
+        <Stack.Screen name="DiningRoomScreen" component={DiningRoomScreen} />
+        <Stack.Screen name="RoomCleaningRequestScreen" component={RoomCleaningRequestScreen} />
+    </Stack.Navigator>
+);
+
+const StaffStack = () => (
+  <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="StaffHomeScreen" component={StaffHomeScreen} />
+  </Stack.Navigator>
+);
+
 export default function AppNavigator() {
+  // Replace the condition below with your logic to determine if the user is an employee or guest
+  const isEmployee = true;
+
   return (
     <>
       <StatusBar style='auto' />
       <NavigationContainer>
-          <Stack.Navigator initialRouteName="SHS">
-            { <Stack.Screen name="Login" component={Login} /> }
-            {<Stack.Screen name="StaffHomeScreen" component={StaffHomeScreen} />}
-            { <Stack.Screen name="HotelSelection" component={HotelSelection} /> }
-            { <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} /> }
-            { <Stack.Screen name="HotelInfoScreen" component={HotelInfoScreen} /> }
-            <Stack.Screen name="HotelServicesScreen" 
-            component={HotelServicesScreen}
-            options={{
-            title: 'Departments menu',
-            headerStyle: {backgroundColor: 'green'},
-            headerTintColor: 'white',
-            contentStyle: {backgroundColor: 'white'}
-          }}
-          />
-          { <Stack.Screen name="SpaScreen" component={SpaScreen} /> }
-          { <Stack.Screen name="RequestsMnOverview" component={RequestsMnOverview} /> }
-          { <Stack.Screen name="DiningRoomScreen" component={DiningRoomScreen} /> }
-          { <Stack.Screen name="RoomCleaningRequestScreen" component={RoomCleaningRequestScreen} /> }
-
-        </Stack.Navigator>
+        {isEmployee ? <StaffStack /> : <GuestStack />}
       </NavigationContainer>
-   </>
-  );}
+    </>
+  );
+}
