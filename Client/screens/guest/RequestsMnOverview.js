@@ -29,18 +29,18 @@ function RequestsMnOverview({ route }) {
       <FlatList
         data={displayedReq}
         keyExtractor={(item) => item.id}
-        renderItem={navigateToRoomCleaningScreen}
+        renderItem={renderRequestItem}
       />
 
       {/* Display the button to navigate to the Room Cleaning Request Screen */}
-      {/* {reqId === 'c3' && (
+      {reqId === 'c3' && (
         <TouchableOpacity
           style={styles.roomCleanButton}
           onPress={navigateToRoomCleaningScreen}
         >
           <Text style={styles.buttonText}>Make Room Cleaning Request</Text>
         </TouchableOpacity>
-      )} */}
+      )}
     </View>
   );
 }
