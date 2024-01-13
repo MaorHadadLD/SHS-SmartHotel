@@ -1,4 +1,6 @@
 import ClassHotel from "../models/ClassHotel";
+import { getDatabase, ref, set } from 'firebase/database';
+import app from '../firebaseConfig'; // Import your Firebase configuration
 
 /*
     On this page are the data for the hotels
@@ -159,3 +161,18 @@ export const HotelModel =[
         'Rooms are vacated on weekdays by 11:00 a.m., on Saturday by 2:00 p.m.'
         ),
 ];
+
+export const exportDataToFirebase = async () => {
+    const database = getDatabase(app);
+    const hotelsRef = ref(database, 'hotels');
+
+    try {
+        for (const hotel of HotelModel) {
+            await set(hotelsRef, hotel.id, { ...hotel });
+        }
+
+        console.log('Data exported to Firebase successfully');
+    } catch (error) {
+        console.error('Error exporting data to Firebase:', error);
+    }
+};

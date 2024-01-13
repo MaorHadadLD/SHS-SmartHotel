@@ -31,8 +31,8 @@ const StaffHomeScreen = ({ route, navigation }) => {
   );
 
   const filteredRequests = requests.filter((request) =>
-    route.params.roles.includes(request.role)
-  );
+  route.params && route.params.roles && route.params.roles.includes(request.role)
+);
 
   return (
     <View style={styles.container}>
