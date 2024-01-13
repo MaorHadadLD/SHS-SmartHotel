@@ -13,6 +13,7 @@ import HotelInfoScreen from '../screens/guest/HotelInfoScreen';
 import SpaScreen from '../screens/guest/SpaScreen';
 import DiningRoomScreen from '../screens/guest/DiningRoomSceern';
 import RoomCleaningRequestScreen from '../screens/guest/RoomCleaningRequestScreen';
+import StaffHomeScreen from '../screens/staff/StaffHomeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function AppNavigator() {
       <NavigationContainer>
           <Stack.Navigator initialRouteName="SHS">
             { <Stack.Screen name="Login" component={Login} /> }
+            {<Stack.Screen name="StaffHomeScreen" component={StaffHomeScreen} />}
             { <Stack.Screen name="HotelSelection" component={HotelSelection} /> }
             { <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} /> }
             { <Stack.Screen name="HotelInfoScreen" component={HotelInfoScreen} /> }

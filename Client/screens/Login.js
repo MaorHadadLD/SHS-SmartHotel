@@ -1,7 +1,10 @@
+import { getDatabase, ref, get} from 'firebase/database';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
+
+import firebaseApp from '../firebaseConfig';
 
 const Login = () => {
   const [showStaffLogin, setShowStaffLogin] = useState(false);
@@ -18,10 +21,39 @@ const Login = () => {
   const handleStaffLogin = () => {
     setShowStaffLogin(true);
   };
+  
+  const handleStaffSubmit = async () => {
+    try {
+      const db = getDatabase(firebaseApp);
 
-  const handleStaffSubmit = () => {
-    // Handle Staff Login Logic and navigation to StaffHomeScreen
+      // Check if the employee exists in the database
+      const employeeRef = ref(db, `staff/${employeeNumber}`);
+      const snapshot = await get(employeeRef);
+
+      if (snapshot.exists()) {
+        // Employee exists, check the password
+        const employeeData = snapshot.val();
+
+        // Ensure employeeData.password is a string before trimming
+        const trimmedPassword = String(employeeData.password).trim();
+
+        if (trimmedPassword === password.trim()) {
+          // Password is correct, navigate to StaffHomeScreen
+          navigation.navigate('StaffHomeScreen');
+        } else {
+          // Password is incorrect
+          console.error('Incorrect password');
+        }
+      } else {
+        // Employee does not exist
+        console.error('Employee does not exist');
+      }
+    } catch (error) {
+      console.error('Staff login error:', error.message);
+      // Handle login error, show error message, etc.
+    }
   };
+
   return (
     <View style={styles.container}>
     <Text style={styles.header}>Welcome to Smart Hotel</Text>
