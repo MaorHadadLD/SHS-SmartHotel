@@ -38,13 +38,24 @@ export const Requests = [
     new Request(
         'r5',
         ['c3'],
-        'The room is dirty',
+        'The room is not clean',
     ),
     new Request(
         'r6',
         ['c3'],
-        'No towels',
+        'No towels in the room.',
     ),
+    new Request(
+        'r9',
+        ['c3'],
+        'There are no toiletries for the shower.',
+    ),
+    new Request(
+        'r10',
+        ['c3'],
+        'No toilet paper.',
+    ),
+    
     // Pool Bar
     new Request(
         'r7',
