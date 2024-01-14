@@ -62,4 +62,16 @@ export const staffHomeStyles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
+  staffDetailsContainer: {
+    marginBottom: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#007bff',
+    borderRadius: 5,
+  },
+  staffDetailText: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: '#333',
+  },
 });

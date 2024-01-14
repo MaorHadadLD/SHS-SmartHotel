@@ -42,6 +42,7 @@ const Login = () => {
           navigation.navigate('StaffHomeScreen', {
             roles: [employeeData.role], // Pass the role as an array
             employeeName: employeeData.employeeName,
+            employeeNumber: employeeData.employeeNumber,
             role: employeeData.role,
             hotel: employeeData.hotel,
           });
