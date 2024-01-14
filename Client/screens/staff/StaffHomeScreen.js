@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
 
 const StaffHomeScreen = ({ route, navigation }) => {
   const [requests, setRequests] = useState([
@@ -9,7 +10,6 @@ const StaffHomeScreen = ({ route, navigation }) => {
   ]);
 
   const handleRequestStatusChange = (id, newStatus) => {
-    // Update the status of the request with the given id
     setRequests((prevRequests) =>
       prevRequests.map((request) =>
         request.id === id ? { ...request, status: newStatus } : request
@@ -18,53 +18,36 @@ const StaffHomeScreen = ({ route, navigation }) => {
   };
 
   const renderRequestItem = ({ item }) => (
-    <View style={styles.requestItem}>
-      <Text>{item.description}</Text>
-      <Text>Status: {item.status}</Text>
-      <TouchableOpacity onPress={() => handleRequestStatusChange(item.id, 'In Progress')}>
-        <Text>Start</Text>
+    <View style={staffHomeStyles.requestItem}>
+      <Text style={staffHomeStyles.requestItemText}>{item.description}</Text>
+      <TouchableOpacity style={staffHomeStyles.startCompleteButton} onPress={() => handleRequestStatusChange(item.id, 'In Progress')}>
+        <Text style={staffHomeStyles.startCompleteButtonText}>Start</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleRequestStatusChange(item.id, 'Done')}>
-        <Text>Complete</Text>
+      <TouchableOpacity style={staffHomeStyles.startCompleteButton} onPress={() => handleRequestStatusChange(item.id, 'Done')}>
+        <Text style={staffHomeStyles.startCompleteButtonText}>Complete</Text>
       </TouchableOpacity>
     </View>
   );
 
   const filteredRequests = requests.filter((request) =>
-  route.params && route.params.roles && route.params.roles.includes(request.role)
-);
+    route.params && route.params.roles && route.params.roles.includes(request.role)
+  );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Staff Dashboard</Text>
+    <View style={globalStyles.container}>
+      <Text style={globalStyles.header}>Staff Dashboard</Text>
       <FlatList
         data={filteredRequests}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderRequestItem}
       />
+      <View style={staffHomeStyles.staffDetailsContainer}>
+        <Text style={staffHomeStyles.detailText}>Name: {route.params.employeeName}</Text>
+        <Text style={staffHomeStyles.detailText}>Role: {route.params.role}</Text>
+        <Text style={staffHomeStyles.detailText}>Hotel: {route.params.hotel}</Text>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  requestItem: {
-    padding: 10,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 5,
-  },
-});
 
 export default StaffHomeScreen;

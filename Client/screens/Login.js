@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-
+import { globalStyles } from '../styles/globalStyle';
 import firebaseApp from '../firebaseConfig';
 
 const Login = () => {
@@ -39,7 +39,12 @@ const Login = () => {
 
         if (trimmedPassword === password.trim()) {
           // Password is correct, navigate to StaffHomeScreen
-          navigation.navigate('StaffHomeScreen');
+          navigation.navigate('StaffHomeScreen', {
+            roles: [employeeData.role], // Pass the role as an array
+            employeeName: employeeData.employeeName,
+            role: employeeData.role,
+            hotel: employeeData.hotel,
+          });
         } else {
           // Password is incorrect
           console.error('Incorrect password');
@@ -55,37 +60,37 @@ const Login = () => {
   };
 
   return (
-    <View style={styles.container}>
-    <Text style={styles.header}>Welcome to Smart Hotel</Text>
-    <TouchableOpacity style={styles.button} onPress={handleGuestLogin}>
-      <Text style={styles.buttonText}>Login as Guest</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.button} onPress={handleStaffLogin}>
-      <Text style={styles.buttonText}>Login as Staff</Text>
-    </TouchableOpacity>
-    {showStaffLogin && (
-      <View style={styles.staffLoginContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Employee Number"
-          value={employeeNumber}
-          onChangeText={(text) => setEmployeeNumber(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <TouchableOpacity style={styles.button} onPress={handleStaffSubmit}>
-          <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
-      </View>
-    )}
-    <StatusBar style="auto" />
-  </View>
-  )
+    <View style={globalStyles.container}>
+      <Text style={globalStyles.header}>Welcome to Smart Hotel</Text>
+      <TouchableOpacity style={globalStyles.button} onPress={handleGuestLogin}>
+        <Text style={globalStyles.buttonText}>Login as Guest</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={globalStyles.button} onPress={handleStaffLogin}>
+        <Text style={globalStyles.buttonText}>Login as Staff</Text>
+      </TouchableOpacity>
+      {showStaffLogin && (
+        <View style={globalStyles.staffLoginContainer}>
+          <TextInput
+            style={globalStyles.input}
+            placeholder="Employee Number"
+            value={employeeNumber}
+            onChangeText={(text) => setEmployeeNumber(text)}
+          />
+          <TextInput
+            style={globalStyles.input}
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+          <TouchableOpacity style={globalStyles.button} onPress={handleStaffSubmit}>
+            <Text style={globalStyles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      <StatusBar style="auto" />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
