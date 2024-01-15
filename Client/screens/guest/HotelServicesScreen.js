@@ -15,6 +15,9 @@ function HotelServicesScreen({ navigation }) {
       else if(itemData.item.title === 'Room Service'){
         navigation.navigate('RoomServiceRequestsScreen');
       }
+      else if(itemData.item.title === 'Pool Bar'){
+        navigation.navigate('PoolBarRequestScreen');
+      }
        else {
         navigation.navigate('RequestsMnOverview', {
           departmentId: itemData.item.id,
