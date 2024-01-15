@@ -10,9 +10,9 @@ import RequestsMnOverview from '../screens/guest/RequestsMnOverview';
 import ClinetMainMenu from '../screens/guest/ClientMainMenu';
 import HotelInfoScreen from '../screens/guest/HotelInfoScreen';
 import SpaScreen from '../screens/guest/SpaScreen';
-import DiningRoomScreen from '../screens/guest/DiningRoomSceern';
-import RoomCleaningRequestScreen from '../screens/guest/RoomCleaningRequestScreen';
-import RoomServiceRequestsScreen from '../screens/guest/RoomServiceRequestsScreen';
+import DiningRoomScreen from '../screens/guest/HotelServices/DiningRoomSceern';
+import RoomCleaningRequestScreen from '../screens/guest/HotelServices/RoomCleaningRequestScreen';
+import RoomServiceRequestsScreen from '../screens/guest/HotelServices/RoomServiceRequestsScreen';
 import StaffHomeScreen from '../screens/staff/StaffHomeScreen';
 
 const Stack = createNativeStackNavigator();

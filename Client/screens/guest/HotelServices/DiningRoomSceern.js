@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, FlatList, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
 import { getDatabase, ref, push } from 'firebase/database';
-import firebaseApp from '../../firebaseConfig';
+import firebaseApp from '../../../firebaseConfig';
 
 
 const hotelDishes = {
