@@ -9,7 +9,13 @@ function HotelServicesScreen({ navigation }) {
     function pressHandler() {
       if (itemData.item.title === 'Dining Room') {
         navigation.navigate('DiningRoomScreen');
-      } else {
+      }else if(itemData.item.title === 'Cleaning Room'){
+        navigation.navigate('RoomCleaningRequestScreen');
+      }
+      else if(itemData.item.title === 'Room Service'){
+        navigation.navigate('RoomServiceRequestsScreen');
+      }
+       else {
         navigation.navigate('RequestsMnOverview', {
           departmentId: itemData.item.id,
         });

@@ -33,14 +33,24 @@ function RequestsMnOverview({ route }) {
       />
 
       {/* Display the button to navigate to the Room Cleaning Request Screen */}
-      {reqId === 'c3' && (
+      {/* {reqId === 'c3' && (
         <TouchableOpacity
           style={styles.roomCleanButton}
           onPress={navigateToRoomCleaningScreen}
         >
           <Text style={styles.buttonText}>Make Room Cleaning Request</Text>
         </TouchableOpacity>
-      )}
+      )} */}
+
+      {/* Display the button to navigate to the Room Service Request Screen */}
+      {/* {reqId === 'c2' && (
+        <TouchableOpacity
+          style={styles.roomServices}
+          onPress={navigateToRoomCleaningScreen}
+        >
+          <Text style={styles.buttonText}>Make Room Cleaning Request</Text>
+        </TouchableOpacity>
+      )} */}
     </View>
   );
 }
