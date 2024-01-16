@@ -10,7 +10,7 @@ function HotelSelection({ navigation }) {
   const handleSelectHotel = (item) => {
     setSelectedHotel(item);
     setModalVisible(false);
-    navigation.navigate('ClientMainMenu', {
+    navigation.navigate('CodeQRScreen', {
       selectedHotel: {
         hotelName: item.hotelName,
         city: item.city,

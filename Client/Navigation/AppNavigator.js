@@ -15,13 +15,14 @@ import RoomCleaningRequestScreen from '../screens/guest/HotelServices/RoomCleani
 import RoomServiceRequestsScreen from '../screens/guest/HotelServices/RoomServiceRequestsScreen';
 import PoolBarRequestScreen from '../screens/guest/HotelServices/PoolBarRequestScreen';
 import StaffHomeScreen from '../screens/staff/StaffHomeScreen';
-
+import CodeQRScreen from '../screens/guest/HotelServices/CodeQRScreen';
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => (
   <Stack.Navigator initialRouteName="Login">
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="HotelSelection" component={HotelSelection} />
+    <Stack.Screen name="CodeQRScreen" component={CodeQRScreen} />
     <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} />
     <Stack.Screen name="HotelInfoScreen" component={HotelInfoScreen} />
     <Stack.Screen
