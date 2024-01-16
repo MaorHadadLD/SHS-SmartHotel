@@ -2,10 +2,12 @@ import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { useNavigation } from '@react-navigation/native';
 
 export default function CodeQRScreen() {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
+  const navigation = useNavigation();
 
   if (!permission) {
     // Camera permissions are still loading
@@ -26,17 +28,9 @@ export default function CodeQRScreen() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
 
-  return (
-    <View style={styles.container}>
-      <Camera
-  barCodeScannerSettings={{
-    barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
-  }}
-  style={styles.camera}
-  type={type}
-  onBarCodeScanned={({ type, data }) => {
+  function handleBarCodeScanned({ type, data }) {
     console.log(`Bar code with type ${type} and data ${data} has been scanned!`);
-    
+
     // Open the URL
     if (data.startsWith('http://') || data.startsWith('https://')) {
       Linking.openURL(data);
@@ -44,15 +38,27 @@ export default function CodeQRScreen() {
       console.log('Scanned data is not a valid URL.');
       // Handle other types of data if needed
     }
-  }}
->
-  <View style={styles.buttonContainer}>
-    <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-      <Text style={styles.text}>Flip Camera</Text>
-    </TouchableOpacity>
-  </View>
-</Camera>
 
+    // Navigate to the "ClientMainMenu" screen
+    navigation.navigate('ClientMainMenu');
+  }
+
+  return (
+    <View style={styles.container}>
+      <Camera
+        barCodeScannerSettings={{
+          barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+        }}
+        style={styles.camera}
+        type={type}
+        onBarCodeScanned={handleBarCodeScanned}
+      >
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
+            <Text style={styles.text}>Flip Camera</Text>
+          </TouchableOpacity>
+        </View>
+      </Camera>
     </View>
   );
 }
