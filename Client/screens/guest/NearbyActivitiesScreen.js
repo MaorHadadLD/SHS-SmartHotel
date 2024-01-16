@@ -1,23 +1,57 @@
-// NearbyActivitiesScreen.js
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 const NearbyActivitiesScreen = () => {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
+
   return (
     <View style={styles.container}>
-      <MapView
-        style={{ width: '100%', height: '100%' }}  // Set specific dimensions
-        initialRegion={{
-          latitude: 31.95079673097148,
-          longitude: 34.88856912380192,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
-        onRegionChange={(region) => {
-          console.log(region);
-        }}
-      />
+      {/* <Text style={styles.paragraph}>{text}</Text> */}
+      {location && (
+        <MapView
+          style={{ width: '100%', height: '100%' }}
+          initialRegion={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+          showsUserLocation={true}
+        >
+          {/* Optional: Display a marker at the user's location */}
+          <Marker
+            coordinate={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+            title="Your Location"
+            description="You are here"
+          />
+        </MapView>
+      )}
     </View>
   );
 };
