@@ -14,6 +14,7 @@ import DiningRoomScreen from '../screens/guest/HotelServices/DiningRoomSceern';
 import RoomCleaningRequestScreen from '../screens/guest/HotelServices/RoomCleaningRequestScreen';
 import RoomServiceRequestsScreen from '../screens/guest/HotelServices/RoomServiceRequestsScreen';
 import PoolBarRequestScreen from '../screens/guest/HotelServices/PoolBarRequestScreen';
+import NearbyActivitiesScreen from '../screens/guest/NearbyActivitiesScreen';
 import StaffHomeScreen from '../screens/staff/StaffHomeScreen';
 
 const Stack = createNativeStackNavigator();
@@ -40,6 +41,7 @@ const MainStack = () => (
     <Stack.Screen name="RoomCleaningRequestScreen" component={RoomCleaningRequestScreen} />
     <Stack.Screen name="RoomServiceRequestsScreen" component={RoomServiceRequestsScreen} />
     <Stack.Screen name="PoolBarRequestScreen" component={PoolBarRequestScreen} />
+    <Stack.Screen name="NearbyActivitiesScreen" component={NearbyActivitiesScreen} />
     <Stack.Screen name="StaffHomeScreen" component={StaffHomeScreen} />
   </Stack.Navigator>
 );
