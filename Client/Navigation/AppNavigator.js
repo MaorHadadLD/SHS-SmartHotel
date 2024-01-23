@@ -16,7 +16,7 @@ import RoomServiceRequestsScreen from '../screens/guest/HotelServices/RoomServic
 import PoolBarRequestScreen from '../screens/guest/HotelServices/PoolBarRequestScreen';
 import NearbyActivitiesScreen from '../screens/guest/NearbyActivitiesScreen';
 import StaffHomeScreen from '../screens/staff/StaffHomeScreen';
-import CodeQRScreen from '../screens/guest/HotelServices/CodeQRScreen';
+import CodeQRScreen from '../screens/guest/CodeQRScreen';
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => (
