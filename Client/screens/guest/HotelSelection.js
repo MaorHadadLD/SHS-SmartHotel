@@ -1,38 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Modal, TouchableOpacity, Platform } from 'react-native';
-import { HotelModel } from '../../data/HotelData';
-import HotelItem from '../../components/HotelItem';
+import firebase from '../../firebaseConfig';
+import { getDatabase, ref, get } from 'firebase/database';
 
 function HotelSelection({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedHotel, setSelectedHotel] = useState(null);
+  const [hotelData, setHotelData] = useState([]);
+
+  useEffect(() => {
+    const fetchHotelData = async () => {
+      try {
+        const db = getDatabase(firebase);
+        const hotelsRef = ref(db, 'Hotels/');
+        const snapshot = await get(hotelsRef);
+        const data = snapshot.val();
+
+        if (data) {
+          const hotels = Object.values(data);
+          setHotelData(hotels);
+        }
+      } catch (error) {
+        console.error('Error fetching hotel data:', error);
+      }
+    };
+
+    fetchHotelData();
+  }, []);
 
   const handleSelectHotel = (item) => {
-    setSelectedHotel(item);
-    setModalVisible(false);
     navigation.navigate('CodeQRScreen', {
-      selectedHotel: {
-        hotelName: item.hotelName,
-        city: item.city,
-        breakfastInfo: item.breakfastInfo,
-        dinnerInfo: item.dinnerInfo,
-        lobbyBarInfo: item.lobbyBarInfo,
-        spaInfo: item.spaInfo,
-        wifiInfo: item.wifiInfo,
-        gymInfo: item.gymInfo,
-        entertainmentInfo: item.entertainmentInfo,
-        poolInfo: item.poolInfo,
-        PoolBarInfo: item.PoolBarInfo,
-        SynagogueInfo: item.SynagogueInfo,
-        KeyOnSaturday: item.KeyOnSaturday,
-        checkOutInfo: item.checkOutInfo,
-      },
+      selectedHotel: item,
     });
+    setModalVisible(false);
   };
 
   const renderClassHotelItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleSelectHotel(item)}>
-      <HotelItem hotelName={item.hotelName} city={item.city} />
+      <View style={styles.hotelItem}>
+        <Text>{item.hotelName}</Text>
+        <Text>{item.city}</Text>
+      </View>
     </TouchableOpacity>
   );
 
@@ -46,12 +53,15 @@ function HotelSelection({ navigation }) {
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Hotel List</Text>
           <FlatList
-            data={HotelModel}
-            keyExtractor={(item) => item.hotelId}
+            data={hotelData}
+            keyExtractor={(item) =>`${item.hotelName}-${item.city}`}
             renderItem={renderClassHotelItem}
             numColumns={1}
             key={(item, index) => index.toString()}
           />
+          <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
+            <Text style={styles.closeModalButtonText}>Close</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>
@@ -63,6 +73,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#fff',
+    justifyContent: 'center',  // Center content vertically
+    alignItems: 'center',      // Center content horizontally
   },
   title: {
     fontSize: 20,
@@ -75,13 +87,23 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   modalContainer: {
-    flex: 1,
+    marginTop: 64,
+    width: '90%',
+    height: '90%',
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 10,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     ...Platform.select({
       ios: {
-        paddingTop: 20,
+        paddingTop: 2,
       },
       android: {
         paddingTop: 0,
@@ -92,15 +114,22 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
-    color: '#fff',
+    color: '#000',
   },
   closeModalButton: {
-    fontSize: 16,
-    color: '#fff',
+    marginTop: 16,
     backgroundColor: '#007bff',
     padding: 10,
     borderRadius: 5,
-    marginTop: 16,
+  },
+  closeModalButtonText: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  hotelItem: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
 });
 
