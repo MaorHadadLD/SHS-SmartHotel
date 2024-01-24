@@ -88,7 +88,7 @@ const HotelInfoScreen = ({ route }) => {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.infoTitle}>check Out:</Text>
+        <Text style={styles.infoTitle}>Check Out:</Text>
         <Text style={styles.infoText}>{checkOutInfo}</Text>
       </View>
 
