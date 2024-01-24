@@ -2,9 +2,8 @@ import React from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 
 function ClientMainMenu({ navigation, route }) {
-  const { selectedHotel } = route.params || {};
+  const { selectedHotel } = route.params.selectedHotel || {};
   const { hotelName, city } = selectedHotel || {};
-
   const handleNavigate = (screen) => {
     navigation.navigate(screen, { selectedHotel });
   };

@@ -4,7 +4,9 @@ import { Button, StyleSheet, Text, TouchableOpacity, View, Linking } from 'react
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 
-export default function CodeQRScreen() {
+export default function CodeQRScreen(route) {
+  const  selectedHotel = route.route.params;
+  const { hotelName, city } = selectedHotel || {};
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const navigation = useNavigation();
@@ -38,9 +40,8 @@ export default function CodeQRScreen() {
       console.log('Scanned data is not a valid URL.');
       // Handle other types of data if needed
     }
-
     // Navigate to the "ClientMainMenu" screen
-    navigation.navigate('ClientMainMenu');
+    navigation.navigate('ClientMainMenu', { selectedHotel: selectedHotel });
   }
 
   return (
