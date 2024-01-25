@@ -41,7 +41,7 @@ export default function CodeQRScreen(route) {
       // Handle other types of data if needed
     }
     // Navigate to the "ClientMainMenu" screen
-    navigation.navigate('ClientMainMenu', { selectedHotel: selectedHotel });
+    navigation.navigate('VerificationScreen', { selectedHotel: selectedHotel });
   }
 
   return (
