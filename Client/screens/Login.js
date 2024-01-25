@@ -94,43 +94,43 @@ const Login = () => {
   );
 };
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 16,
-      backgroundColor: '#fff',
-    },
-    header: {
-      fontSize: 24,
-      marginBottom: 20,
-    },
-    button: {
-      backgroundColor: '#007bff',
-      paddingVertical: 15,
-      paddingHorizontal: 30,
-      borderRadius: 5,
-      marginBottom: 20,
-    },
-    buttonText: {
-      color: 'white',
-      fontSize: 18,
-      textAlign: 'center',
-    },
-    staffLoginContainer: {
-      marginTop: 20,
-      width: '100%',
-      alignItems: 'center',
-    },
-    input: {
-      height: 40,
-      width: '100%',
-      borderColor: 'gray',
-      borderWidth: 1,
-      marginBottom: 20,
-      paddingHorizontal: 10,
-    },
-  });
+// const styles = StyleSheet.create({
+//     container: {
+//       flex: 1,
+//       // justifyContent: 'center',
+//       // alignItems: 'center',
+//       padding: 16,
+//       backgroundColor: '#fff',
+//     },
+//     header: {
+//       fontSize: 24,
+//       marginBottom: 20,
+//     },
+//     button: {
+//       backgroundColor: '#007bff',
+//       paddingVertical: 15,
+//       paddingHorizontal: 30,
+//       borderRadius: 5,
+//       marginBottom: 20,
+//     },
+//     buttonText: {
+//       color: 'white',
+//       fontSize: 18,
+//       textAlign: 'center',
+//     },
+//     staffLoginContainer: {
+//       marginTop: 20,
+//       width: '100%',
+//       alignItems: 'center',
+//     },
+//     input: {
+//       height: 40,
+//       width: '100%',
+//       borderColor: 'gray',
+//       borderWidth: 1,
+//       marginBottom: 20,
+//       paddingHorizontal: 10,
+//     },
+//   });
 
 export default Login

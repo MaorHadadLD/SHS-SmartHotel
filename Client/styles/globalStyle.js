@@ -6,6 +6,9 @@ export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#fff',
   },
   header: {
