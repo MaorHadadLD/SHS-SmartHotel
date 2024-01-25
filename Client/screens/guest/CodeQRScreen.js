@@ -41,7 +41,6 @@ export default function CodeQRScreen(route) {
       // Handle other types of data if needed
     }
     // Navigate to the "ClientMainMenu" screen
-    console.log(selectedHotel);
     navigation.navigate('VerificationScreen', { selectedHotel: selectedHotel.selectedHotel });
   }
 
