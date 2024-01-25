@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native';
 import { ref, getDatabase, get } from 'firebase/database';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import firebaseApp from '../../firebaseConfig';
 
 const VerificationScreen = (route) => {
@@ -30,7 +30,18 @@ const VerificationScreen = (route) => {
             if (otp === storedOtp) {
               // Display success message or navigate to the next screen
               Alert.alert('Verification Successful', 'Welcome!');
-              navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params });
+            //   navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params });
+                navigation.dispatch(
+                    CommonActions.reset({
+                    index: 0,
+                    routes: [
+                        {
+                        name: 'ClientMainMenu',
+                        params: { selectedHotel: route.route.params },
+                        },
+                    ],
+                    })
+                );
             } else {
               Alert.alert('Verification Failed', 'Invalid OTP');
             }
