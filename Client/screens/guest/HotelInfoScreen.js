@@ -91,8 +91,6 @@ const HotelInfoScreen = ({ route }) => {
         <Text style={styles.infoTitle}>Check Out:</Text>
         <Text style={styles.infoText}>{checkOutInfo}</Text>
       </View>
-
-      {/* Repeat for other properties */}
     </ScrollView>
   );
 };
