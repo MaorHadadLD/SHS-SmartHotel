@@ -1,21 +1,26 @@
-import StaffRoutes from './routes/StaffRoute';
 import cors from 'cors';
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from 'express';
+import StaffRoutes from './routes/StaffRoute.js';
+
 const app = express();
-const port = process.env.PORT || 8000;
 
+const configureApp = () => {
+    app.use(cors());
+};
+const addRouters = () => {
+    app.use('/', StaffRoutes);
+};
 
-app.use(cors());
-// Use body-parser middleware with a specified limit
-app.use(bodyParser.json({ limit: '50mb' }));
-
-app.listen(port, () => {
-    console.log(`app is listening on ${port}`);
-});
-
-app.get('/*', async (req, res) => {
+app.get('*', async (req, res) => {
+    console.log('GET request');
     res.send('SHS server');
 });
-
-app.use('/', StaffRoutes);
+const startServer = async () => {
+    configureApp();
+    addRouters();
+    const port = process.env.PORT || 5002;
+    app.listen(port, () => {
+      console.log(`Server is running at port: ${port}`);
+    });
+  };
+  await startServer();

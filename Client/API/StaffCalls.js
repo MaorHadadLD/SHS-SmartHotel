@@ -1,0 +1,17 @@
+import axios from 'axios';
+
+const BaseURL = 'http://localhost:5002/';
+
+export const sendLoginStaff = async (employeeNumber, password) => {
+    console.log("sendLoginStaff", employeeNumber, password);
+  try {
+    console.log("sendLoginStaff try");
+    const response = await axios.post(BaseURL + 'staff', { employeeNumber, password });
+ 
+    console.log("sendLoginStaff response", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("send login", error);
+  }
+}
+

@@ -4,8 +4,8 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-nativ
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../styles/globalStyle';
-import firebaseApp from '../firebaseConfig';
-
+// import firebaseApp from '../firebaseConfig';
+import { sendLoginStaff } from '../API/StaffCalls';
 const Login = () => {
   const [showStaffLogin, setShowStaffLogin] = useState(false);
   const [employeeNumber, setEmployeeNumber] = useState('');
@@ -23,41 +23,59 @@ const Login = () => {
   };
   
   const handleStaffSubmit = async () => {
+    // Handle Staff Login Logic
     try {
-      const db = getDatabase(firebaseApp);
-
-      // Check if the employee exists in the database
-      const employeeRef = ref(db, `staff/${employeeNumber}`);
-      const snapshot = await get(employeeRef);
-
-      if (snapshot.exists()) {
-        // Employee exists, check the password
-        const employeeData = snapshot.val();
-
-        // Ensure employeeData.password is a string before trimming
-        const trimmedPassword = String(employeeData.password).trim();
-
-        if (trimmedPassword === password.trim()) {
-          // Password is correct, navigate to StaffHomeScreen
-          navigation.navigate('StaffHomeScreen', {
-            roles: [employeeData.role], // Pass the role as an array
-            employeeName: employeeData.employeeName,
-            employeeNumber: employeeData.employeeNumber,
-            role: employeeData.role,
-            hotel: employeeData.hotel,
-          });
-        } else {
-          // Password is incorrect
-          console.error('Incorrect password');
-        }
+      const result = await sendLoginStaff(employeeNumber, password);
+      if (result.success) {
+        navigation.navigate('StaffHomeScreen', {
+          roles: [result.data.role], // Pass the role as an array
+          employeeName: result.data.employeeName,
+          employeeNumber: result.data.employeeNumber,
+          role: result.data.role,
+          hotel: result.data.hotel,
+        });
       } else {
-        // Employee does not exist
-        console.error('Employee does not exist');
+        console.error('Staff login error:', result.data);
       }
     } catch (error) {
-      console.error('Staff login error:', error.message);
-      // Handle login error, show error message, etc.
+        console.error('Staff login error:', error.message);
     }
+
+    // try {
+    //   const db = getDatabase(firebaseApp);
+
+    //   // Check if the employee exists in the database
+    //   const employeeRef = ref(db, `staff/${employeeNumber}`);
+    //   const snapshot = await get(employeeRef);
+
+    //   if (snapshot.exists()) {
+    //     // Employee exists, check the password
+    //     const employeeData = snapshot.val();
+
+    //     // Ensure employeeData.password is a string before trimming
+    //     const trimmedPassword = String(employeeData.password).trim();
+
+    //     if (trimmedPassword === password.trim()) {
+    //       // Password is correct, navigate to StaffHomeScreen
+    //       navigation.navigate('StaffHomeScreen', {
+    //         roles: [employeeData.role], // Pass the role as an array
+    //         employeeName: employeeData.employeeName,
+    //         employeeNumber: employeeData.employeeNumber,
+    //         role: employeeData.role,
+    //         hotel: employeeData.hotel,
+    //       });
+    //     } else {
+    //       // Password is incorrect
+    //       console.error('Incorrect password');
+    //     }
+    //   } else {
+    //     // Employee does not exist
+    //     console.error('Employee does not exist');
+    //   }
+    // } catch (error) {
+    //   console.error('Staff login error:', error.message);
+    //   // Handle login error, show error message, etc.
+    // }
   };
 
   return (
