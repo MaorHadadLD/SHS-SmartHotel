@@ -11,10 +11,6 @@ app.listen(port, () => {
     console.log(`app is listening on ${port}`);
 });
 
-app.get('/login', async (req, res) => {
-    console.log('login');
-    res.send("you're logged in");
-});
 
 app.get('/*', async (req, res) => {
     res.send('SHS server');
