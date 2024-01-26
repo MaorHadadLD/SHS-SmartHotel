@@ -1,4 +1,4 @@
-import { StaffLogin } from "../actions/StaffAction";
+import  { StaffLogin } from '../actions/StaffAction.js';
 
 export const requestSuccess = (data) => ({success: true, data})
 export const requestFailure = (data) => ({ success: false, data });
