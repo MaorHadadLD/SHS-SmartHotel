@@ -6,12 +6,12 @@ export const sendLoginStaff = async (employeeNumber, password) => {
     console.log("sendLoginStaff", employeeNumber, password);
   try {
     console.log("sendLoginStaff try");
-    const response = await axios.post(BaseURL + 'staff', { employeeNumber, password });
+    const response = await axios.post(`${BaseURL}staff`, { employeeNumber, password });
  
     console.log("sendLoginStaff response", response.data);
     return response.data;
   } catch (error) {
     console.error("send login", error);
   }
-}
+};
 
