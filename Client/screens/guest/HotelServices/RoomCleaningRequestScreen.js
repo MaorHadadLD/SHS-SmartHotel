@@ -6,7 +6,7 @@ import firebaseApp from '../../../firebaseConfig';
 import { v4 as uuidv4 } from 'uuid';
 
 function RoomCleaningRequestScreen({ navigation }) {
-  const departmentId = 'c3';
+  const departmentId = 'CleaningRoom';
   const database = getDatabase(firebaseApp);
 
   const cleaningRoomRequests = Requests.filter((reqItem) => {

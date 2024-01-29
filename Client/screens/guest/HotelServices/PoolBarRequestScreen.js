@@ -6,7 +6,7 @@ import firebaseApp from '../../../firebaseConfig';
 import { v4 as uuidv4 } from 'uuid';
 
 function PoolBarRequestScreen() {
-    const departmentId = 'c4'; // Adjust departmentId for room service
+    const departmentId = 'PoolBar'; // Adjust departmentId for room service
   const database = getDatabase(firebaseApp);
 
   const poolBarServiceRequests = Requests.filter((reqItem) => {
