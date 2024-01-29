@@ -5,12 +5,14 @@ export const requestFailure = (data) => ({ success: false, data });
 
 
 export const StaffLoginController = async (req, res) => {
-    const { employeeNumber, password } = req.body;
+    console.log("StaffLoginController", req);
+    const { employeeNumber, password } = req;
     const result = await StaffLogin(employeeNumber, password);
-    if (result.success) {
-        res.status(200).json(requestSuccess(result.data))
+    console.log("StaffLoginController result", result.sucess);
+    if (result.sucess) {
+        return requestSuccess(result.data);
     }
     else {
-        res.status(400).json(requestFailure(result.data))
+        return requestFailure(result.data);
     }
 }

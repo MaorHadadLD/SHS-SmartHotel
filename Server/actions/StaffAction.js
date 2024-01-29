@@ -14,7 +14,7 @@ export const StaffLogin = async (employeeNumber, password) => {
         if (snapshot.exists()) {
             // Employee exists, check the password
             const employeeData = snapshot.val();
-          
+            console.log("employeeData", employeeData);
             // Ensure employeeData.password is a string before trimming
             const trimmedPassword = String(employeeData.password).trim();
           
