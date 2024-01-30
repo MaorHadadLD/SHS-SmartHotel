@@ -1,11 +1,15 @@
 import React from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
-function ClientMainMenu({ navigation, route }) {
+function ClientMainMenu({route}) {
+  console.log("ClientMainMenu route", route.params.guest);
   const { selectedHotel } = route.params.selectedHotel || {};
+  const guestEmail  = route.params.guest || {};
+  const navigation = useNavigation();
   const { hotelName, city } = selectedHotel || {};
   const handleNavigate = (screen) => {
-    navigation.navigate(screen, { selectedHotel });
+    navigation.navigate(screen, { selectedHotel, guest: guestEmail});
   };
   
 
@@ -31,7 +35,7 @@ function ClientMainMenu({ navigation, route }) {
   return (
     <View style={styles.container}>
       <Text style={styles.header}> Welcome to {hotelName ? `${hotelName}, ${city}` : 'your hotel'} </Text>
-
+      <Text style={styles.header}> {`guest ${guestEmail}`} </Text>
       <FlatList
         data={menuItems}
         keyExtractor={(item) => item.id}
