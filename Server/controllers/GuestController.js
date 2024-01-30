@@ -8,8 +8,8 @@ export const LogInGuestController = async (body) => {
     const guestData = Object.values(result)[0];
     if (guestData) {
         if (guestData.otp === body.password){
-            await updateGuestSelectedHotel(guestData.email, body.selectedHotel.selectedHotel.hotelName, body.selectedHotel.selectedHotel.city);
-            return requestSuccess(guestData);
+            const resultupdate = await updateGuestSelectedHotel(guestData.email, body.selectedHotel.selectedHotel.hotelName, body.selectedHotel.selectedHotel.city);
+            return requestSuccess(resultupdate);
             // guestData.otp = null;
             // guestData.password = body.password;
             // console.log("LogInGuestController guestData", guestData);
