@@ -14,11 +14,12 @@ const VerificationScreen = (route) => {
   const handleVerification = async () => {
         try{
             const results = await sendLoginGuest(email, otp, route.route.params);
+            console.log("handleVerification results", results.data.email);
             if(results.success) {
                 if(results.data.roomNumber === "waitaing for room assignment"){
                     await sendRoomRequest(results.data, route.route.params);
                 }
-                navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params, guest: results.guestEmail });
+                navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params, guest: results.data.email });
               } else {
                   Alert.alert(results.data);
               }
