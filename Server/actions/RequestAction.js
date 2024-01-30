@@ -4,7 +4,6 @@ import { getDatabase, ref, set } from 'firebase/database';
 const db = getDatabase(firebaseApp);
 
 export const postRoomRequest = async (request) => {
-    console.log("postRoomRequest???", request.guest.checkIn);
     const requestData = {
         guestEmail: request.guest.email,
         guestName: request.guest.firstname + " " + request.guest.lastname,
@@ -17,11 +16,11 @@ export const postRoomRequest = async (request) => {
     try {
         const requestRef = ref(db, `roomRequests/`);
         await set(requestRef, requestData);
-        return true;
+        return {succees: true, guestEmail: request.guest.email};
     }
     catch (error) {
         console.error("postRoomRequest", error);
-        return false;
+        return {succees: false};
     }
 }
 

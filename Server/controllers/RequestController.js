@@ -15,11 +15,10 @@ export const getRequestsByDepartmentController = async (department) => {
     }
 }
 //* POST REQUEST CONTROLLER *// 
-export const postRequestController = async (body) => {
-    console.log("postRequestController", body);
-    const result = await postRoomRequest(body);
-    console.log("postRequestController result", result);
-    if (result) {
+export const postRoomRequestController = async (body) => {
+    const result  = await postRoomRequest(body);
+    if (result.succees) {
+        console.log("-> POST ROOM REQUEST SUCCESSFUL \n\t GUEST: ",result.guestEmail);
         return requestSuccess(result);
     }
     else {
