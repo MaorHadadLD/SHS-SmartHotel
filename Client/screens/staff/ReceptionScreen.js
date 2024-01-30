@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
-import { onValue, ref, getDatabase } from 'firebase/database';
+import { onValue, ref, getDatabase, query, orderByChild,equalTo } from 'firebase/database';
 
 const ReceptionScreen = ({ route, navigation }) => {
   const [requests, setRequests] = useState([]);
@@ -9,26 +9,22 @@ const ReceptionScreen = ({ route, navigation }) => {
   useEffect(() => {
     const db = getDatabase();
     const requestsRef = ref(db, 'roomRequests');
-  
     const unsubscribe = onValue(requestsRef, (snapshot) => {
       const data = snapshot.val();
-      console.log('data', data.checkInDate);
-  
       if (data) {
-        const requestList = Object.values(data).map(request => ({
-          checkInDate: request.checkInDate,
-          checkOutDate: request.checkOutDate,
-          guestEmail: request.guestEmail,
-          guestName: request.guestName,
-          hotelName: request.hotel.selectedHotel.hotelName,
-          city: request.hotel.selectedHotel.city,
-          status: request.status,
-        }));
-        console.log('requestList', requestList);
+        const requestList = Object.values(data)
+  .filter(request => request.hotel === route.params.hotel) // Filter by hotel name
+  .map(request => ({
+    checkInDate: request.checkInDate,
+    checkOutDate: request.checkOutDate,
+    guestEmail: request.guestEmail,
+    guestName: request.guestName,
+    hotelName: request.hotel,
+    status: request.status,
+  }));
         setRequests(requestList);
       }
     });
-  
     // Cleanup function to detach the event listener when the component unmounts
     return () => {
       // Detach the event listener
@@ -48,6 +44,7 @@ const ReceptionScreen = ({ route, navigation }) => {
       <Text style={staffHomeStyles.requestItemText}>Check-in: {item.checkInDate}</Text>
       <Text style={staffHomeStyles.requestItemText}>Check-out: {item.checkOutDate}</Text>
       <Text style={staffHomeStyles.requestItemText}>Status: {item.status}</Text>
+      <Text style={staffHomeStyles.requestItemText}>Hotel: {item.hotelName}</Text>
       <TouchableOpacity
         style={staffHomeStyles.startCompleteButton}
         onPress={() => handleRequestStatusChange(item.guestEmail, 'In Progress')}
