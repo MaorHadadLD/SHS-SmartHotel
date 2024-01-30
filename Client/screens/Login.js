@@ -28,13 +28,13 @@ const Login = () => {
       const result = await sendLoginStaff(employeeNumber, password);
       if (result.success) {
         if(result.data.role === 'reception'){
-        navigation.navigate('ReceptionScreen', {
-          // roles: [result.data.role], // Pass the role as an array
-          employeeName: result.data.employeeName,
-          employeeNumber: result.data.employeeNumber,
-          role: result.data.role,
-          hotel: result.data.hotel,
-        });
+          navigation.navigate('ReceptionScreen', {
+            // roles: [result.data.role], // Pass the role as an array
+            employeeName: result.data.employeeName,
+            employeeNumber: result.data.employeeNumber,
+            role: result.data.role,
+            hotel: result.data.hotel,
+          });
       } else {
         console.error('Staff login error:', result.data);
       }
