@@ -4,7 +4,7 @@ import { getDatabase, ref, set, push } from 'firebase/database';
 const db = getDatabase(firebaseApp);
 
 export const postRoomRequest = async (request) => {
-    console.log("postRoomRequest", request);
+    // console.log("postRoomRequest", request);
     try {
         const requestRef = ref(db, `roomRequests/`);
         const newRef = push(requestRef);
