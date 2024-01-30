@@ -83,10 +83,10 @@ const Login = () => {
     <View style={globalStyles.container}>
       <Text style={globalStyles.header}>Welcome to Smart Hotel</Text>
       <TouchableOpacity style={globalStyles.button} onPress={handleGuestLogin}>
-        <Text style={globalStyles.buttonText}>Login as Guest</Text>
+        <Text style={globalStyles.buttonText}>Guest</Text>
       </TouchableOpacity>
       <TouchableOpacity style={globalStyles.button} onPress={handleStaffLogin}>
-        <Text style={globalStyles.buttonText}>Login as Staff</Text>
+        <Text style={globalStyles.buttonText}>Staff</Text>
       </TouchableOpacity>
       {showStaffLogin && (
         <View style={globalStyles.staffLoginContainer}>
