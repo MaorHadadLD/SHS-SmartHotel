@@ -1,5 +1,6 @@
 import firebaseApp from '../firebaseConfig.js';
 import { getDatabase, ref, set, push } from 'firebase/database';
+import { updateGuestRoomNumber } from './GuestAction.js';
 
 const db = getDatabase(firebaseApp);
 
@@ -11,11 +12,13 @@ export const postRoomRequest = async (request) => {
         set(newRef, {
             guestEmail: request.guest.email,
             guestName: request.guest.firstname + " " + request.guest.lastname,
-            hotel: request.hotel,
+            hotel: request.hotel.selectedHotel.hotelName+" "+request.hotel.selectedHotel.city,
             checkInDate: request.guest.checkIn,        
             checkOutDate: request.guest.checkOut,
             status: "waiting",
         });
+        const res = await updateGuestRoomNumber(request.guest.email, "Your request for your room has been sent to the hotel reception");
+        console.log("postRoomRequestreslut", res);
         return {succees: true, guestEmail: request.guest.email};
     }
     catch (error) {
