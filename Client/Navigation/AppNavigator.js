@@ -18,6 +18,7 @@ import NearbyActivitiesScreen from '../screens/guest/NearbyActivitiesScreen';
 import ReceptionScreen from '../screens/staff/ReceptionScreen';
 import CodeQRScreen from '../screens/guest/CodeQRScreen';
 import VerificationScreen from '../screens/guest/VerificationScreen';
+import RoomKeyScreen from '../screens/guest/RoomKeyScreen';
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => (
@@ -28,6 +29,7 @@ const MainStack = () => (
     <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
     <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} />
     <Stack.Screen name="HotelInfoScreen" component={HotelInfoScreen} />
+    <Stack.Screen name="RoomKeyScreen" component={RoomKeyScreen} />
     <Stack.Screen
       name="HotelServicesScreen"
       component={HotelServicesScreen}
