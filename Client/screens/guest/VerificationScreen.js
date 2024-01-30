@@ -3,6 +3,8 @@ import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native';
 import { ref, getDatabase, get } from 'firebase/database';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import firebaseApp from '../../firebaseConfig';
+import { sendLoginGuest} from '../../API/GuestCalls';
+import { sendRoomRequest } from '../../API/RequestCalls';
 
 const VerificationScreen = (route) => {
   const [email, setEmail] = useState('');
@@ -10,51 +12,66 @@ const VerificationScreen = (route) => {
   const navigation = useNavigation();
 
   const handleVerification = async () => {
-    try {
-        const db = getDatabase(firebaseApp);
-        const userRef = ref(db, 'check-ins');
-  
-        // Retrieve user details from Firebase Realtime Database
-        const snapshot = await get(userRef);
-  
-        if (snapshot.exists()) {
-          const userData = snapshot.val();
-  
-          // Filter the results based on the email
-          const userWithEmail = Object.values(userData).find((user) => user.email === email);
-  
-          if (userWithEmail) {
-            const storedOtp = userWithEmail.otp;
-  
-            // Compare OTPs
-            if (otp === storedOtp) {
-              // Display success message or navigate to the next screen
-              Alert.alert('Verification Successful', 'Welcome!');
-            //   navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params });
-                navigation.dispatch(
-                    CommonActions.reset({
-                    index: 0,
-                    routes: [
-                        {
-                        name: 'ClientMainMenu',
-                        params: { selectedHotel: route.route.params },
-                        },
-                    ],
-                    })
-                );
-            } else {
-              Alert.alert('Verification Failed', 'Invalid OTP');
-            }
-          } else {
-            Alert.alert('Verification Failed', 'Email not found');
+        try{
+            const results = await sendLoginGuest(email, otp, route.route.params);
+            if(results.success) {
+                if(results.data.guest.roomNumber === null){
+                    await sendRoomRequest(results.guest, route.route.params);
+                }
+                navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params, guest: results.data.guest.email });
+              } else {
+                  Alert.alert(results.data);
+              }
+        }catch (error) {
+            console.error('Verification error:', error.message);
           }
-        } else {
-          Alert.alert('Verification Failed', 'No user data found');
         }
-      } catch (error) {
-        console.error('Verification error:', error.message);
-      }
-  };
+
+    // try {
+    //     const db = getDatabase(firebaseApp);
+    //     const userRef = ref(db, 'check-ins');
+  
+    //     // Retrieve user details from Firebase Realtime Database
+    //     const snapshot = await get(userRef);
+  
+    //     if (snapshot.exists()) {
+    //       const userData = snapshot.val();
+  
+    //       // Filter the results based on the email
+    //       const userWithEmail = Object.values(userData).find((user) => user.email === email);
+  
+    //       if (userWithEmail) {
+    //         const storedOtp = userWithEmail.otp;
+  
+    //         // Compare OTPs
+    //         if (otp === storedOtp) {
+    //           // Display success message or navigate to the next screen
+    //           Alert.alert('Verification Successful', 'Welcome!');
+    //         //   navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params });
+    //             navigation.dispatch(
+    //                 CommonActions.reset({
+    //                 index: 0,
+    //                 routes: [
+    //                     {
+    //                     name: 'ClientMainMenu',
+    //                     params: { selectedHotel: route.route.params },
+    //                     },
+    //                 ],
+    //                 })
+    //             );
+    //         } else {
+    //           Alert.alert('Verification Failed', 'Invalid OTP');
+    //         }
+    //       } else {
+    //         Alert.alert('Verification Failed', 'Email not found');
+    //       }
+    //     } else {
+    //       Alert.alert('Verification Failed', 'No user data found');
+    //     }
+    //   } catch (error) {
+    //     console.error('Verification error:', error.message);
+    //   }
+  
 
   const handleResendOTP = () => {
     // Implement the logic to resend OTP

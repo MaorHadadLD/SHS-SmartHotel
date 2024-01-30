@@ -27,8 +27,9 @@ const Login = () => {
     try {
       const result = await sendLoginStaff(employeeNumber, password);
       if (result.success) {
-        navigation.navigate('StaffHomeScreen', {
-          roles: [result.data.role], // Pass the role as an array
+        if(result.data.role === 'reception'){
+        navigation.navigate('ReceptionScreen', {
+          // roles: [result.data.role], // Pass the role as an array
           employeeName: result.data.employeeName,
           employeeNumber: result.data.employeeNumber,
           role: result.data.role,
@@ -37,7 +38,7 @@ const Login = () => {
       } else {
         console.error('Staff login error:', result.data);
       }
-    } catch (error) {
+    } }catch (error) {
         console.error('Staff login error:', error.message);
     }
 

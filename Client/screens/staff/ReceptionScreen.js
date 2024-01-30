@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
 
-const StaffHomeScreen = ({ route, navigation }) => {
+const ReceptionScreen = ({ route, navigation }) => {
   const [requests, setRequests] = useState([
     { id: 1, role: 'Cleaning Staff', status: 'Waiting', description: 'Clean Room 101' },
     { id: 2, role: 'Front Desk Staff', status: 'In Progress', description: 'Assist Guest Check-in' },
@@ -50,4 +50,4 @@ const StaffHomeScreen = ({ route, navigation }) => {
   );
 };
 
-export default StaffHomeScreen;
+export default ReceptionScreen;

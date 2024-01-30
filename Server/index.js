@@ -2,6 +2,8 @@ import cors from 'cors';
 import express from 'express';
 import StaffRoutes from './routes/StaffRoute.js';
 import bodyParser from 'body-parser';
+import guestRouter from './routes/GuestRoute.js';
+import requestRouter from './routes/RequestRoute.js';
 
 const app = express();
 
@@ -12,7 +14,10 @@ const configureApp = () => {
 };
 const addRouters = () => {
     app.use('/', StaffRoutes);
+    app.use('/', guestRouter);
+    app.use('/', requestRouter);
 };
+
 
 app.get('*', async (req, res) => {
     console.log('GET request');
