@@ -1,21 +1,21 @@
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, set } from 'firebase/database';
+import { getDatabase, ref, set, push } from 'firebase/database';
 
 const db = getDatabase(firebaseApp);
 
 export const postRoomRequest = async (request) => {
-    const requestData = {
-        guestEmail: request.guest.email,
-        guestName: request.guest.firstname + " " + request.guest.lastname,
-        hotel: request.hotel,
-        checkInDate: request.guest.checkIn,        
-        checkOutDate: request.guest.checkOut,
-        status: "waiting",
-    
-    }
+    console.log("postRoomRequest", request);
     try {
         const requestRef = ref(db, `roomRequests/`);
-        await set(requestRef, requestData);
+        const newRef = push(requestRef);
+        set(newRef, {
+            guestEmail: request.guest.email,
+            guestName: request.guest.firstname + " " + request.guest.lastname,
+            hotel: request.hotel,
+            checkInDate: request.guest.checkIn,        
+            checkOutDate: request.guest.checkOut,
+            status: "waiting",
+        });
         return {succees: true, guestEmail: request.guest.email};
     }
     catch (error) {
