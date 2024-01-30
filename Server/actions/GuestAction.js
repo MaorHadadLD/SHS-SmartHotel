@@ -1,47 +1,53 @@
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, get } from 'firebase/database';
+import { getDatabase, ref, get, query, orderByChild, equalTo ,update} from 'firebase/database';
 
 const db = getDatabase(firebaseApp);
 
 export const getGuestByEmail = async (email) => {
     try {
-        const guestRef = ref(db, `guests/`);
-        const snapshot = await get(guestRef);
+        const guestRef = ref(db, 'guests/');
+        const emailQuery = query(guestRef, orderByChild('email'), equalTo(email));
+        const snapshot = await get(emailQuery);
+
         if (snapshot.exists()) {
             const guestData = snapshot.val();
+            const guestKey = Object.keys(guestData)[0]; // Get the key of the matching guest node
+            console.log("guestKey?????", guestKey);
+            console.log("guestData?????", guestData);
             return guestData;
-        }
-        else {
+        } else {
             return null;
         }
-    }
-    catch (error) {
+    } catch (error) {
+        console.error('Error retrieving guest:', error);
         return null;
     }
 }
 
 export const createGuest = async (guest) => {}
 
-export const updateGuestSelectesHotel = async (guest, hotelName, city) => {
+export const updateGuestSelectedHotel = async (guestEmail, hotelName, city) => {
     try {
-        const guestRef = ref(db, `guests/`);
-        if (!guestRef) {
+        const guestData = await getGuestByEmail(guestEmail);
+
+        if (!guestData) {
             return false;
         }
-        await update(guestRef, {
-           selectedHotel: {
-               hotelName: hotelName,
-               city: city
-           }
-        });
+        // Update the guest data with the selectedHotel
+        const updatedGuestData = {
+            ...guestData,
+            selectedHotel: {
+                hotelName: hotelName,
+                city: city
+            }
+        };
+        const guestRef = ref(db, `guests/`);
+        // Use update to set the new guest data
+        await update(guestRef, updatedGuestData);
         return true;
-    }
-    catch (error) {
-        console.error("updateGuestSelectesHotel", error);
+    } catch (error) {
+        console.error("updateGuestSelectedHotel", error);
         return false;
     }
-
-
-}
-
+};
 export const deleteGuest = async (guest) => {}
