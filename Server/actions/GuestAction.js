@@ -12,8 +12,6 @@ export const getGuestByEmail = async (email) => {
         if (snapshot.exists()) {
             const guestData = snapshot.val();
             const guestKey = Object.keys(guestData)[0]; // Get the key of the matching guest node
-            console.log("guestKey?????", guestKey);
-            console.log("guestData?????", guestData);
             return guestData;
         } else {
             return null;
@@ -28,8 +26,9 @@ export const createGuest = async (guest) => {}
 
 export const updateGuestSelectedHotel = async (guestEmail, hotelName, city) => {
     try {
-        const guestData = await getGuestByEmail(guestEmail);
-
+        const result = await getGuestByEmail(guestEmail);
+        const guestData = Object.values(result)[0];
+        const guestKey = Object.keys(result)[0]; 
         if (!guestData) {
             return false;
         }
@@ -39,9 +38,10 @@ export const updateGuestSelectedHotel = async (guestEmail, hotelName, city) => {
             selectedHotel: {
                 hotelName: hotelName,
                 city: city
-            }
+            },
+            roomNumber: "waitaing for room assignment",
         };
-        const guestRef = ref(db, `guests/`);
+        const guestRef = ref(db, `guests/${guestKey}`);
         // Use update to set the new guest data
         await update(guestRef, updatedGuestData);
         return true;

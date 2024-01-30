@@ -4,10 +4,8 @@ export const requestSuccess = (data) => ({success: true, data})
 export const requestFailure = (data) => ({ success: false, data });
 
 export const LogInGuestController = async (body) => {
-    console.log("LogInGuestController", body.email, body.password);
     const result = await getGuestByEmail(body.email);
     const guestData = Object.values(result)[0];
-    console.log("LogInGuestController guestDataOTP", guestData.otp);
     if (guestData) {
         if (guestData.otp === body.password){
             await updateGuestSelectedHotel(guestData.email, body.selectedHotel.selectedHotel.hotelName, body.selectedHotel.selectedHotel.city);
