@@ -5,7 +5,6 @@ const BaseURL = 'http://192.168.1.161:3002/';
 export const sendLoginStaff = async (employeeNumber, password) => {
     console.log("sendLoginStaff", employeeNumber, password);
   try {
-    console.log("sendLoginStaff try");
     const response = await axios.post(`${BaseURL}staff`, { employeeNumber, password }); 
     // console.log("sendLoginStaff response", response.data);
     return response.data;
@@ -14,8 +13,7 @@ export const sendLoginStaff = async (employeeNumber, password) => {
   }
 };
 
-
-export const getAvialableRooms = async (hotelName) => {
+export const getAvailableRooms = async (hotelName) => {
   try {
     console.log("getAvialableRooms", hotelName);
     const response = await axios.post(`${BaseURL}availableRooms`, { hotelName });
@@ -25,3 +23,11 @@ export const getAvialableRooms = async (hotelName) => {
   }
 }
 
+export const updateRoomStatusAndGuestRoom = async (guestEmail, selectedRoom, hotel, status) => {
+  try {
+    const response = await axios.put(`${BaseURL}updateRoomStatusAndGuestRoom`, { guestEmail, selectedRoom, hotel, status });
+    return response.data;
+  } catch (error) {
+    console.error("updateRoomStatusAndGuestRoom", error);
+  }
+}

@@ -1,5 +1,5 @@
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, get, orderByChild, equalTo, query } from 'firebase/database';
+import { getDatabase, ref, get, orderByChild, equalTo, query, update } from 'firebase/database';
 
 const db = getDatabase(firebaseApp);
 export const StaffLogin = async (employeeNumber, password) => {
@@ -76,3 +76,50 @@ export const getAvailableRooms = async (hotel) => {
       throw error;
     }
   };
+
+  export const updateRoomStatus = async (hotel, roomNumber, status) => {
+    console.log(`Update room ${roomNumber} status to ${status} in hotel ${hotel.hotelName}`);
+    try {
+       const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
+         const roomList = hotelref.roomList;
+            roomList[roomNumber] = status;
+            const hotelRef = ref(db, `Hotels/${hotel.hotelId}`);
+            await update(hotelRef, { roomList });
+            const availableRooms = await getAvailableRooms(hotel);
+            return {success: true, data: availableRooms};
+  
+    } catch (error) {  
+        console.error('Error updating room status:', error.message);
+        return {success: false, data: error.message};
+    }
+}
+
+export const getHotelByNameAndCity = async (hotelName, city) => {
+    try {
+        const hotelsRef = ref(db, 'Hotels');
+        const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotelName));
+        const snapshot = await get(hotelsQuery);
+        if (snapshot.exists()) {
+            const hotels = snapshot.val();
+            // Find the hotel with matching city
+            const hotelKey = Object.keys(hotels).find(key => {
+            const hotelFound = hotels[key];
+            const hotelCity = hotelFound.city || ''; // Handle the case where the city property might not be present
+            return hotelCity === city;
+        });
+        if (hotelKey) {
+            const hotel = hotels[hotelKey];
+            return hotel;
+        } else {
+            console.log('Hotel not found in the given city');
+            return null;
+        }
+        } else {
+            console.log('Hotel not found');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error getting available rooms:', error.message);
+        throw error;
+    }
+}

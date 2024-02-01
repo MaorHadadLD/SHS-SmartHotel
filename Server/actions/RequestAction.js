@@ -1,5 +1,5 @@
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, set, push } from 'firebase/database';
+import { getDatabase, ref, set, push, query, orderByChild, equalTo } from 'firebase/database';
 import { updateGuestRoomNumber } from './GuestAction.js';
 
 const db = getDatabase(firebaseApp);
@@ -31,6 +31,17 @@ export const postRoomRequest = async (request) => {
     }
 }
 
-export const updateGuest = async (guest) => {}
+export const updateRequest = async (guest) => {}
 
-export const deleteGuest = async (guest) => {}
+export const deleteRequest = async (guestEmail, type) => {
+    try {
+        const requestRef = ref(db, `${type}`);
+        const reqQuery = query(requestRef, orderByChild('guestEmail'), equalTo(guestEmail));
+        set(reqQuery, null);
+        return {success: true};
+    }
+    catch (error) {
+        console.error("deleteRequest", error);
+        return {success: false};
+    }
+}

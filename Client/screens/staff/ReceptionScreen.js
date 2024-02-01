@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, Modal, StyleSheet } from 'react
 import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
 import { onValue, ref, getDatabase } from 'firebase/database';
 import { Picker } from '@react-native-picker/picker';
-import { getAvialableRooms as getAvailableRooms } from '../../API/StaffCalls';
+import { getAvailableRooms, updateRoomStatusAndGuestRoom } from '../../API/StaffCalls';
 
 const ReceptionScreen = ({ route, navigation }) => {
   const [requests, setRequests] = useState([]);
@@ -12,7 +12,7 @@ const ReceptionScreen = ({ route, navigation }) => {
   const [selectedRoom, setSelectedRoom] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const staffData = route.params.staffData || {};
-  
+
   useEffect(() => {
     const db = getDatabase();
     const requestsRef = ref(db, 'roomRequests');
@@ -39,10 +39,10 @@ const ReceptionScreen = ({ route, navigation }) => {
     };
   }, []);
 
-  const fetchAvailableRooms = async (hotelName) => {
-    console.log('fetchAvailableRooms', hotelName);
+  const fetchAvailableRooms = async (hotel) => {
+    console.log('fetchAvailableRooms', hotel);
     try {
-      const response = await getAvailableRooms(hotelName);
+      const response = await getAvailableRooms(hotel);
       if (response.success && response.data !=='No rooms available') {
         const availableRooms = response.data;
         console.log('fetchAvailableRooms availableRooms', response.data);
@@ -51,15 +51,20 @@ const ReceptionScreen = ({ route, navigation }) => {
     } catch(error){
       console.error("fetchAvailableRooms", error);
     }
-    // const sampleAvailableRooms = ['101', '102', '103', '104'];
-    // setAvailableRooms(sampleAvailableRooms);
   };
 
-  const handleRoomAssignment = (guestEmail, selectedRoom) => {
-    // Implement the logic to update the room number in the database based on guestEmail and selectedRoom
-    // After updating the room number, you can update the request status or remove the request as needed
-    // For now, I'll just log the data
+  const handleRoomAssignment = async (guestEmail, selectedRoom) => {
     console.log(`Assign room ${selectedRoom} for guest ${guestEmail}`);
+    try {
+      // Update room status in the database
+      const result = await updateRoomStatusAndGuestRoom(guestEmail, selectedRoom, staffData.hotel, 'occupied');
+      if (result.success) {
+        console.log('result from updateRoomStatusAndGuestRoom', result);
+      }
+    } catch (error) {
+      console.error('handleRoomAssignment', error);
+    }
+    
   };
 
   const renderRequestItem = ({ item }) => (

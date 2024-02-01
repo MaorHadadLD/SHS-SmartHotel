@@ -1,4 +1,6 @@
-import  { StaffLogin, getAvailableRooms } from '../actions/StaffAction.js';
+import  { StaffLogin, getAvailableRooms, updateRoomStatus } from '../actions/StaffAction.js';
+import { updateGuestRoomNumber } from '../actions/GuestAction.js';
+import { deleteRequest } from '../actions/RequestAction.js';
 
 export const requestSuccess = (data) => ({success: true, data})
 export const requestFailure = (data) => ({ success: false, data });
@@ -28,5 +30,22 @@ export const availableRooms = async (req, res) => {
     }
     else {
         return requestFailure(result);
+    }
+}
+
+export const updateRoomController = async (req, res) => {
+    const guestEmail = req.guestEmail;
+    const selectedRoom = req.selectedRoom;
+    const hotel = req.hotel;
+    const status = req.status;
+    console.log("updateRoomController", req);
+    const updateReq = await deleteRequest(guestEmail, 'roomRequests');
+    const updateRoom = await updateRoomStatus(hotel, selectedRoom, status);
+    const updateGuest = await updateGuestRoomNumber(guestEmail, selectedRoom);
+    if (updateReq.success && updateRoom.success && updateGuest.success) {
+        return requestSuccess({updateReq, updateRoom});
+    }
+    else {
+        return requestFailure("Room Not Assigned");
     }
 }
