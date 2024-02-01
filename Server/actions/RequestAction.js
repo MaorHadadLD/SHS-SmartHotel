@@ -12,7 +12,11 @@ export const postRoomRequest = async (request) => {
         set(newRef, {
             guestEmail: request.guest.email,
             guestName: request.guest.firstname + " " + request.guest.lastname,
-            hotel: request.hotel.selectedHotel.hotelName+" "+request.hotel.selectedHotel.city,
+            hotel:{
+                hotelName: request.guest.selectedHotel.hotelName,
+                city: request.guest.selectedHotel.city,
+            
+            },
             checkInDate: request.guest.checkIn,        
             checkOutDate: request.guest.checkOut,
             status: "waiting",
