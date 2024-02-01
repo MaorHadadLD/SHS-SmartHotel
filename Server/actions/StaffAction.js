@@ -34,30 +34,20 @@ export const StaffLogin = async (employeeNumber, password) => {
     }
 }
 
-export const getAvailableRooms = async (hotelNameAndCity) => {
+export const getAvailableRooms = async (hotel) => {
     try {
-      const firstSpaceIndex = hotelNameAndCity.indexOf(' ');
-      const secondSpaceIndex = hotelNameAndCity.indexOf(' ', firstSpaceIndex + 1);
-  
-      if (firstSpaceIndex !== -1 && secondSpaceIndex !== -1) {
-        const hotelName = hotelNameAndCity.substring(0, secondSpaceIndex);
-        const city = hotelNameAndCity.substring(secondSpaceIndex + 1);
-        console.log('Hotel name:', hotelName);
-        console.log('City:', city);
-  
         const hotelsRef = ref(db, 'Hotels');
-        const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotelName));
+        const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotel.hotelName));
         const snapshot = await get(hotelsQuery);
-  
+        
         if (snapshot.exists()) {
-          const hotels = snapshot.val();
-  
-          // Find the hotel with matching city
-          const hotelKey = Object.keys(hotels).find(key => {
-            const hotel = hotels[key];
-            const hotelCity = hotel.city || ''; // Handle the case where the city property might not be present
-            return hotelCity === city;
-          });
+            const hotels = snapshot.val();
+            // Find the hotel with matching city
+            const hotelKey = Object.keys(hotels).find(key => {
+            const hotelFound = hotels[key];
+            const hotelCity = hotelFound.city || ''; // Handle the case where the city property might not be present
+            return hotelCity === hotel.city;
+        });
   
           if (hotelKey) {
             const roomList = hotels[hotelKey].roomList;
@@ -72,7 +62,6 @@ export const getAvailableRooms = async (hotelNameAndCity) => {
             if (availableRoomNumber.length === 0) {
                 return 'No rooms available';
             }
-          console.log('Number of Available Rooms:', availableRoomNumber);
           return availableRoomNumber.map(String);
           } else {
             console.log('Hotel not found in the given city');
@@ -82,10 +71,6 @@ export const getAvailableRooms = async (hotelNameAndCity) => {
           console.log('Hotel not found');
           return null;
         }
-      } else {
-        console.log('Invalid input format');
-        return null;
-      }
     } catch (error) {
       console.error('Error getting available rooms:', error.message);
       throw error;
