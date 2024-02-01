@@ -14,3 +14,14 @@ export const sendLoginStaff = async (employeeNumber, password) => {
   }
 };
 
+
+export const getAvialableRooms = async (hotelName) => {
+  try {
+    console.log("getAvialableRooms", hotelName);
+    const response = await axios.post(`${BaseURL}availableRooms`, { hotelName });
+    return response.data;
+  } catch (error) {
+    console.error("getAvialableRooms", error);
+  }
+}
+
