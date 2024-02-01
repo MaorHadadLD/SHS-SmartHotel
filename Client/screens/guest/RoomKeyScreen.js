@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
-import { globalStyles } from '../../styles/globalStyle';
+// import { globalStyles } from '../../styles/globalStyle';
 import { sendRooomStatus } from '../../API/GuestCalls';
 
 const RoomKeyScreen = ({ route }) => {
