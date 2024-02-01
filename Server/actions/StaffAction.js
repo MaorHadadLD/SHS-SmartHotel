@@ -1,5 +1,5 @@
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, get } from 'firebase/database';
+import { getDatabase, ref, get, orderByChild, equalTo, query } from 'firebase/database';
 
 const db = getDatabase(firebaseApp);
 export const StaffLogin = async (employeeNumber, password) => {
@@ -34,4 +34,60 @@ export const StaffLogin = async (employeeNumber, password) => {
     }
 }
 
+export const getAvailableRooms = async (hotelNameAndCity) => {
+    try {
+      const firstSpaceIndex = hotelNameAndCity.indexOf(' ');
+      const secondSpaceIndex = hotelNameAndCity.indexOf(' ', firstSpaceIndex + 1);
+  
+      if (firstSpaceIndex !== -1 && secondSpaceIndex !== -1) {
+        const hotelName = hotelNameAndCity.substring(0, secondSpaceIndex);
+        const city = hotelNameAndCity.substring(secondSpaceIndex + 1);
+        console.log('Hotel name:', hotelName);
+        console.log('City:', city);
+  
+        const hotelsRef = ref(db, 'Hotels');
+        const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotelName));
+        const snapshot = await get(hotelsQuery);
+  
+        if (snapshot.exists()) {
+          const hotels = snapshot.val();
+  
+          // Find the hotel with matching city
+          const hotelKey = Object.keys(hotels).find(key => {
+            const hotel = hotels[key];
+            const hotelCity = hotel.city || ''; // Handle the case where the city property might not be present
+            return hotelCity === city;
+          });
+  
+          if (hotelKey) {
+            const roomList = hotels[hotelKey].roomList;
 
+          // Get indices of available rooms
+            const availableRoomNumber = roomList.reduce((indices, status, index) => {
+                if (status === 'available') {
+                    indices.push(index);
+                }
+            return indices;
+            }, []);
+            if (availableRoomNumber.length === 0) {
+                return 'No rooms available';
+            }
+          console.log('Number of Available Rooms:', availableRoomNumber);
+          return availableRoomNumber.map(String);
+          } else {
+            console.log('Hotel not found in the given city');
+            return null;
+          }
+        } else {
+          console.log('Hotel not found');
+          return null;
+        }
+      } else {
+        console.log('Invalid input format');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error getting available rooms:', error.message);
+      throw error;
+    }
+  };
