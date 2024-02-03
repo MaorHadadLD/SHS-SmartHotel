@@ -3,7 +3,27 @@ import { getDatabase, ref, set, push, query, orderByChild, equalTo } from 'fireb
 import { updateGuestRoomNumber } from './GuestAction.js';
 
 const db = getDatabase(firebaseApp);
-
+export const getRequestsRoomByHotel = async (hotel) => {
+    const requestsRef = ref(db, 'roomRequests');
+    const snapshot = await get(requestsRef);
+      const data = snapshot.val();
+      if (data) {
+        const requestList = Object.values(data)
+          .filter(request => request.hotel.hotelName === hotel.hotelName && request.hotel.city === hotel.city)
+          .map(request => ({
+            checkInDate: request.checkInDate,
+            checkOutDate: request.checkOutDate,
+            guestEmail: request.guestEmail,
+            guestName: request.guestName,
+            hotel: request.hotel,
+            status: request.status,
+          }));
+          return {success: true, data: requestList};
+        }
+        else {
+            return {success: false, data: "No request found"};
+        }
+    }   
 export const postRoomRequest = async (request) => {
     // console.log("postRoomRequest", request);
     try {
@@ -38,6 +58,7 @@ export const deleteRequest = async (guestEmail, type) => {
         const requestRef = ref(db, `${type}`);
         const reqQuery = query(requestRef, orderByChild('guestEmail'), equalTo(guestEmail));
         set(reqQuery, null);
+        const requestsRef = ref(db, 'roomRequests');
         return {success: true};
     }
     catch (error) {
