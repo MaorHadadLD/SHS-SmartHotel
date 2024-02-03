@@ -45,8 +45,10 @@ const ReceptionScreen = ({ route, navigation }) => {
       const response = await getAvailableRooms(hotel);
       if (response.success && response.data !=='No rooms available') {
         const availableRooms = response.data;
-        console.log('fetchAvailableRooms availableRooms', response.data);
         setAvailableRooms(availableRooms);
+      }else {
+        setAvailableRooms([]);
+        alert('No rooms available');
       }
     } catch(error){
       console.error("fetchAvailableRooms", error);
@@ -59,7 +61,8 @@ const ReceptionScreen = ({ route, navigation }) => {
       // Update room status in the database
       const result = await updateRoomStatusAndGuestRoom(guestEmail, selectedRoom, staffData.hotel, 'occupied');
       if (result.success) {
-        console.log('result from updateRoomStatusAndGuestRoom', result);
+        setRequests(prevRequests => prevRequests.filter(request => request.guestEmail !== guestEmail));
+        fetchAvailableRooms(staffData.hotel);
       }
     } catch (error) {
       console.error('handleRoomAssignment', error);
