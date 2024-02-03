@@ -38,12 +38,11 @@ export const updateRoomController = async (req, res) => {
     const selectedRoom = req.selectedRoom;
     const hotel = req.hotel;
     const status = req.status;
-    console.log("updateRoomController", req);
     const updateReq = await deleteRequest(guestEmail, 'roomRequests');
     const updateRoom = await updateRoomStatus(hotel, selectedRoom, status);
     const updateGuest = await updateGuestRoomNumber(guestEmail, selectedRoom);
-    if (updateReq.success && updateRoom.success && updateGuest.success) {
-        return requestSuccess({updateReq, updateRoom});
+    if (updateReq.success && updateRoom.success && updateGuest) {
+        return requestSuccess(updateReq.data, updateRoom.data);
     }
     else {
         return requestFailure("Room Not Assigned");
