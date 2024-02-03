@@ -80,14 +80,29 @@ export const getAvailableRooms = async (hotel) => {
   export const updateRoomStatus = async (hotel, roomNumber, status) => {
     console.log(`Update room ${roomNumber} status to ${status} in hotel ${hotel.hotelName}`);
     try {
-       const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
-         const roomList = hotelref.roomList;
+        const hotelsRef = ref(db, 'Hotels');
+        const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotel.hotelName));
+        const snapshot = await get(hotelsQuery);
+        if (snapshot.exists()) {
+            const hotels = snapshot.val();
+            // Find the hotel with matching city
+            const hotelKey = Object.keys(hotels).find(key => {
+            const hotelFound = hotels[key];
+            const hotelCity = hotelFound.city || ''; // Handle the case where the city property might not be present
+            return hotelCity === hotel.city;
+        });
+        if (hotelKey) {
+            const roomList = hotels[hotelKey].roomList;
             roomList[roomNumber] = status;
-            const hotelRef = ref(db, `Hotels/${hotel.hotelId}`);
-            await update(hotelRef, { roomList });
-            const availableRooms = await getAvailableRooms(hotel);
-            return {success: true, data: availableRooms};
-  
+            const hotelRef = ref(db, `Hotels/${hotelKey}`);
+            await update(hotelRef, {roomList});
+            // const availableRooms = await getAvailableRooms(hotel);
+            return {success: true, data: 'Room status updated'};
+        }
+        } else {
+            console.log('Hotel not found in the given city');
+            return {success: false, data: 'Hotel not found in the given city'};
+        }
     } catch (error) {  
         console.error('Error updating room status:', error.message);
         return {success: false, data: error.message};
