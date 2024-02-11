@@ -28,14 +28,17 @@ const Login = () => {
       if (result.success) {
         if(result.data.role === 'reception'){
           navigation.navigate('ReceptionScreen', {staffData: result.data});
+        } else if (result.data.role === 'cleaning'){
+          navigation.navigate('CleaningRoomScreen', {staffData: result.data});
+        }
       } else {
         console.error('Staff login error:', error.message);
       }
-    } }catch (error) {
-        console.error('Staff login error:', error.message);
+    } catch (error) {
+      console.error('Staff login error:', error.message);
     }
-    
   };
+    
 
   return (
     <View style={globalStyles.container}>

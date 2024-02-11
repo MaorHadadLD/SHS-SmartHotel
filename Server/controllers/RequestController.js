@@ -1,11 +1,13 @@
-import {postRoomRequest} from '../actions/RequestAction.js';
+import {postRoomRequest, getRequestByDpartment, postRequest} from '../actions/RequestAction.js';
+
 
 export const requestSuccess = (data) => ({success: true, data})
 export const requestFailure = (data) => ({ success: false, data });
 
-export const getRequestsByDepartmentController = async (department) => {
-    console.log("getRequestsByDepartmentController", department);
-    const result = await getRequestByDpartment(department);
+//* GET REQUEST CONTROLLER *//
+export const getRequestsByDepartmentController = async (reqBody) => {
+    console.log("getRequestsByDepartmentController", reqBody);
+    const result = await getRequestByDpartment(reqBody );
     console.log("getRequestsByDepartmentController result", result);
     if (result) {
         return requestSuccess(result);
@@ -19,6 +21,19 @@ export const postRoomRequestController = async (body) => {
     const result  = await postRoomRequest(body);
     if (result.succees) {
         console.log("-> POST ROOM REQUEST SUCCESSFUL \n\t GUEST: ",result.guestEmail);
+        return requestSuccess(result);
+    }
+    else {
+        return requestFailure("No Requests");
+    }
+}
+
+export const postRequestController = async (body) => {
+    console.log("postRequestController", body);
+    const result  = await postRequest(body);
+    console.log("postRequestController", result);
+    if (result.succees) {
+        console.log("-> POST REQUEST SUCCESSFUL \n\t GUEST: ",result);
         return requestSuccess(result);
     }
     else {

@@ -3,7 +3,10 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'r
 import {Requests} from "../../../data/ClassDpData";
 import { getDatabase, ref, set, push } from 'firebase/database';
 import firebaseApp from '../../../firebaseConfig';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
+import { sendPostRequest } from '../../../API/RequestCalls';
+import { useState } from 'react';
+
 
 function RoomCleaningRequestScreen({ navigation }) {
   const departmentId = 'CleaningRoom';
@@ -13,30 +16,39 @@ function RoomCleaningRequestScreen({ navigation }) {
     return reqItem.departmentId.includes(departmentId);
   });
 
-  const [customRequest, setCustomRequest] = React.useState('');
+  const [customRequest, setCustomRequest] =React.useState('');
 
-  function handleRequestSubmit(request) {
-    const requestId = uuidv4();
-    const requestsRef = ref(database, 'RoomCleaningRequest');
+  const handleRequestSubmit = async (request)  => {
+    try {
+      const response = await sendPostRequest(request, departmentId);
+      if (response.success) {
+        alert('Request submitted successfully');
+        navigation.navigate('ClientMainMenu');
+      }
+    } catch (error) {
+      console.error('Room cleaning request error:', error.message);
+    }
+    // const requestId = uuidv4();
+    // const requestsRef = ref(database, 'RoomCleaningRequest');
 
-    const newRequest = {
-      id: requestId,
-      departmentId: departmentId,
-      requestNotice: request,
-    };
+    // const newRequest = {
+    //   id: requestId,
+    //   departmentId: departmentId,
+    //   requestNotice: request,
+    // };
 
-    // Using push to generate a new unique child location
-    const newRequestRef = push(requestsRef);
+    // // Using push to generate a new unique child location
+    // const newRequestRef = push(requestsRef);
     
-    set(newRequestRef, newRequest)
-      .then(() => {
-        console.log('Request saved to the database:', newRequest);
-        // Additional logic after successfully saving the request
-      })
-      .catch((error) => {
-        console.error('Error saving request to the database:', error);
-      });
-  }
+    // set(newRequestRef, newRequest)
+    //   .then(() => {
+    //     console.log('Request saved to the database:', newRequest);
+    //     // Additional logic after successfully saving the request
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error saving request to the database:', error);
+    //   });
+  };
 
   function renderPredefinedRequestButton(request) {
     return (

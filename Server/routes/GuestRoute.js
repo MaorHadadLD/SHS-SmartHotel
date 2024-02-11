@@ -13,4 +13,5 @@ guestRouter.post('/roomstatus', async (req, res) => {
     respond(await RoomStatusController(req.body), res);
 });
 
+
 export default guestRouter;
