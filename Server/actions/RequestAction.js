@@ -101,7 +101,6 @@ export const postRequest = async (body) => {
         set(newRef,{
             status: "waiting",
             notice: body.request,
-            
     });
         return {succees: true};
     }

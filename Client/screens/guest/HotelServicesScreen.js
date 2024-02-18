@@ -3,14 +3,16 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { ClassDpCategories } from '../../data/ClassDpData';
 import DpClassCategoryGridTil from '../../components/DpClassCategoryGridTil';
+import { checkStatusReq } from '../../API/RequestCalls';
 
 function HotelServicesScreen({ navigation }) {
   function renderClassDpCategoryItem(itemData) {
+    console.log('itemData', itemData);
     const pressHandler = async() => {
       if (itemData.item.title === 'Dining Room') {
         navigation.navigate('DiningRoomScreen');
       }else if(itemData.item.title === 'Cleaning Room'){
-        // const result = await checkStatusReq(roomNumber, 'RoomCleaningRequest');
+        // const result = await checkStatusReq( roomNumber, 'RoomCleaningRequest');
         // if(result.success){
         //     alert('You have already made a request');
         // }else{

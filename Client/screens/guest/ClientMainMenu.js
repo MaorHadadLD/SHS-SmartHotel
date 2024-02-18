@@ -1,13 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import { getGuestDetails } from '../../API/GuestCalls';
 
 function ClientMainMenu({route}) {
-  console.log("ClientMainMenu route", route.params.guest);
+  console.log("ClientMainMenu route", route.params);
   const { selectedHotel } = route.params.selectedHotel || {};
   const guestEmail  = route.params.guest || {};
   const navigation = useNavigation();
   const { hotelName, city } = selectedHotel || {};
+  useEffect(() =>  {
+    const funcGuest = async () => {
+    try {
+      const results = await getGuestDetails( guestEmail);
+      if (results.sucsses) {
+        console.log("ClientMainMenu results", results.data);
+      }
+    }catch (error) {  
+      console.error('ClientMainMenu error:', error.message);
+    }
+  };
+  funcGuest();
+  }, []);
   const handleNavigate = (screen) => {
     navigation.navigate(screen, { selectedHotel, guest: guestEmail});
   };

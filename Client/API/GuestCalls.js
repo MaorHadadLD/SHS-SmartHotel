@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BaseURL = 'http://192.168.1.126:3002/';
+const BaseURL = 'http://192.168.1.110:3002/';
 
 export const sendLoginGuest = async (email, password, selectedHotel) => {
   try {
@@ -17,5 +17,14 @@ export const sendRooomStatus = async (email) => {
     return response.data;
   } catch (error) {
     console.error("sendRooomStatus", error);
+  }
+}
+
+export const getGuestDetails = async (email) => {
+  try {
+    const response = await axios.post(`${BaseURL}getGuestDetails`, { email });
+    return response.data;
+  } catch (error) {
+    console.error("getGuestDetails", error);
   }
 }

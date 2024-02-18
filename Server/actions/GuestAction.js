@@ -76,4 +76,6 @@ export const updateGuestRoomNumber = async (guestEmail, roomNumber) => {
         return false;
     }
 }
+
+
 export const deleteGuest = async (guest) => {}

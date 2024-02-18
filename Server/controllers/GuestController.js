@@ -33,3 +33,12 @@ export const RoomStatusController = async (body) => {
     }
 }
 
+export const getGuestDetailsController = async (body) => {
+    const result = await getGuestByEmail(body.email);
+    const guestData = Object.values(result)[0];
+    if (guestData) {
+        return requestSuccess(guestData);
+    } else {
+        return requestFailure("Email not found");
+    }
+}
