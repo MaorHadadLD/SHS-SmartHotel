@@ -18,7 +18,7 @@ const HotelInfoScreen = ({ route }) => {
     KeyOnSaturday,
     checkOutInfo,
   } = route.params.selectedHotel || {};
-
+  console.log("HotelInfoScreen route.params", route.params);
   // Check if selectedHotel is defined before accessing its properties
   if (!route.params.selectedHotel) {
     return (
