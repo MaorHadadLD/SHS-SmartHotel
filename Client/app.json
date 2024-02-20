@@ -18,7 +18,9 @@
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
-      "bundleIdentifier": "com.shs.smarthotel"
+      "bundleIdentifier": "com.shs.smarthotel",
+      "package": "com.shs.smarthotel",
+      "googleMapsApiKey": "AIzaSyBHV26uOtdXka6czAzzxsB99hJO38hD9DE"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -26,7 +28,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.shs.smarthotel"
+      "package": "com.shs.smarthotel",
+      "googleMapsApiKey": "AIzaSyBHV26uOtdXka6czAzzxsB99hJO38hD9DE"
     },
     "web": {
       "favicon": "./assets/favicon.png"
