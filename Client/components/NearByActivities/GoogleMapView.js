@@ -1,29 +1,58 @@
 import { View, Text, Dimensions } from 'react-native'
-import React, { useState } from 'react'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
+import React, { useContext, useState, useEffect} from 'react'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+import { UserLocationContext } from '../../Context/UserLocationContext'
+
+
+
 
 export default function GoogleMapView() {
-    const [mapRegion, setmapRegion] = useState({
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-    });  
-  return (
-    <View style={{marginTop:20}}>
-      <MapView
-        style={{
-            width: Dimensions.get('screen').width*0.89,
-            height: Dimensions.get('screen').height*0.23,
-            borderRadius: 10,
-         }}
-         provider={PROVIDER_GOOGLE}
-         showsUserLocation={true}
-         region={mapRegion}
-        
-      >
+    const [mapRegion, setmapRegion] = useState([]);
 
-      </MapView>
-    </View>
-  )
+   
+    const {location,setLocation}=useContext(UserLocationContext);
+    
+    useEffect(()=>{
+        if(location)
+        {
+            setmapRegion({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.0422,
+                longitudeDelta: 0.0421,
+            })
+        }
+      },[location])
+  
+  
+      return (
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ fontSize: 20, 
+            marginBottom: 10, fontWeight: "600" }}>
+            Top Near By Places
+          </Text>
+          <View style={{ borderRadius: 20, overflow: "hidden" }}>
+        {location?    <MapView
+              style={{
+                width: Dimensions.get("screen").width * 0.89,
+                height: Dimensions.get("screen").height * 0.23,
+              }}
+              provider={PROVIDER_GOOGLE}
+              showsUserLocation={true}
+              region={mapRegion}
+            >
+                <Marker 
+                title="You" 
+                coordinate={mapRegion}
+                 />
+                {/* {placeList.map((item,index)=>index<=4&&(
+                    <PlaceMarker item={item} key={index} />
+                ))} */}
+               
+            </MapView>:null} 
+            
+          </View>
+         
+        </View>
+      );
 }

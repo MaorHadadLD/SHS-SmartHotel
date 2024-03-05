@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Dimensions } from 'react-native'
+import { View, Text, TextInput, Dimensions, StyleSheet } from 'react-native'
 import React from 'react'
 
 export default function Header() {
