@@ -20,7 +20,7 @@ import CodeQRScreen from '../screens/guest/CodeQRScreen';
 import VerificationScreen from '../screens/guest/VerificationScreen';
 import RoomKeyScreen from '../screens/guest/RoomKeyScreen';
 import CleaningRoomScreen from '../screens/staff/CleaningRoomScreen';
-import ActivitiesHome from '../screens/guest/ActivityNearBy/ActivitiesHome';
+import HomeNavigation from './HomeNavigation';
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => (
@@ -48,7 +48,7 @@ const MainStack = () => (
     <Stack.Screen name="RoomServiceRequestsScreen" component={RoomServiceRequestsScreen} />
     <Stack.Screen name="PoolBarRequestScreen" component={PoolBarRequestScreen} />
     <Stack.Screen name="NearbyActivitiesScreen" component={NearbyActivitiesScreen} />
-    <Stack.Screen name="ActivitiesHome" component={ActivitiesHome} />
+    <Stack.Screen name="ActivitiesHome" component={HomeNavigation } />
     
     
     <Stack.Screen name="ReceptionScreen" component={ReceptionScreen} />
