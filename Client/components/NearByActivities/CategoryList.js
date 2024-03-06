@@ -2,7 +2,7 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import React from 'react'
 import CategoryItem from './CategoryItem'
 
-export default function CategoryList() {
+export default function CategoryList({setSelectedCategory}) {
 
     const categoryList = [
         {
@@ -45,17 +45,18 @@ export default function CategoryList() {
             Select Top Category
        </Text>
         
-        <FlatList
-            data={categoryList}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={{marginTop:5}}
-            renderItem={({item})=>(
-             <TouchableOpacity onPress={() =>console.Console.log(item.name)}>
-               <CategoryItem category = {item}/>
-             </TouchableOpacity>
-            )}
-        />
+       <FlatList
+        data={categoryList}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        style={{marginTop:5}}
+        renderItem={({item})=>(
+          <TouchableOpacity 
+          onPress={()=>setSelectedCategory(item.Value)} >
+            <CategoryItem category={item} />
+          </TouchableOpacity>
+        )}
+      />
     </View>
   )
 }

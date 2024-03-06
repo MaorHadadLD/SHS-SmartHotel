@@ -5,24 +5,30 @@ import GoogleMapView from '../../../components/NearByActivities/GoogleMapView';
 import CategoryList from '../../../components/NearByActivities/CategoryList';
 import GlobalApi from '../../../API/GlobalApi';
 import { UserLocationContext } from '../../../Context/UserLocationContext';
+import PlaceList from '../../../components/NearByActivities/PlaceList';
 
 export default function ActivitiesHome() {
-    // const [placeList,setPlaceList]=useState([]);
+    const [placeList,setPlaceList]=useState([]);
     const {location,setLocation}=useContext(UserLocationContext);
-  useEffect(()=>{
-    GetNearBySearchPlace();
-  },[])
+    useEffect(()=>{
+      if(location)
+      {
+         GetNearBySearchPlace('restaurant'); 
+      }
+    },[location])
 
-  const GetNearBySearchPlace=()=>{
-    GlobalApi.nearByPlace().then(resp=>{
+  const GetNearBySearchPlace=(value)=>{
+    GlobalApi.nearByPlace(location.coords.latitude,
+      location.coords.longitude, value).then(resp=>{
       setPlaceList(resp.data.results);
     })
   }
   return (
     <ScrollView style={{padding:20,backgroundColor:'#fff',flex:1}}>
-    <Header/>
-    <GoogleMapView />
-    <CategoryList setSelectedCategory={(value)=>GetNearBySearchPlace(value)}/>
-</ScrollView>
+      <Header/>
+      <GoogleMapView placeList={placeList}/>
+      <CategoryList setSelectedCategory={(value)=>GetNearBySearchPlace(value)}/>
+      {placeList? <PlaceList placeList={placeList} />:null}
+    </ScrollView>
   )
 }
