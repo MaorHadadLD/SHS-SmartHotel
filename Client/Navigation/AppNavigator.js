@@ -24,10 +24,8 @@ import ActivitiesHome from '../screens/guest/ActivityNearBy/ActivitiesHome';
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => (
-  <Stack.Navigator initialRouteName="NearbyActivitiesScreen">
-    <Stack.Screen name="NearbyActivitiesScreen" component={NearbyActivitiesScreen} />
-    <Stack.Screen name="ActivitiesHome" component={ActivitiesHome} />
-    {/* <Stack.Screen name="Login" component={Login} />
+  <Stack.Navigator initialRouteName="Login">
+    <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="HotelSelection" component={HotelSelection} />
     <Stack.Screen name="CodeQRScreen" component={CodeQRScreen} />
     <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
@@ -49,9 +47,12 @@ const MainStack = () => (
     <Stack.Screen name="RoomCleaningRequestScreen" component={RoomCleaningRequestScreen} />
     <Stack.Screen name="RoomServiceRequestsScreen" component={RoomServiceRequestsScreen} />
     <Stack.Screen name="PoolBarRequestScreen" component={PoolBarRequestScreen} />
+    <Stack.Screen name="NearbyActivitiesScreen" component={NearbyActivitiesScreen} />
+    <Stack.Screen name="ActivitiesHome" component={ActivitiesHome} />
+    
     
     <Stack.Screen name="ReceptionScreen" component={ReceptionScreen} />
-    <Stack.Screen name="CleaningRoomScreen" component={CleaningRoomScreen} /> */}
+    <Stack.Screen name="CleaningRoomScreen" component={CleaningRoomScreen} />
   </Stack.Navigator>
 );
 
