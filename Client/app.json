@@ -18,9 +18,7 @@
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
-      "bundleIdentifier": "com.shs.smarthotel",
-      "package": "com.shs.smarthotel",
-      "googleMapsApiKey": "AIzaSyBHV26uOtdXka6czAzzxsB99hJO38hD9DE"
+      "bundleIdentifier": "com.shs.smarthotel"
     },
     "android": {
       "googleServicesFile": "./google-services.json",

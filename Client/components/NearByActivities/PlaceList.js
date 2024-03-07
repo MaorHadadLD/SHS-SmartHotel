@@ -7,8 +7,8 @@ export default function PlaceList({ placeList }) {
 
 
   const navigator=useNavigation();
-  const onPlaceClick=()=>{
-    navigator.navigate('place-detail');
+  const onPlaceClick=(item)=>{
+    navigator.navigate('PlaceDetail',{place:item});
 
   }
   return (
@@ -17,7 +17,7 @@ export default function PlaceList({ placeList }) {
 
       <FlatList
         data={placeList}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <TouchableOpacity onPress={()=>onPlaceClick(item)}>
           <PlaceItem place={item} />
           </TouchableOpacity>
