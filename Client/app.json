@@ -27,7 +27,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.shs.smarthotel",
-      "googleMapsApiKey": "AIzaSyBHV26uOtdXka6czAzzxsB99hJO38hD9DE"
+      "googleMapsApiKey": "AIzaSyCh0dw3B5TMHQFgUUPjXCrvBM2y9pPyBJc"
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native'
 import * as Location from 'expo-location';
 import ActivitiesHome from './ActivityNearBy/ActivitiesHome';
 import { UserLocationContext } from '../../Context/UserLocationContext';
-
+import HomeNavigation from '../../Navigation/HomeNavigation';
 
 
 // import TabNavigator from '../../Navigation/TabNavigator';
@@ -38,24 +38,36 @@ const NearbyActivitiesScreen = () => {
   
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, styles.map]}>
       <UserLocationContext.Provider 
           value={{location,setLocation}}>
-          <ActivitiesHome />
+          <HomeNavigation />
       </UserLocationContext.Provider>
-       </View>
+    </View>
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
     flex: 1,
+    backgroundColor: '#fff',
+    paddingTop:20
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
-  },
+        ...StyleSheet.absoluteFillObject,
+      },
 });
+
+// const styles = StyleSheet.create({
+//   container: {
+//     ...StyleSheet.absoluteFillObject,
+//     flex: 1,
+//   },
+//   map: {
+//     ...StyleSheet.absoluteFillObject,
+//   },
+// });
 
 export default NearbyActivitiesScreen;
 

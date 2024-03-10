@@ -10,7 +10,7 @@ export default function PlaceMarker({item}) {
             {
                 latitude: item.geometry.location.lat,
                 longitude: item.geometry.location.lng,
-                latitudeDelta: 0.0422,
+                latitudeDelta: 0.0522,
                 longitudeDelta: 0.0421,
             }
         }

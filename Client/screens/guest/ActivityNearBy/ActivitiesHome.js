@@ -7,6 +7,7 @@ import GlobalApi from '../../../API/GlobalApi';
 import { UserLocationContext } from '../../../Context/UserLocationContext';
 import PlaceList from '../../../components/NearByActivities/PlaceList';
 
+
 export default function ActivitiesHome() {
     const [placeList,setPlaceList]=useState([]);
     const {location,setLocation}=useContext(UserLocationContext);

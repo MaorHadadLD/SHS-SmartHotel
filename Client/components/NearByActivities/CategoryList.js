@@ -20,7 +20,7 @@ export default function CategoryList({setSelectedCategory}) {
         {
             id:3,
             name:'Coffee Shop',
-            Value:'coffee_shop',
+            Value:'cafe',
             icon:require('../../assets/coffee-shop.png'),
         },
         {
@@ -34,9 +34,7 @@ export default function CategoryList({setSelectedCategory}) {
             name:'Shopping Mall',
             Value:'shopping_mall',
             icon:require('../../assets/mall.png'),
-        }
-    
-        
+        },
     ]
 
   return (

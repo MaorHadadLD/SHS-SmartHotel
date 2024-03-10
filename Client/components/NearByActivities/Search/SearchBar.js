@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions } from "react-native";
 import { TextInput } from "react-native";
@@ -14,7 +14,6 @@ export default function SearchBar({ setSearchText }) {
                 colors={[color = '#fff', "transparent"]}
                 style={{ padding: 20, width: Dimensions.get("screen").width }}
             >
-            </LinearGradient>
             <View
                 style={{
                     display: "flex",
@@ -47,7 +46,7 @@ export default function SearchBar({ setSearchText }) {
                     onSubmitEditing={() => setSearchText(searchInput)}
                 />
             </View>
-            <LinearGradient />
+            </LinearGradient>
 
         </View>
     )

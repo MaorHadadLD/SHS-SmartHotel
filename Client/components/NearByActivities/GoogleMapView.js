@@ -33,7 +33,7 @@ export default function GoogleMapView({ placeList }) {
         Top Near By Places
       </Text>
       <View style={{ borderRadius: 20, overflow: "hidden" }}>
-        {location ? (
+        {location ? 
           <MapView
             style={{
               width: Dimensions.get('screen').width * 0.89,
@@ -51,7 +51,7 @@ export default function GoogleMapView({ placeList }) {
               <PlaceMarker item={item} key={index} />
             ))}
 
-          </MapView>) : null}
+          </MapView> : null}
 
       </View>
 

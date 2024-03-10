@@ -1,13 +1,16 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from "@expo/vector-icons";
 import GoogleMapView from '../GoogleMapView'
+import Share from '../../../API/Share';
 
 export default function PlaceDetailItem({ place, onDirectionClick }) {
   return (
     <View>
-      <Text style={{fontSize:26}}>{place.name}</Text>
+      <Text style={{fontSize:26}}>
+        {place.name}
+        </Text>
 
       <View
         style={{
@@ -29,7 +32,7 @@ export default function PlaceDetailItem({ place, onDirectionClick }) {
               "?maxwidth=400" +
               "&photo_reference=" +
               place?.photos[0]?.photo_reference +
-              "&key=AIzaSyBHV26uOtdXka6czAzzxsB99hJO38hD9DE",
+              "&key=AIzaSyCh0dw3B5TMHQFgUUPjXCrvBM2y9pPyBJc",
           }}
           style={{
             width: "100%",
@@ -71,6 +74,22 @@ export default function PlaceDetailItem({ place, onDirectionClick }) {
         >
           <Ionicons name="navigate-circle-outline" size={24} color="black" />
           <Text style={{ fontSize: 16 }}>Direction</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>Share.SharePlace(place)}
+          style={{
+            direction: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 5,
+            backgroundColor:'#f0f0f0',
+            width:90,
+            padding:3,
+            borderRadius:40,
+            justifyContent:'center'
+          }}
+        >
+         <Ionicons name="md-share-outline" size={24} color="black" />
+          <Text style={{  fontSize: 16 }}>Share</Text>
         </TouchableOpacity>
     </View>
     </View>

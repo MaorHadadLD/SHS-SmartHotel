@@ -1,4 +1,4 @@
-import { View, Text, ScrollView ,Platform, Linking } from 'react-native'
+import { View, Text, ScrollView ,Platform, Linking, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {useRoute} from '@react-navigation/native'
 import PlaceDetailItem from './PlaceDetailItem'
@@ -58,5 +58,5 @@ export default function PlaceDetail() {
         </Text>
       </TouchableOpacity>
     </ScrollView>
-  )
+  );
 }

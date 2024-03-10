@@ -23,6 +23,7 @@ import CleaningRoomScreen from '../screens/staff/CleaningRoomScreen';
 // import ActivitiesHome from '../screens/guest/ActivityNearBy/ActivitiesHome';
 import HomeNavigation from './HomeNavigation';
 import Search from '../screens/guest/ActivityNearBy/Search';
+import PlaceDetail from '../components/NearByActivities/PlaceDetail/PlaceDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +31,7 @@ const MainStack = () => (
   <Stack.Navigator initialRouteName="Login">
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="HotelSelection" component={HotelSelection} />
-    <Stack.Screen name="CodeQRScreen" component={CodeQRScreen} />
+    {/* <Stack.Screen name="CodeQRScreen" component={CodeQRScreen} /> */}
     <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
     <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} />
     <Stack.Screen name="HotelInfoScreen" component={HotelInfoScreen} />
@@ -52,7 +53,9 @@ const MainStack = () => (
     <Stack.Screen name="PoolBarRequestScreen" component={PoolBarRequestScreen} />
     <Stack.Screen name="NearbyActivitiesScreen" component={NearbyActivitiesScreen} />
     <Stack.Screen name="ActivitiesHome" component={HomeNavigation } />
-    <Stack.Screen name="Search" component={Search } />
+    <Stack.Screen name="Search" component={ Search } />
+    <Stack.Screen name="PlaceDetail" component={ PlaceDetail } />
+
     
     
     
