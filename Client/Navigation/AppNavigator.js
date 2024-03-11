@@ -31,7 +31,7 @@ const MainStack = () => (
   <Stack.Navigator initialRouteName="Login">
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="HotelSelection" component={HotelSelection} />
-    {/* <Stack.Screen name="CodeQRScreen" component={CodeQRScreen} /> */}
+    <Stack.Screen name="CodeQRScreen" component={CodeQRScreen} />
     <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
     <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} />
     <Stack.Screen name="HotelInfoScreen" component={HotelInfoScreen} />
