@@ -13,8 +13,9 @@ export const sendLoginGuest = async (email, password, selectedHotel) => {
 };
 
 export const sendRooomStatus = async (email) => {
+  console.log("sendRooomStatus", email);
   try {
-    const response = await axios.post(`${BaseURL}roomstatus`, { email });
+    const response = await axios.post(`${BaseURL}roomstatus`, { email});
     return response.data;
   } catch (error) {
     console.error("sendRooomStatus", error);

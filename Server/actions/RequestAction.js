@@ -68,14 +68,11 @@ export const deleteRequest = async (guestEmail, type) => {
 }
 
 export const getRequestByDepartment = async (reqBody) => {
-    const requestsRef = ref(db, `${reqBody.type, reqBody.hotel.hotelName, reqBody.hotel.city}`);
-    console.log("getRequestByDpartment", requestsRef);
+    console.log("getRequestByDpartment", reqBody);
+    const requestsRef = ref(db, `requests/${reqBody.type}`);
     const snapshot = await get(requestsRef);
-    console.log("getRequestByDpartment", snapshot);
     const data = snapshot.val();
-    console.log("getRequestByDpartment", data);
     if (data) {
-        console.log("getRequestByDpartment", hotel.hotelName, hotel.city, data);
         const requestList = Object.values(data)
           .filter(request =>request.hotel.hotelName === reqBody.hotel.hotelName && request.hotel.city === reqBody.hotel.city)
           .map(request => ({
@@ -84,6 +81,7 @@ export const getRequestByDepartment = async (reqBody) => {
             hotel: request.hotel,
             status: request.status,
           }));
+          console.log("getRequestByDpartment159",  requestList);
           return {success: true, data: requestList};
         }
         else {
@@ -93,14 +91,14 @@ export const getRequestByDepartment = async (reqBody) => {
 
 export const postRequest = async (body) => {
     try {
-        const requestRef = ref(db, `requests/${body.type}/`);
-        console.log("postRequest", requestRef);
+        const requestRef = ref(db, `requests/${body.bodyrequest.type}/`);
+        console.log("postRequestAction", body);
         const newRef = push(requestRef);
         set(newRef,{
             status: "waiting",
-            notice: body.request,
-            hotel: body.hotel,
-            roomNumer: body.roomNumber
+            notice: body.bodyrequest.request,
+            hotel: body.bodyrequest.selectedHotel,
+            roomNumber: body.bodyrequest.roomNumber,
     });
         return {succees: true};
     }

@@ -13,9 +13,9 @@ export const sendRoomRequest = async (guest, hotel) => {
     }
   };
 
-  export const sendPostRequest = async (request, type) => {
+  export const sendPostRequest = async ( bodyrequest) => {
     try {
-      const response = await axios.post(`${BaseURL}request/post`, {request, type});
+      const response = await axios.post(`${BaseURL}request/post`, { bodyrequest });
       return response.data;
     } catch (error) {
       console.error("sendRoomCleaningRequest", error);
@@ -25,7 +25,8 @@ export const sendRoomRequest = async (guest, hotel) => {
   export const getRequests = async (hotel, type) => {
     try {
       const response = await axios.post(`${BaseURL}request/get`, { hotel, type });
-      return response.data;
+      console.log("getRequests", response.data.data);
+      return response.data.data;
     } catch (error) {
       console.error("getRequests", error);
     }

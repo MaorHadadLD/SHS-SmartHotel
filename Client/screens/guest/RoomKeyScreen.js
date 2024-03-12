@@ -1,24 +1,58 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
-// import { globalStyles } from '../../styles/globalStyle';
+import { View, Text, StyleSheet, Image, ScrollView, Button, Platform } from 'react-native';
+import NfcManager , { NfcTech } from 'react-native-nfc-manager'; // Import NFC Manager
 import { sendRooomStatus } from '../../API/GuestCalls';
 
+
+
 const RoomKeyScreen = ({ route }) => {
-    const [guest, setGuest] = useState({});
-    const guestEmail = route.params.guest || {};
+    const [guest, setGuest] = useState(route.params.guest);
+    
 
     useEffect(() => {
         const fetchGuestData = async () => {
             try {
-                const results = await sendRooomStatus(guestEmail);
-                // console.log("fetchGuestData results", results.data);
+                const results = await sendRooomStatus(guest.email);
                 setGuest(results.data);
             } catch (error) {
                 console.error("fetchGuestData error", error);
             }
         }
         fetchGuestData();
+
+        // Initialize NFC Manager when component mounts
+        initNfc();
+       
     }, []);
+
+    // Function to initialize NFC Manager
+    const initNfc = async () => {
+        try {
+            await NfcManager.start();
+        } catch (ex) {
+            console.warn('NFC init error', ex.message);
+        }
+    };
+
+    // Function to broadcast room key using NFC
+    const broadcastRoomKey = async () => {
+        try {
+            console.log("key")
+            await NfcManager.requestTechnology(NfcTech.Ndef);
+            console.log("rapehello")
+            
+
+            const bytes = NfcManager.createNdefMessage({
+                roomKey: guest.roomKey // Assuming roomKey is a string
+
+            });
+          
+
+            await NfcManager.setNdefPushMessage(bytes);
+        } catch (ex) {
+            console.warn('NFC broadcast error', ex.message);
+        }
+    };
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -34,7 +68,9 @@ const RoomKeyScreen = ({ route }) => {
                 <Text style={styles.text}>{guest.email}</Text>
                 <Text style={styles.label}>Room Number:</Text>
                 <Text style={styles.text}>{guest.roomNumber}</Text>
-                {/* Add other relevant properties here */}
+                <Text style={styles.label}>keyNumber:</Text>
+                <Text style={styles.text}>{guest.roomKey}</Text>
+                <Button title="Broadcast Room Key" onPress={broadcastRoomKey} />
             </View>
         </ScrollView>
     );

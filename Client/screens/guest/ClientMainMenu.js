@@ -4,8 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { getGuestDetails } from '../../API/GuestCalls';
 
 function ClientMainMenu({route}) {
-  console.log("ClientMainMenu route", route.params.selectedHotel);
   const { selectedHotel } = route.params.selectedHotel || {};
+  console.log("ClientMainMenu selectedHotel: ", route.params.selectedHotel);
   const guestEmail  = route.params.guest || {};
   let guestData = {};
   const navigation = useNavigation();
@@ -16,7 +16,6 @@ function ClientMainMenu({route}) {
       const results = await getGuestDetails( guestEmail);
       if (results.success) {
         guestData = results.data;
-        console.log("ClientMainMenu guestData: ", guestData);
       }
     }catch (error) {  
       console.error('ClientMainMenu error:', error.message);

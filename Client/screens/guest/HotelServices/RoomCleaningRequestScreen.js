@@ -8,7 +8,7 @@ import { sendPostRequest } from '../../../API/RequestCalls';
 
 
 
-function RoomCleaningRequestScreen({ navigation }) {
+function RoomCleaningRequestScreen({ route, navigation }) {
   const departmentId = 'CleaningRoom';
   const database = getDatabase(firebaseApp);
 
@@ -20,10 +20,11 @@ function RoomCleaningRequestScreen({ navigation }) {
 
   const handleRequestSubmit = async (request)  => {
     try {
-      const response = await sendPostRequest(request, departmentId);
+      const bodyrequest = { request, type: departmentId, roomNumber: route.params.roomNumber, selectedHotel: route.params.selectedHotel };
+      const response = await sendPostRequest(bodyrequest);
       if (response.success) {
         alert('Request submitted successfully');
-        navigation.navigate('ClientMainMenu');
+        navigation.navigate('ClientMainMenu', { selectedHotel: route.params.selectedHotel, guest: route.params.guest });
       }
     } catch (error) {
       console.error('Room cleaning request error:', error.message);

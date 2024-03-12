@@ -26,6 +26,7 @@ export const getAvailableRooms = async (hotelName) => {
 }
 
 export const updateRoomStatusAndGuestRoom = async (guestEmail, selectedRoom, hotel, status) => {
+  console.log("updateRoomStatusAndGuestRoom", guestEmail);
   try {
     const response = await axios.put(`${BaseURL}updateRoomStatusAndGuestRoom`, { guestEmail, selectedRoom, hotel, status });
     return response.data;

@@ -4,6 +4,7 @@ import { getDatabase, ref, get, query, orderByChild, equalTo ,update} from 'fire
 const db = getDatabase(firebaseApp);
 
 export const getGuestByEmail = async (email) => {
+    console.log("getGuestByEmail", email);
     try {
         const guestRef = ref(db, 'guests/');
         const emailQuery = query(guestRef, orderByChild('email'), equalTo(email));
@@ -54,6 +55,13 @@ export const updateGuestSelectedHotel = async (guestEmail, hotelName, city) => {
         return false;
     }
 };
+
+// Function to generate a random room key
+const generateRandomRoomKey = () => {
+    // Generate a random number between 1000 and 9999
+    return Math.floor(1000 + Math.random() * 9000);
+}
+
 export const updateGuestRoomNumber = async (guestEmail, roomNumber) => {
     try {
         const result = await getGuestByEmail(guestEmail);
@@ -62,20 +70,38 @@ export const updateGuestRoomNumber = async (guestEmail, roomNumber) => {
         if (!guestData) {
             return false;
         }
-        // Update the guest data with the selectedHotel
+
+        // Check if the generated room key already exists in the keys collection
+        let roomKeyExists = true;
+        let roomKey;
+        while (roomKeyExists) {
+            roomKey = generateRandomRoomKey();
+            const keysRef = ref(db, 'keys/' + roomKey);
+            const keySnapshot = await get(keysRef);
+            roomKeyExists = keySnapshot.exists();
+        }
+
+        // Update the guest data with the selected hotel and generated room key
         const updatedGuestData = {
             ...guestData,
             roomNumber: roomNumber,
+            roomKey: roomKey
         };
+
         const guestRef = ref(db, `guests/${guestKey}`);
+        const keysRef = ref(db, `keys/${roomKey}`);
+
         // Use update to set the new guest data
-        await update(guestRef, updatedGuestData);
+        await Promise.all([
+            update(guestRef, updatedGuestData),
+            update(keysRef, { [roomKey]: true }) // Add the room key to the keys collection
+        ]);
+        
         return true;
     } catch (error) {
-        console.error("updateGuestSelectedHotel", error);
+        console.error("updateGuestRoomNumber", error);
         return false;
     }
 }
-
 
 export const deleteGuest = async (guest) => {}

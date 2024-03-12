@@ -29,9 +29,7 @@ export const postRoomRequestController = async (body) => {
 }
 
 export const postRequestController = async (body) => {
-    console.log("postRequestController", body);
     const result  = await postRequest(body);
-    console.log("postRequestController", result);
     if (result.succees) {
         console.log("-> POST REQUEST SUCCESSFUL \n\t GUEST: ",result);
         return requestSuccess(result);

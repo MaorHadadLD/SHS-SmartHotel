@@ -4,13 +4,16 @@ import { useState,useEffect } from 'react';
 import { getRequests } from '../../API/RequestCalls';
 
 const CleaningRoomScreen = ({ route }) => {
+  console.log('CleaningRoomScreen route', route.params.staffData);
     const [requests, setRequests] = useState([]);
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                const response = await getRequests(route.params.staffData.hotel, 'RoomCleaningRequest');
+                const response = await getRequests(route.params.staffData.hotel, 'CleaningRoom');
+                console.log('fetchRequests response15698', response.data);
                 if (response.success) {
-                    setRequests(response.data);
+                    setRequests(JSON.stringify(response.data));
+                    console.log('fetchRequests requests', requests);
                 }
             } catch (error) {
                 console.error('fetchRequests', error);
@@ -56,9 +59,9 @@ return (
     )}
     
     <View style={staffHomeStyles.staffDetailsContainer}>
-      <Text style={staffHomeStyles.detailText}>Name: {route.params.employeeName}</Text>
-      <Text style={staffHomeStyles.detailText}>Role: {route.params.role}</Text>
-      <Text style={staffHomeStyles.detailText}>Hotel: {route.params.hotel}</Text>
+      <Text style={staffHomeStyles.detailText}>Name: {route.params.staffData.employeeName}</Text>
+      <Text style={staffHomeStyles.detailText}>Role: {route.params.staffData.role}</Text>
+      <Text style={staffHomeStyles.detailText}>Hotel: {route.params.staffData.hotel.hotelName} {route.params.staffData.hotel.city}</Text>
     </View>
   </View>
 );
