@@ -76,6 +76,7 @@ export const getRequestByDepartment = async (reqBody) => {
         const requestList = Object.values(data)
           .filter(request =>request.hotel.hotelName === reqBody.hotel.hotelName && request.hotel.city === reqBody.hotel.city)
           .map(request => ({
+            id: request.id,
             notice: request.notice,
             roomNumber: request.roomNumber,
             hotel: request.hotel,
@@ -95,6 +96,7 @@ export const postRequest = async (body) => {
         console.log("postRequestAction", body);
         const newRef = push(requestRef);
         set(newRef,{
+            id: newRef.key,
             status: "waiting",
             notice: body.bodyrequest.request,
             hotel: body.bodyrequest.selectedHotel,
