@@ -1,4 +1,4 @@
-import {postRoomRequest, getRequestByDpartment, postRequest} from '../actions/RequestAction.js';
+import {postRoomRequest, getRequestByDepartment, postRequest} from '../actions/RequestAction.js';
 
 
 export const requestSuccess = (data) => ({success: true, data})
@@ -7,7 +7,7 @@ export const requestFailure = (data) => ({ success: false, data });
 //* GET REQUEST CONTROLLER *//
 export const getRequestsByDepartmentController = async (reqBody) => {
     console.log("getRequestsByDepartmentController", reqBody);
-    const result = await getRequestByDpartment(reqBody );
+    const result = await getRequestByDepartment(reqBody );
     console.log("getRequestsByDepartmentController result", result);
     if (result) {
         return requestSuccess(result);
