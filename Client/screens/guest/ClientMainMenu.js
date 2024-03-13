@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { getGuestDetails } from '../../API/GuestCalls';
@@ -7,7 +7,7 @@ function ClientMainMenu({route}) {
   const { selectedHotel } = route.params.selectedHotel || {};
   console.log("ClientMainMenu PARAMS: ", route.params);
   const guestEmail  = route.params.guest || {};
-  let guestData = {};
+  const [guestData, setGuestData] = useState([]);
   const navigation = useNavigation();
   const { hotelName, city } = selectedHotel || {};
   useEffect(() =>  {
@@ -15,7 +15,7 @@ function ClientMainMenu({route}) {
     try {
       const results = await getGuestDetails( guestEmail);
       if (results.success) {
-        guestData = results.data;
+        setGuestData(results.data);
       }
     }catch (error) {  
       console.error('ClientMainMenu error:', error.message);
@@ -25,6 +25,8 @@ function ClientMainMenu({route}) {
   }, []);
 
   const handleNavigate = (screen) => {
+    console.log('ClientMainMenu handleNavigate GUSTDATA:', guestData);
+    console.log('ClientMainMenu handleNavigate SELECTEDHOTEL:', route.params.selectedHotel);
   navigation.navigate(screen, {
     selectedHotel: route.params.selectedHotel, // Default to an empty object if undefined
     guest: guestData
