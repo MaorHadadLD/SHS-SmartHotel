@@ -1,5 +1,5 @@
 import express from 'express';
-import { postRoomRequestController, getRequestsByDepartmentController, postRequestController} from '../controllers/RequestController.js';
+import { postRoomRequestController, getRequestsByDepartmentController, postRequestController, updateRequestController, deleteRequestController} from '../controllers/RequestController.js';
 import { respond } from './utils.js';
 
 const requestRouter = express.Router();
@@ -17,5 +17,14 @@ requestRouter.post('/request/get', async (req, res) => {
 
 requestRouter.post('/request/post', async (req, res) => {
     respond(await postRequestController(req.body), res);
+});
+
+requestRouter.put('/request/update', async (req, res) => {
+    respond(await updateRequestController(req.body), res);
+});
+
+requestRouter.put('/request/delete', async (req, res) => {
+    console.log("requestRouter.delete", req.body);
+    respond(await deleteRequestController(req.body), res);
 });
 export default requestRouter;

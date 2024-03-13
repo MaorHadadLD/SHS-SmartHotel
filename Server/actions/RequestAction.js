@@ -1,5 +1,5 @@
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, set, push, query, orderByChild, equalTo, get } from 'firebase/database';
+import { getDatabase, ref, set, push, query, orderByChild, equalTo, get, update } from 'firebase/database';
 import { updateGuestRoomNumber } from './GuestAction.js';
 
 const db = getDatabase(firebaseApp);
@@ -51,10 +51,10 @@ export const postRoomRequest = async (request) => {
     }
 }
 
-export const updateRequest = async (guest) => {}
 
 
-export const deleteRequest = async (guestEmail, type) => {
+
+export const deleteRoomRequest = async (guestEmail, type) => {
     try {
         const requestRef = ref(db, `${type}`);
         const reqQuery = query(requestRef, orderByChild('guestEmail'), equalTo(guestEmail));
@@ -107,5 +107,36 @@ export const postRequest = async (body) => {
     catch (error) {
         console.error("postRequest", error);
         return {succees: false};
+    }
+}
+
+export const updateRequest = async (body) => {
+    console.log("updateRequest", body);
+    try {
+        const requestRef = ref(db, `requests/${body.type}/${body.id}`);
+        update(requestRef, {
+            status: body.newStatus,
+        });
+        return {success: true};
+    }
+    catch (error) {
+        console.error("updateRequest", error);
+        return {success: false};
+    }
+
+
+}
+
+export const deleteRequest = async (body) => {
+    console.log("deleteRequest", body);
+    try {
+        const requestRef = ref(db, `requests/${body.type}/${body.id}`);
+        set(requestRef, null);
+        return {success: true};
+    }
+    catch (error) {
+        console.error("deleteRequest", error);
+        return {success: false};
+    
     }
 }

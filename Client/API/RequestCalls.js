@@ -43,4 +43,20 @@ export const sendRoomRequest = async (guest, hotel) => {
   }
 
 
-  
+  export const sendUpdateRequest = async (id, newStatus ,type) => {
+    try {
+      const response = await axios.put(`${BaseURL}request/update`, { id, newStatus, type });
+      return response.data;
+    } catch (error) {
+      console.error("sendUpdateRequest", error);
+    }
+  }
+
+  export const sendDeleteRequest = async (id ,type) => {
+    try {
+      const response = await axios.put(`${BaseURL}request/delete`, { id, type});
+      return response.data;
+    } catch (error) {
+      console.error("sendDeleteRequest", error);
+    }
+  }

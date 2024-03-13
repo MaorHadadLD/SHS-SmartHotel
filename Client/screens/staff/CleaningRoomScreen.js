@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
 import { getRequests } from '../../API/RequestCalls';
+import { sendDeleteRequest, sendUpdateRequest } from '../../API/RequestCalls';
 
 const CleaningRoomScreen = ({ route }) => {
   const [requests, setRequests] = useState([]);
@@ -25,17 +26,22 @@ const CleaningRoomScreen = ({ route }) => {
     fetchRequests();
   }, []);
 
-  const handleRequestStatusChange = (id, newStatus) => {
+  const handleRequestStatusChange =async  (id, newStatus) => {
     if (newStatus === 'Done') {
+      const response = await sendDeleteRequest(id, 'CleaningRoom');
+
       // Filter out the request with the specified ID
       setRequests(prevRequests => prevRequests.filter(request => request.id !== id));
+      
     } else {
       // Update the status of the request
+
       setRequests(prevRequests =>
         prevRequests.map(request =>
           request.id === id ? { ...request, status: newStatus } : request
         )
       );
+      const response = await sendUpdateRequest(id, newStatus, 'CleaningRoom');
     }
   };
   

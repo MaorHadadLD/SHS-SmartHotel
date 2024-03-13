@@ -1,4 +1,4 @@
-import {postRoomRequest, getRequestByDepartment, postRequest} from '../actions/RequestAction.js';
+import {postRoomRequest, getRequestByDepartment, postRequest, updateRequest, deleteRequest} from '../actions/RequestAction.js';
 
 
 export const requestSuccess = (data) => ({success: true, data})
@@ -32,6 +32,26 @@ export const postRequestController = async (body) => {
     const result  = await postRequest(body);
     if (result.succees) {
         console.log("-> POST REQUEST SUCCESSFUL \n\t GUEST: ",result);
+        return requestSuccess(result);
+    }
+    else {
+        return requestFailure("No Requests");
+    }
+}
+
+export const updateRequestController = async (reqBody) => {
+    const result = await updateRequest(reqBody);
+    if (result) {
+        return requestSuccess(result);
+    }
+    else {
+        return requestFailure("No Requests");
+    }
+}
+
+export const deleteRequestController = async (reqBody) => {
+    const result = await deleteRequest(reqBody);
+    if (result) {
         return requestSuccess(result);
     }
     else {

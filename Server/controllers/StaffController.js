@@ -1,6 +1,6 @@
 import  { StaffLogin, getAvailableRooms, updateRoomStatus } from '../actions/StaffAction.js';
 import { updateGuestRoomNumber } from '../actions/GuestAction.js';
-import { deleteRequest } from '../actions/RequestAction.js';
+import { deleteRoomRequest } from '../actions/RequestAction.js';
 
 export const requestSuccess = (data) => ({success: true, data})
 export const requestFailure = (data) => ({ success: false, data });
@@ -38,7 +38,7 @@ export const updateRoomController = async (req, res) => {
     const selectedRoom = req.selectedRoom;
     const hotel = req.hotel;
     const status = req.status;
-    const updateReq = await deleteRequest(guestEmail, 'roomRequests');
+    const updateReq = await deleteRoomRequest(guestEmail, 'roomRequests');
     const updateRoom = await updateRoomStatus(hotel, selectedRoom, status);
     const updateGuest = await updateGuestRoomNumber(guestEmail, selectedRoom);
     if (updateReq.success && updateRoom.success && updateGuest) {
