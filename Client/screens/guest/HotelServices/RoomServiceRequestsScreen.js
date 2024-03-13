@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 function RoomServiceRequestsScreen() {
   const departmentId = 'RoomService'; // Adjust departmentId for room service
-  const database = getDatabase(firebaseApp);
+  // const database = getDatabase(firebaseApp);
 
   const roomServiceRequests = Requests.filter((reqItem) => {
     return reqItem.departmentId.includes(departmentId);
@@ -16,26 +16,29 @@ function RoomServiceRequestsScreen() {
   const [customRequest, setCustomRequest] = React.useState('');
   
   function handleRequestSubmit(request) {
-    const requestId = uuidv4();
-    const requestsRef = ref(database, 'roomServiceRequests');
+    //TODO: Send the request to the server!!!!!!
 
-    const newRequest = {
-      id: requestId,
-      departmentId: departmentId,
-      requestNotice: request,
-    };
 
-    // Using push to generate a new unique child location
-    const newRequestRef = push(requestsRef);
+    // const requestId = uuidv4();
+    // const requestsRef = ref(database, 'roomServiceRequests');
 
-    set(newRequestRef, newRequest)
-      .then(() => {
-        console.log('Request saved to the database:', newRequest);
-        // Additional logic after successfully saving the request
-      })
-      .catch((error) => {
-        console.error('Error saving request to the database:', error);
-      });
+    // const newRequest = {
+    //   id: requestId,
+    //   departmentId: departmentId,
+    //   requestNotice: request,
+    // };
+
+    // // Using push to generate a new unique child location
+    // const newRequestRef = push(requestsRef);
+
+    // set(newRequestRef, newRequest)
+    //   .then(() => {
+    //     console.log('Request saved to the database:', newRequest);
+    //     // Additional logic after successfully saving the request
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error saving request to the database:', error);
+    //   });
   }
 
   function renderPredefinedRequestButton(request) {

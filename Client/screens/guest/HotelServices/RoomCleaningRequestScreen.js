@@ -1,16 +1,14 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import {Requests} from "../../../data/ClassDpData";
-import { getDatabase, ref, set, push } from 'firebase/database';
-import firebaseApp from '../../../firebaseConfig';
-// import { v4 as uuidv4 } from 'uuid';
+
 import { sendPostRequest } from '../../../API/RequestCalls';
 
 
 
 function RoomCleaningRequestScreen({ route, navigation }) {
   const departmentId = 'CleaningRoom';
-  const database = getDatabase(firebaseApp);
+  // const database = getDatabase(firebaseApp);
 
   const cleaningRoomRequests = Requests.filter((reqItem) => {
     return reqItem.departmentId.includes(departmentId);
