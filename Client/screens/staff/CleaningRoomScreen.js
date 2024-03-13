@@ -26,12 +26,19 @@ const CleaningRoomScreen = ({ route }) => {
   }, []);
 
   const handleRequestStatusChange = (id, newStatus) => {
-    setRequests((prevRequests) =>
-      prevRequests.map((request) =>
-        request.id === id ? { ...request, status: newStatus } : request
-      )
-    );
+    if (newStatus === 'Done') {
+      // Filter out the request with the specified ID
+      setRequests(prevRequests => prevRequests.filter(request => request.id !== id));
+    } else {
+      // Update the status of the request
+      setRequests(prevRequests =>
+        prevRequests.map(request =>
+          request.id === id ? { ...request, status: newStatus } : request
+        )
+      );
+    }
   };
+  
   
 
   const renderRequestItem = ({ item }) => (

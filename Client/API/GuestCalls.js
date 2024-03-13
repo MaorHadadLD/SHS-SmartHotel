@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const BaseURL = 'http://192.168.1.110:3002/';
-// const BaseURL = 'http://192.168.0.102:3002/';
+// const BaseURL = 'http://192.168.1.110:3002/';
+const BaseURL = 'http://192.168.1.167:3002/';
+
 
 export const sendLoginGuest = async (email, password, selectedHotel) => {
   try {

@@ -64,44 +64,70 @@ const generateRandomRoomKey = () => {
 
 export const updateGuestRoomNumber = async (guestEmail, roomNumber) => {
     try {
-        const result = await getGuestByEmail(guestEmail);
-        const guestData = Object.values(result)[0];
-        const guestKey = Object.keys(result)[0]; 
-        if (!guestData) {
-            return false;
+        // Check if the roomNumber is a message
+        if (roomNumber === "Your request for your room has been sent to the hotel reception") {
+            // Update guest data without generating a room key
+            const result = await getGuestByEmail(guestEmail);
+            const guestData = Object.values(result)[0];
+            const guestKey = Object.keys(result)[0]; 
+            if (!guestData) {
+                return false;
+            }
+
+            // Update the guest data with the provided roomNumber
+            const updatedGuestData = {
+                ...guestData,
+                roomNumber: roomNumber
+            };
+
+            const guestRef = ref(db, `guests/${guestKey}`);
+
+            // Use update to set the new guest data
+            await update(guestRef, updatedGuestData);
+
+            return true;
+        } else {
+            // If roomNumber is an actual room number, generate a room key
+            const result = await getGuestByEmail(guestEmail);
+            const guestData = Object.values(result)[0];
+            const guestKey = Object.keys(result)[0]; 
+            if (!guestData) {
+                return false;
+            }
+
+            // Check if the generated room key already exists in the keys collection
+            let roomKeyExists = true;
+            let roomKey;
+            while (roomKeyExists) {
+                roomKey = generateRandomRoomKey();
+                const keysRef = ref(db, 'keys/' + roomKey);
+                const keySnapshot = await get(keysRef);
+                roomKeyExists = keySnapshot.exists();
+            }
+
+            // Update the guest data with the selected hotel and generated room key
+            const updatedGuestData = {
+                ...guestData,
+                roomNumber: roomNumber,
+                roomKey: roomKey
+            };
+
+            const guestRef = ref(db, `guests/${guestKey}`);
+            const keysRef = ref(db, `keys/${roomKey}`);
+
+            // Use update to set the new guest data
+            await Promise.all([
+                update(guestRef, updatedGuestData),
+                update(keysRef, { [roomKey]: true }) // Add the room key to the keys collection
+            ]);
+            
+            return true;
         }
-
-        // Check if the generated room key already exists in the keys collection
-        let roomKeyExists = true;
-        let roomKey;
-        while (roomKeyExists) {
-            roomKey = generateRandomRoomKey();
-            const keysRef = ref(db, 'keys/' + roomKey);
-            const keySnapshot = await get(keysRef);
-            roomKeyExists = keySnapshot.exists();
-        }
-
-        // Update the guest data with the selected hotel and generated room key
-        const updatedGuestData = {
-            ...guestData,
-            roomNumber: roomNumber,
-            roomKey: roomKey
-        };
-
-        const guestRef = ref(db, `guests/${guestKey}`);
-        const keysRef = ref(db, `keys/${roomKey}`);
-
-        // Use update to set the new guest data
-        await Promise.all([
-            update(guestRef, updatedGuestData),
-            update(keysRef, { [roomKey]: true }) // Add the room key to the keys collection
-        ]);
-        
-        return true;
     } catch (error) {
         console.error("updateGuestRoomNumber", error);
         return false;
     }
 }
+
 
 export const deleteGuest = async (guest) => {}

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Button, Platform } from 'react-native';
-import NfcManager , { NfcTech } from 'react-native-nfc-manager'; // Import NFC Manager
+// import NfcManager , { NfcTech } from 'react-native-nfc-manager'; // Import NFC Manager
 import { sendRooomStatus } from '../../API/GuestCalls';
-
 
 
 const RoomKeyScreen = ({ route }) => {
@@ -21,38 +20,38 @@ const RoomKeyScreen = ({ route }) => {
         fetchGuestData();
 
         // Initialize NFC Manager when component mounts
-        initNfc();
+        // initNfc();
        
     }, []);
 
     // Function to initialize NFC Manager
-    const initNfc = async () => {
-        try {
-            await NfcManager.start();
-        } catch (ex) {
-            console.warn('NFC init error', ex.message);
-        }
-    };
+    // const initNfc = async () => {
+    //     try {
+    //         await NfcManager.start();
+    //     } catch (ex) {
+    //         console.warn('NFC init error', ex.message);
+    //     }
+    // };
 
     // Function to broadcast room key using NFC
-    const broadcastRoomKey = async () => {
-        try {
-            console.log("key")
-            await NfcManager.requestTechnology(NfcTech.Ndef);
-            console.log("rapehello")
+    // const broadcastRoomKey = async () => {
+    //     try {
+    //         console.log("key")
+    //         await NfcManager.requestTechnology(NfcTech.Ndef);
+    //         console.log("rapehello")
             
 
-            const bytes = NfcManager.createNdefMessage({
-                roomKey: guest.roomKey // Assuming roomKey is a string
+    //         const bytes = NfcManager.createNdefMessage({
+    //             roomKey: guest.roomKey // Assuming roomKey is a string
 
-            });
+    //         });
           
 
-            await NfcManager.setNdefPushMessage(bytes);
-        } catch (ex) {
-            console.warn('NFC broadcast error', ex.message);
-        }
-    };
+    //         await NfcManager.setNdefPushMessage(bytes);
+    //     } catch (ex) {
+    //         console.warn('NFC broadcast error', ex.message);
+    //     }
+    // };
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -70,7 +69,7 @@ const RoomKeyScreen = ({ route }) => {
                 <Text style={styles.text}>{guest.roomNumber}</Text>
                 <Text style={styles.label}>keyNumber:</Text>
                 <Text style={styles.text}>{guest.roomKey}</Text>
-                <Button title="Broadcast Room Key" onPress={broadcastRoomKey} />
+                {/* <Button title="Broadcast Room Key" onPress={broadcastRoomKey} /> */}
             </View>
         </ScrollView>
     );

@@ -66,7 +66,7 @@ export const deleteRequest = async (guestEmail, type) => {
         return {success: false};
     }
 }
-
+// get the request by department and by hotel 
 export const getRequestByDepartment = async (reqBody) => {
     console.log("getRequestByDpartment", reqBody);
     const requestsRef = ref(db, `requests/${reqBody.type}`);
