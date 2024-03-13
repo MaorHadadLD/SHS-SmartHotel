@@ -12,12 +12,10 @@ const RoomServiceScreen = ({ route }) => {
         const fetchRequests = async () => {
             try {
                 const response = await getRequests(route.params.staffData.hotel, 'RoomService');
-                console.log('fetchRequests response', response);
+                // console.log('fetchRequests response', response.success);
                 if (response.success) {
                     setRequests(response.data);
-                    console.log('fetchRequests requests', response.data);
-                } else {
-                    console.error('fetchRequests failed:', response.error); // Handle error from API
+                    console.log('fetchRequestsghhgjjgjgjgjgjgj requests', response.data);
                 }
             } catch (error) {
                 console.error('fetchRequests error:', error);
@@ -82,7 +80,8 @@ const RoomServiceScreen = ({ route }) => {
                     keyExtractor={(item, index) => index.toString()}
                 />
             ) : (
-                <Text>No requests found</Text>
+                <Text>There are no requests to perform in Room Services {route.params.staffData.hotel.hotelName}{' '}
+                {route.params.staffData.hotel.city}</Text>
             )}
 
             <View style={staffHomeStyles.staffDetailsContainer}>

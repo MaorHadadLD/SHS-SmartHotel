@@ -77,7 +77,8 @@ const CleaningRoomScreen = ({ route }) => {
           renderItem={renderRequestItem}
         />
       ) : (
-        <Text>No requests available</Text>
+        <Text>There are no requests to perform in Cleaning Room {route.params.staffData.hotel.hotelName}{' '}
+        {route.params.staffData.hotel.city}</Text>
       )}
 
       <View style={staffHomeStyles.staffDetailsContainer}>

@@ -24,7 +24,6 @@ requestRouter.put('/request/update', async (req, res) => {
 });
 
 requestRouter.put('/request/delete', async (req, res) => {
-    console.log("requestRouter.delete", req.body);
     respond(await deleteRequestController(req.body), res);
 });
 export default requestRouter;

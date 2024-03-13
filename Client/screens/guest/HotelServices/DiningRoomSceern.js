@@ -34,29 +34,29 @@ function DiningRoomScreen() {
   };
 
   const handleReservation = () => {
-    try {
-      // Get a reference to the database
-      const db = getDatabase(firebaseApp);
+    // try {
+    //   // Get a reference to the database
+    //   const db = getDatabase(firebaseApp);
   
-      // Create a reference to the 'diningRoomReservations' node in the database
-      const diningRoomReservationsRef = ref(db, 'diningRoomReservations');
+    //   // Create a reference to the 'diningRoomReservations' node in the database
+    //   const diningRoomReservationsRef = ref(db, 'diningRoomReservations');
   
-      // Push the reservation data to the database
-      const newReservationRef = push(diningRoomReservationsRef, {
-        numberOfDiners,
-        arrivalTime,
-        roomNumber,
-        timestamp: new Date().toISOString(), // Include a timestamp for record keeping
-      });
+    //   // Push the reservation data to the database
+    //   const newReservationRef = push(diningRoomReservationsRef, {
+    //     numberOfDiners,
+    //     arrivalTime,
+    //     roomNumber,
+    //     timestamp: new Date().toISOString(), // Include a timestamp for record keeping
+    //   });
   
-      console.log('Dining Room Reservation added with ID:', newReservationRef.key);
+    //   console.log('Dining Room Reservation added with ID:', newReservationRef.key);
   
-      // Dining Room Reservation successfully sent to the server
-      console.log('Dining Room Reservation successful!');
-    } catch (error) {
-      // Handle errors
-      console.error('Error during Dining Room Reservation:', error.message);
-    }
+    //   // Dining Room Reservation successfully sent to the server
+    //   console.log('Dining Room Reservation successful!');
+    // } catch (error) {
+    //   // Handle errors
+    //   console.error('Error during Dining Room Reservation:', error.message);
+    // }
   
     // Close the modal after handling the reservation
     toggleModal();
