@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../styles/globalStyle';
 // import firebaseApp from '../firebaseConfig';
 import { sendLoginStaff } from '../API/StaffCalls';
+
 const Login = () => {
   const [showStaffLogin, setShowStaffLogin] = useState(false);
   const [employeeNumber, setEmployeeNumber] = useState('');
@@ -30,6 +31,8 @@ const Login = () => {
           navigation.navigate('ReceptionScreen', {staffData: result.data});
         } else if (result.data.role === 'cleaning'){
           navigation.navigate('CleaningRoomScreen', {staffData: result.data});
+        } else if (result.data.role === 'RoomService'){
+          navigation.navigate('RoomServiceScreen', {staffData: result.data});
         }
       } else {
         console.error('Staff login error:', error.message);

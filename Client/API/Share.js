@@ -1,5 +1,9 @@
 import { Share } from "react-native"
 
+/**
+ * SharePlace function to share the place details
+ */
+
 const SharePlace=(place)=>{
         Share.share({
             title:'Share Business',

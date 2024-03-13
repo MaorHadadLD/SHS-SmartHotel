@@ -1,11 +1,9 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import {Requests} from "../../../data/ClassDpData";
-import { getDatabase, ref, set, push } from 'firebase/database';
-import firebaseApp from '../../../firebaseConfig';
-import { v4 as uuidv4 } from 'uuid';
+import { sendPostRequest } from '../../../API/RequestCalls';
 
-function RoomServiceRequestsScreen() {
+function RoomServiceRequestsScreen({ route, navigation}) {
   const departmentId = 'RoomService'; // Adjust departmentId for room service
   // const database = getDatabase(firebaseApp);
 
@@ -15,7 +13,18 @@ function RoomServiceRequestsScreen() {
 
   const [customRequest, setCustomRequest] = React.useState('');
   
-  function handleRequestSubmit(request) {
+  const handleRequestSubmit = async(request) =>{
+    try {
+      const bodyrequest = { request, type: departmentId, roomNumber: route.params.roomNumber, selectedHotel: route.params.selectedHotel };
+      console.log('bodyrequest:', bodyrequest);
+      const response = await sendPostRequest(bodyrequest);
+      if (response.success) {
+        alert('Request submitted successfully');
+        navigation.navigate('ClientMainMenu', { selectedHotel: route.params.selectedHotel, guest: route.params.guest });
+      }
+    } catch (error) {
+      console.error('Room Service request error:', error.message);
+    }
     //TODO: Send the request to the server!!!!!!
 
 

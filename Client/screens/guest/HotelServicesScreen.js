@@ -6,26 +6,27 @@ import DpClassCategoryGridTil from '../../components/DpClassCategoryGridTil';
 import { checkStatusReq } from '../../API/RequestCalls';
 
 function HotelServicesScreen({  route, navigation }) {
-  console.log('HotelServicesScreen route', route.params);
+  console.log('HotelServicesScreen routeGUEST', route.params.guest);
+  console.log('HotelServicesScreen routeHOTEL', route.params.selectedHotel);
   function renderClassDpCategoryItem(itemData) {
 
     console.log('itemData', itemData);
     const pressHandler = async() => {
       if (itemData.item.title === 'Dining Room') {
-        navigation.navigate('DiningRoomScreen', route.params.guest);
+        navigation.navigate('DiningRoomScreen', route.params.guest, route.params.selectedHotel);
       }else if(itemData.item.title === 'Cleaning Room'){
         // const result = await checkStatusReq( roomNumber, 'RoomCleaningRequest');
         // if(result.success){
         //     alert('You have already made a request');
         // }else{
-        navigation.navigate('RoomCleaningRequestScreen', route.params.guest);
+        navigation.navigate('RoomCleaningRequestScreen',{ guest: route.params.guest, selectedHotel: route.params.selectedHotel });
         // }
       }
       else if(itemData.item.title === 'Room Service'){
-        navigation.navigate('RoomServiceRequestsScreen', route.params.guest);
+        navigation.navigate('RoomServiceRequestsScreen', route.params.guest, route.params.selectedHotel);
       }
       else if(itemData.item.title === 'Pool Bar'){
-        navigation.navigate('PoolBarRequestScreen', route.params.guest);
+        navigation.navigate('PoolBarRequestScreen', route.params.guest, route.params.selectedHotel);
       }
        else {
         navigation.navigate('RequestsMnOverview', {

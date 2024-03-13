@@ -8,6 +8,7 @@ import { sendPostRequest } from '../../../API/RequestCalls';
 
 function RoomCleaningRequestScreen({ route, navigation }) {
   const departmentId = 'CleaningRoom';
+  console.log('RoomCleaningRequestScreen route TESTINGREPHAL:', route.params);
   // const database = getDatabase(firebaseApp);
 
   const cleaningRoomRequests = Requests.filter((reqItem) => {
@@ -18,11 +19,14 @@ function RoomCleaningRequestScreen({ route, navigation }) {
 
   const handleRequestSubmit = async (request)  => {
     try {
-      const bodyrequest = { request, type: departmentId, roomNumber: route.params.roomNumber, selectedHotel: route.params.selectedHotel };
+      const bodyrequest = { request, type: departmentId, roomNumber: route.params.guest.roomNumber, selectedHotel: route.params.guest.selectedHotel };
+      console.log('bodyrequest beavilBDIKA:', bodyrequest);
       const response = await sendPostRequest(bodyrequest);
       if (response.success) {
         alert('Request submitted successfully');
+        console.log('RoomCleaningRequestScreen route.params:', route.params);
         navigation.navigate('ClientMainMenu', { selectedHotel: route.params.selectedHotel, guest: route.params.guest });
+        
       }
     } catch (error) {
       console.error('Room cleaning request error:', error.message);

@@ -19,7 +19,7 @@ const VerificationScreen = (route) => {
                 if(results.data.roomNumber === "waitaing for room assignment"){
                     await sendRoomRequest(results.data, route.route.params);
                 }
-                console.log("handleVerification results", route.route.params);
+                console.log("handleVerification results", route.route.params.selectedHotel);
                 navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params.selectedHotel, guest: results.data.email });
               } else {
                   Alert.alert(results.data);

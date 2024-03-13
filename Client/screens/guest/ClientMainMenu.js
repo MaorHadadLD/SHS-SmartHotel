@@ -5,7 +5,7 @@ import { getGuestDetails } from '../../API/GuestCalls';
 
 function ClientMainMenu({route}) {
   const { selectedHotel } = route.params.selectedHotel || {};
-  console.log("ClientMainMenu selectedHotel: ", route.params.selectedHotel);
+  console.log("ClientMainMenu PARAMS: ", route.params);
   const guestEmail  = route.params.guest || {};
   let guestData = {};
   const navigation = useNavigation();
@@ -23,9 +23,13 @@ function ClientMainMenu({route}) {
   };
   funcGuest();
   }, []);
+
   const handleNavigate = (screen) => {
-    navigation.navigate(screen, {  selectedHotel: route.params.selectedHotel, guest: guestData});
-  };
+  navigation.navigate(screen, {
+    selectedHotel: route.params.selectedHotel, // Default to an empty object if undefined
+    guest: guestData
+  });
+};
   
 
   // Menu items data Spa

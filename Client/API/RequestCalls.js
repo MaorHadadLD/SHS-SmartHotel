@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BaseURL = 'http://192.168.1.110:3002/';
-const BaseURL = 'http://192.168.1.167:3002/';
+const BaseURL = 'http://192.168.1.110:3002/';
+// const BaseURL = 'http://192.168.1.167:3002/';
 
 
 export const sendRoomRequest = async (guest, hotel) => {
@@ -14,6 +14,7 @@ export const sendRoomRequest = async (guest, hotel) => {
   };
 
   export const sendPostRequest = async ( bodyrequest) => {
+    console.log('sendPostRequest bodyrequestTest1:', bodyrequest);
     try {
       const response = await axios.post(`${BaseURL}request/post`, { bodyrequest });
       return response.data;
