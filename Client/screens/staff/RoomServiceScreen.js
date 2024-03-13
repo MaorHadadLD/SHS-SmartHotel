@@ -60,10 +60,15 @@ const RoomServiceScreen = ({ route }) => {
             <Text style={staffHomeStyles.requestItemText}>Status: {item.status}</Text>
             {/* Add more text elements to display other properties as needed */}
             <TouchableOpacity
-                style={staffHomeStyles.startCompleteButton}
-                onPress={() => handleRequestStatusChange(item.id, 'In Progress')}>
-                <Text style={staffHomeStyles.startCompleteButtonText}>Start</Text>
-            </TouchableOpacity>
+        style={staffHomeStyles.startCompleteButton}
+        onPress={() => handleRequestStatusChange(item.id, 'In Progress')}>
+        <Text style={staffHomeStyles.startCompleteButtonText}>Start</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={staffHomeStyles.startCompleteButton}
+        onPress={() => handleRequestStatusChange(item.id, 'Done')}>
+        <Text style={staffHomeStyles.startCompleteButtonText}>Complete</Text>
+      </TouchableOpacity>
         </View>
     );
 
