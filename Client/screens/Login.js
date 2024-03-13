@@ -33,6 +33,8 @@ const Login = () => {
           navigation.navigate('CleaningRoomScreen', {staffData: result.data});
         } else if (result.data.role === 'RoomService'){
           navigation.navigate('RoomServiceScreen', {staffData: result.data});
+        } else if (result.data.role === 'PoolBar'){
+          navigation.navigate('PoolBarScreen', {staffData: result.data});
         }
       } else {
         console.error('Staff login error:', error.message);

@@ -25,6 +25,7 @@ import HomeNavigation from './HomeNavigation';
 import Search from '../screens/guest/ActivityNearBy/Search';
 import PlaceDetail from '../components/NearByActivities/PlaceDetail/PlaceDetail';
 import RoomServiceScreen from '../screens/staff/RoomServiceScreen';
+import PoolBarScreen from '../screens/staff/PoolBarScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +64,7 @@ const MainStack = () => (
     <Stack.Screen name="ReceptionScreen" component={ReceptionScreen} />
     <Stack.Screen name="CleaningRoomScreen" component={CleaningRoomScreen} />
     <Stack.Screen name="RoomServiceScreen" component={RoomServiceScreen} />
+    <Stack.Screen name="PoolBarScreen" component={PoolBarScreen} />
   </Stack.Navigator>
 );
 

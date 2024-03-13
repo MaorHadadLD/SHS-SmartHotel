@@ -25,29 +25,6 @@ function RoomServiceRequestsScreen({ route, navigation}) {
     } catch (error) {
       console.error('Room Service request error:', error.message);
     }
-    //TODO: Send the request to the server!!!!!!
-
-
-    // const requestId = uuidv4();
-    // const requestsRef = ref(database, 'roomServiceRequests');
-
-    // const newRequest = {
-    //   id: requestId,
-    //   departmentId: departmentId,
-    //   requestNotice: request,
-    // };
-
-    // // Using push to generate a new unique child location
-    // const newRequestRef = push(requestsRef);
-
-    // set(newRequestRef, newRequest)
-    //   .then(() => {
-    //     console.log('Request saved to the database:', newRequest);
-    //     // Additional logic after successfully saving the request
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error saving request to the database:', error);
-    //   });
   }
 
   function renderPredefinedRequestButton(request) {
