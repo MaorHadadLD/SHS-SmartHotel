@@ -95,13 +95,26 @@ export const postRequest = async (body) => {
         const requestRef = ref(db, `requests/${body.bodyrequest.type}/`);
         console.log("postRequestAction", body);
         const newRef = push(requestRef);
-        set(newRef,{
-            id: newRef.key,
-            status: "waiting",
-            notice: body.bodyrequest.request,
-            hotel: body.bodyrequest.selectedHotel,
-            roomNumber: body.bodyrequest.roomNumber,
-    });
+        if(body.bodyrequest.type === "Dinning"){
+            set(newRef,{
+                id: newRef.key,
+                numberOfDiners: body.bodyrequest.numberOfDiners,
+                arrivalTime : body.bodyrequest.arrivalTime,
+                roomNumber: body.bodyrequest.roomNumber,
+                hotel: body.bodyrequest.selectedHotel,
+                timestamp: new Date().toISOString()
+                // status: "waiting",
+                // notice: body.bodyrequest.request,
+        });
+        } else {
+            set(newRef,{
+                id: newRef.key,
+                status: "waiting",
+                notice: body.bodyrequest.request,
+                hotel: body.bodyrequest.selectedHotel,
+                roomNumber: body.bodyrequest.roomNumber,
+            });
+        }
         return {succees: true};
     }
     catch (error) {
@@ -140,3 +153,4 @@ export const deleteRequest = async (body) => {
     
     }
 }
+

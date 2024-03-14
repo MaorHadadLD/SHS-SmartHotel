@@ -26,6 +26,7 @@ const Login = () => {
     // Handle Staff Login Logic
     try {
       const result = await sendLoginStaff(employeeNumber, password);
+      console.log('Staff login result:', result.success);
       if (result.success) {
         if(result.data.role === 'reception'){
           navigation.navigate('ReceptionScreen', {staffData: result.data});
@@ -37,7 +38,7 @@ const Login = () => {
           navigation.navigate('PoolBarScreen', {staffData: result.data});
         }
       } else {
-        console.error('Staff login error:', error.message);
+        alert('Invalid employee number or password. Please try again.');
       }
     } catch (error) {
       console.error('Staff login error:', error.message);
