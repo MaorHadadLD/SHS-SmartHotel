@@ -10,18 +10,15 @@ function ClientMainMenu({route}) {
   // console.log("ClientMainMenu PARAMS: ", route.params.selectedHotel);
   const guestEmail  = route.params.guestData.email || {};
   const [guestData, setGuestData] = useState([]);
-
   const navigation = useNavigation();
   const { hotelName, city } =  route.params.selectedHotel;
-
-
 
   useEffect(() => {
     const getGuestData = async () => {
       try {
         // Retrieve guest data from AsyncStorage
         const storedGuestData = await AsyncStorage.getItem('guestData');
-        // console.log('storedGuestData:', storedGuestData);
+        console.log('storedGuestData:', storedGuestData);
         if (storedGuestData) {
           setGuestData(JSON.parse(storedGuestData));
         } else {
@@ -39,8 +36,6 @@ function ClientMainMenu({route}) {
     getGuestData();
   }, [guestEmail]); // Include guestEmail in the dependency array
 
-
-
   const handleNavigate = (screen) => {
     console.log('ClientMainMenu handleNavigate GUSTDATA:', guestData);
     console.log('ClientMainMenu handleNavigate SELECTEDHOTEL:', route.params.selectedHotel);
@@ -50,7 +45,6 @@ function ClientMainMenu({route}) {
   });
 };
   
-
   // Menu items data Spa
   const menuItems = [
     { id: '1', title: "Hotel Information", screen: "HotelInfoScreen" },

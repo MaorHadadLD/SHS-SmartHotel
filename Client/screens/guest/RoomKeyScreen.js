@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Button, Platform } from 'react-native';
 // import NfcManager , { NfcTech } from 'react-native-nfc-manager'; // Import NFC Manager
 import { sendRooomStatus } from '../../API/GuestCalls';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RoomKeyScreen = ({ route }) => {
     const [guest, setGuest] = useState(route.params.guest);
@@ -13,6 +13,7 @@ const RoomKeyScreen = ({ route }) => {
             try {
                 const results = await sendRooomStatus(guest.email);
                 setGuest(results.data);
+                await AsyncStorage.setItem('guestData', JSON.stringify(results.data));
             } catch (error) {
                 console.error("fetchGuestData error", error);
             }

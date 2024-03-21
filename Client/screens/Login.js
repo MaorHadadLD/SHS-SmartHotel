@@ -21,7 +21,7 @@ const Login = () => {
         // Retrieve guest data from AsyncStorage
         const storedGuestData = await AsyncStorage.getItem('guestData');
         const storedHotelData = await AsyncStorage.getItem('selectedHotel');
-        console.log('storedGuestData:', storedGuestData);
+        // console.log('storedGuestData:', storedGuestData);
         if (storedGuestData) {
           navigation.replace('ClientMainMenu', { guestData: JSON.parse(storedGuestData) , selectedHotel: JSON.parse(storedHotelData)});
         }
