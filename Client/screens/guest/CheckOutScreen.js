@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -39,6 +39,7 @@ const CheckOutScreen = () => {
 
   return (
     <View style={styles.container}>
+      <ScrollView>
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Check Out</Text>
       </View>
@@ -94,6 +95,7 @@ const CheckOutScreen = () => {
       <TouchableOpacity style={styles.checkOutButton} onPress={handleCheckOut}>
         <Text style={styles.buttonText}>Confirm Check Out</Text>
       </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
