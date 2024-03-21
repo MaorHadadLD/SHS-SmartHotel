@@ -2,27 +2,39 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { getGuestDetails } from '../../API/GuestCalls';
+import { get } from "firebase/database";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function ClientMainMenu({route}) {
   const { selectedHotel } = route.params.selectedHotel || {};
   console.log("ClientMainMenu PARAMS: ", route.params);
-  const guestEmail  = route.params.guest || {};
+  const guestEmail  = route.params.guestData.email || {};
   const [guestData, setGuestData] = useState([]);
   const navigation = useNavigation();
   const { hotelName, city } = selectedHotel || {};
-  useEffect(() =>  {
-    const funcGuest = async () => {
-    try {
-      const results = await getGuestDetails( guestEmail);
-      if (results.success) {
-        setGuestData(results.data);
+
+  useEffect(() => {
+    const getGuestData = async () => {
+      try {
+        // Retrieve guest data from AsyncStorage
+        const storedGuestData = await AsyncStorage.getItem('guestData');
+        // console.log('storedGuestData:', storedGuestData);
+        if (storedGuestData) {
+          setGuestData(JSON.parse(storedGuestData));
+        } else {
+          const results = await getGuestDetails(guestEmail);
+          if (results.success) {
+            setGuestData(results.data);
+            // Save guest data to AsyncStorage when it changes
+            await AsyncStorage.setItem('guestData', JSON.stringify(results.data));
+          }
+        }
+      } catch (error) {
+        console.error('Error retrieving guest data:', error.message);
       }
-    }catch (error) {  
-      console.error('ClientMainMenu error:', error.message);
-    }
-  };
-  funcGuest();
-  }, []);
+    };
+    getGuestData();
+  }, [guestEmail]); // Include guestEmail in the dependency array
 
   const handleNavigate = (screen) => {
     console.log('ClientMainMenu handleNavigate GUSTDATA:', guestData);

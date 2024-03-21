@@ -1,21 +1,49 @@
 import { getDatabase, ref, get} from 'firebase/database';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../styles/globalStyle';
 // import firebaseApp from '../firebaseConfig';
 import { sendLoginStaff } from '../API/StaffCalls';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
   const [showStaffLogin, setShowStaffLogin] = useState(false);
   const [employeeNumber, setEmployeeNumber] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
+  
+  useEffect(() => {
+    
+    const getGuestData = async () => {
+      // await AsyncStorage.clear();
+      try {
+        // Retrieve guest data from AsyncStorage
+        const storedGuestData = await AsyncStorage.getItem('guestData');
+        const storedHotelData = await AsyncStorage.getItem('selectedHotel');
+        console.log('storedGuestData:', storedGuestData);
+        if (storedGuestData) {
+          navigation.navigate('ClientMainMenu', { guestData: JSON.parse(storedGuestData) , selectedHotel: JSON.parse(storedHotelData)});
+        }
+      }
+      catch (error) {
+        console.error('Error retrieving guest data:', error.message);
+      }
+    };
+    getGuestData();
+  }, [navigation]);
+
 
   const handleGuestLogin = () => {
     // Handle Guest Login Logic
-    navigation.navigate('HotelSelection')
+    // const storedGuestData = AsyncStorage.getItem('guestData');
+    // console.log('storedGuestData:',storedGuestData);
+    // if (storedGuestData !== null && storedGuestData !== undefined) {
+    //   navigation.navigate('ClientMainMenu', { guestData: JSON.parse(storedGuestData) });
+    // } else {
+      navigation.navigate('HotelSelection');
+    // }
   
   };
   const handleStaffLogin = () => {

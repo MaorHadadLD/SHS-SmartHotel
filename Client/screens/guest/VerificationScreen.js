@@ -5,6 +5,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import firebaseApp from '../../firebaseConfig';
 import { sendLoginGuest} from '../../API/GuestCalls';
 import { sendRoomRequest } from '../../API/RequestCalls';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VerificationScreen = (route) => {
   const [email, setEmail] = useState('');
@@ -19,8 +20,12 @@ const VerificationScreen = (route) => {
                 if(results.data.roomNumber === "waitaing for room assignment"){
                     await sendRoomRequest(results.data, route.route.params);
                 }
+                await AsyncStorage.setItem('guestData', JSON.stringify(results.data));
+                await AsyncStorage.setItem('selectedHotel', JSON.stringify(route.route.params.selectedHotel));
+                const datacheck = await AsyncStorage.getItem('guestData');
+                console.log("datacheck: ", datacheck);
                 console.log("handleVerification results", route.route.params.selectedHotel);
-                navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params.selectedHotel, guest: results.data.email });
+                navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params.selectedHotel, guestData: results.data });
               } else {
                   Alert.alert(results.data);
               }
