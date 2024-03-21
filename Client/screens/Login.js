@@ -15,7 +15,6 @@ const Login = () => {
   const navigation = useNavigation();
   
   useEffect(() => {
-    
     const getGuestData = async () => {
       // await AsyncStorage.clear();
       try {
@@ -24,7 +23,7 @@ const Login = () => {
         const storedHotelData = await AsyncStorage.getItem('selectedHotel');
         console.log('storedGuestData:', storedGuestData);
         if (storedGuestData) {
-          navigation.navigate('ClientMainMenu', { guestData: JSON.parse(storedGuestData) , selectedHotel: JSON.parse(storedHotelData)});
+          navigation.replace('ClientMainMenu', { guestData: JSON.parse(storedGuestData) , selectedHotel: JSON.parse(storedHotelData)});
         }
       }
       catch (error) {

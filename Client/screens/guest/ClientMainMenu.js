@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused} from '@react-navigation/native';
 import { getGuestDetails } from '../../API/GuestCalls';
 import { get } from "firebase/database";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,8 +10,10 @@ function ClientMainMenu({route}) {
   // console.log("ClientMainMenu PARAMS: ", route.params.selectedHotel);
   const guestEmail  = route.params.guestData.email || {};
   const [guestData, setGuestData] = useState([]);
+
   const navigation = useNavigation();
   const { hotelName, city } =  route.params.selectedHotel;
+
 
 
   useEffect(() => {
@@ -37,6 +39,8 @@ function ClientMainMenu({route}) {
     getGuestData();
   }, [guestEmail]); // Include guestEmail in the dependency array
 
+
+
   const handleNavigate = (screen) => {
     console.log('ClientMainMenu handleNavigate GUSTDATA:', guestData);
     console.log('ClientMainMenu handleNavigate SELECTEDHOTEL:', route.params.selectedHotel);
@@ -54,7 +58,7 @@ function ClientMainMenu({route}) {
     { id: '3', title: "Hotel Services", screen: "HotelServicesScreen" },
     { id: '4', title: "Nearby Activities", screen: "NearbyActivitiesScreen" },
     { id: '5', title: "Spa", screen: "SpaScreen" },
-    { id: '6', title: "check out", screen: "checkOutScreen" },
+    { id: '6', title: "check out", screen: "CheckOutScreen" },
   ];
 
   const renderItem = ({ item }) => (

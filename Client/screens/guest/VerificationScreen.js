@@ -25,7 +25,7 @@ const VerificationScreen = (route) => {
                 const datacheck = await AsyncStorage.getItem('guestData');
                 console.log("datacheck: ", datacheck);
                 console.log("handleVerification results", route.route.params.selectedHotel);
-                navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params.selectedHotel, guestData: results.data });
+                navigation.replace('ClientMainMenu', { selectedHotel: route.route.params.selectedHotel, guestData: results.data });
               } else {
                   Alert.alert(results.data);
               }
