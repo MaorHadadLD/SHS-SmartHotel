@@ -6,12 +6,13 @@ import { get } from "firebase/database";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function ClientMainMenu({route}) {
-  const { selectedHotel } = route.params.selectedHotel || {};
-  console.log("ClientMainMenu PARAMS: ", route.params);
+  // const selectedHotel  = route.params.selectedHotel ;
+  // console.log("ClientMainMenu PARAMS: ", route.params.selectedHotel);
   const guestEmail  = route.params.guestData.email || {};
   const [guestData, setGuestData] = useState([]);
   const navigation = useNavigation();
-  const { hotelName, city } = selectedHotel || {};
+  const { hotelName, city } =  route.params.selectedHotel;
+
 
   useEffect(() => {
     const getGuestData = async () => {
