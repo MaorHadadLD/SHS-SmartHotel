@@ -1,4 +1,4 @@
-import {postRoomRequest, getRequestByDepartment, postRequest, updateRequest, deleteRequest} from '../actions/RequestAction.js';
+import {postRoomRequest, getRequestByDepartment, postRequest, updateRequest, deleteRequest, getAllRequstsByRoomNumber} from '../actions/RequestAction.js';
 
 
 export const requestSuccess = (data) => ({success: true, data})
@@ -58,3 +58,13 @@ export const deleteRequestController = async (reqBody) => {
         return requestFailure("No Requests");
     }
 }
+
+export const getRequestsByRoomNumberController = async (reqBody) => {
+    const result = await getAllRequstsByRoomNumber(JSON.parse(reqBody.roomNumber));
+    if (result) {
+        return requestSuccess(result);
+    }
+    else {
+        return requestFailure("No Requests");
+    }
+} 

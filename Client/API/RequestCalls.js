@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BaseURL = 'http://192.168.1.126:3002/';
+const BaseURL = 'http://192.168.1.250:3002/';
 // const BaseURL = 'http://192.168.1.186:3002/';
 
 
@@ -33,6 +33,15 @@ export const sendRoomRequest = async (guest, hotel) => {
     }
   };
 
+export const getAllRequstsByRoomNumberGuest = async (roomNumber) => {
+    try {
+      console.log("getAllRequstsByRoomNumberGuest", roomNumber);
+      const response = await axios.post(`${BaseURL}request/getallbyroomnumber`, { roomNumber });
+      return response.data.data;
+    } catch (error) {
+      console.error("getAllRequstsByRoomNumberGuest", error);
+    }
+  };
 
   export const checkStatusReq = async (roomNumber, type) => {
     try {

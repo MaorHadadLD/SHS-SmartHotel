@@ -6,6 +6,7 @@ import { sendPostRequest } from '../../../API/RequestCalls';
 function PoolBarRequestScreen({route, navigation}) {
     const departmentId = 'PoolBar'; // Adjust departmentId for room service
   // const database = getDatabase(firebaseApp);
+  console.log('PoolBarRequestScreen route :', route.params);
 
   const poolBarServiceRequests = Requests.filter((reqItem) => {
     return reqItem.departmentId.includes(departmentId);
@@ -15,15 +16,15 @@ function PoolBarRequestScreen({route, navigation}) {
   
   const handleRequestSubmit = async(request) => {
     try{
-       const bodyrequest = { request, type: departmentId, roomNumber: route.params.roomNumber, selectedHotel: route.params.selectedHotel };
+       const bodyrequest = { request, type: departmentId, roomNumber: route.params.guestData.roomNumber, selectedHotel: route.params.guestData.selectedHotel };
        const response = await sendPostRequest(bodyrequest);
         if (response.success) {
           alert('Request submitted successfully');
-          navigation.navigate('ClientMainMenu', { selectedHotel: route.params.selectedHotel, guest: route.params.guest });
+          navigation.navigate('ClientMainMenu', { selectedHotel: route.params.selectedHotel, guestData: route.params.guestData });
         }
     }
     catch (error) {
-      console.error('Room Service request error:', error.message);
+      console.error('Pool Bar request error:', error.message);
     }
   }
 

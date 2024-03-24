@@ -1,5 +1,5 @@
 import express from 'express';
-import { postRoomRequestController, getRequestsByDepartmentController, postRequestController, updateRequestController, deleteRequestController} from '../controllers/RequestController.js';
+import { postRoomRequestController, getRequestsByDepartmentController, postRequestController, updateRequestController, deleteRequestController, getRequestsByRoomNumberController} from '../controllers/RequestController.js';
 import { respond } from './utils.js';
 
 const requestRouter = express.Router();
@@ -26,4 +26,10 @@ requestRouter.put('/request/update', async (req, res) => {
 requestRouter.put('/request/delete', async (req, res) => {
     respond(await deleteRequestController(req.body), res);
 });
+
+requestRouter.post('/request/getallbyroomnumber', async (req, res) => {
+    console.log("requestRouter.getallbyroomnumber", req.body);
+    respond(await getRequestsByRoomNumberController(req.body), res);
+});
+
 export default requestRouter;

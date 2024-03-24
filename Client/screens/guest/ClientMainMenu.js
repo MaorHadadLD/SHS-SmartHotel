@@ -41,7 +41,7 @@ function ClientMainMenu({route}) {
     console.log('ClientMainMenu handleNavigate SELECTEDHOTEL:', route.params.selectedHotel);
   navigation.navigate(screen, {
     selectedHotel: route.params.selectedHotel, // Default to an empty object if undefined
-    guest: guestData
+    guestData: guestData
   });
 };
   
@@ -50,9 +50,10 @@ function ClientMainMenu({route}) {
     { id: '1', title: "Hotel Information", screen: "HotelInfoScreen" },
     { id: '2', title: "Room Key", screen: "RoomKeyScreen" },
     { id: '3', title: "Hotel Services", screen: "HotelServicesScreen" },
-    { id: '4', title: "Nearby Activities", screen: "NearbyActivitiesScreen" },
-    { id: '5', title: "Spa", screen: "SpaScreen" },
-    { id: '6', title: "check out", screen: "CheckOutScreen" },
+    { id: '4', title: "Request Tracking", screen: "RequestTrackingScreen"},
+    { id: '5', title: "Nearby Activities", screen: "NearbyActivitiesScreen" },
+    { id: '6', title: "Spa", screen: "SpaScreen" },
+    { id: '7', title: "check out", screen: "CheckOutScreen" },
   ];
 
   const renderItem = ({ item }) => (

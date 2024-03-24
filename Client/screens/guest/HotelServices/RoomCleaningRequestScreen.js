@@ -19,13 +19,13 @@ function RoomCleaningRequestScreen({ route, navigation }) {
 
   const handleRequestSubmit = async (request)  => {
     try {
-      const bodyrequest = { request, type: departmentId, roomNumber: route.params.guest.roomNumber, selectedHotel: route.params.guest.selectedHotel };
+      const bodyrequest = { request, type: departmentId, roomNumber: route.params.guestData.roomNumber, selectedHotel: route.params.guestData.selectedHotel };
       console.log('bodyrequest beavilBDIKA:', bodyrequest);
       const response = await sendPostRequest(bodyrequest);
       if (response.success) {
         alert('Request submitted successfully');
         console.log('RoomCleaningRequestScreen route.params:', route.params);
-        navigation.navigate('ClientMainMenu', { selectedHotel: route.params.selectedHotel, guest: route.params.guest });
+        navigation.navigate('ClientMainMenu', { selectedHotel: route.params.selectedHotel, guestData: route.params.guestData });
         
       }
     } catch (error) {

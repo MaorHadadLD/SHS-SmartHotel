@@ -28,6 +28,7 @@ function DiningRoomScreen() {
   const [numberOfDiners, setNumberOfDiners] = useState('');
   const [arrivalTime, setArrivalTime] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
+  
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

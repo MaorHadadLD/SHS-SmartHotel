@@ -2,6 +2,8 @@ import firebaseApp from '../firebaseConfig.js';
 import { getDatabase, ref, set, push, query, orderByChild, equalTo, get, update } from 'firebase/database';
 import { updateGuestRoomNumber } from './GuestAction.js';
 
+
+
 const db = getDatabase(firebaseApp);
 export const getRequestsRoomByHotel = async (hotel) => {
     const requestsRef = ref(db, 'roomRequests');
@@ -66,6 +68,7 @@ export const deleteRoomRequest = async (guestEmail, type) => {
         return {success: false};
     }
 }
+
 // get the request by department and by hotel 
 export const getRequestByDepartment = async (reqBody) => {
     console.log("getRequestByDpartment", reqBody);
@@ -89,6 +92,37 @@ export const getRequestByDepartment = async (reqBody) => {
             return {success: false, data: "No request found"};
         }
     }
+
+    export const getAllRequstsByRoomNumber = async (guestData) => {
+        console.log("getAllRequstsByRoomNumber", guestData.roomNumber);
+        try {
+            const requestList = [];
+            
+            // Call getRequestByDepartment for each department type
+            const departmentTypes = ["CleaningRoom", "PoolBar", "RoomService"]; // Add more department types if needed
+            for (const type of departmentTypes) {
+                const res = await getRequestByDepartment({ type, hotel: guestData.selectedHotel });
+                if (res.success) {
+                    requestList.push(...res.data); // Add the requests from this department to the request list
+                } else {
+                    console.error(`Failed to fetch requests for department ${type}`);
+                }
+            }
+            
+            // Now requestList contains requests from all departments
+            console.log("All requests:", requestList);
+            
+            // Filter requestList by room number
+            const filteredRequests = requestList.filter(request => request.roomNumber === guestData.roomNumber);
+            console.log("Filtered requests:", filteredRequests);
+            
+            return { success: true, data: filteredRequests };
+        } catch (error) {
+            console.error("getAllRequstsByRoomNumber", error);
+            return { success: false };
+        }
+    }
+    
 
 export const postRequest = async (body) => {
     try {
