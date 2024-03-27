@@ -63,6 +63,8 @@ const Login = () => {
           navigation.navigate('RoomServiceScreen', {staffData: result.data});
         } else if (result.data.role === 'PoolBar'){
           navigation.navigate('PoolBarScreen', {staffData: result.data});
+        } else if (result.data.role === 'Dinning'){
+          navigation.navigate('DinningRoomStaff', {staffData: result.data});
         }
       } else {
         alert('Invalid employee number or password. Please try again.');

@@ -45,7 +45,7 @@ export const staffHomeStyles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#007bff',
+    borderColor: '#ccc',
     borderRadius: 5,
   },
   requestItemText: {

@@ -109,7 +109,7 @@ function DiningRoomScreen() {
     <View style={styles.container}>
       {availableMeals.length > 0 ? (
         <>
-        <Text >Room Number {guestData.roomNumber}</Text>
+        {/* <Text >Room Number {guestData.roomNumber}</Text> */}
           <Text style={styles.header}>Available Meals</Text>
           {availableMeals.map(({ meal, startTime, endTime }) => (
             <View key={meal}>
