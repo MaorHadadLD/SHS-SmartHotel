@@ -71,18 +71,31 @@ function DiningRoomScreen() {
                 renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
                 ListEmptyComponent={<Text>No dishes available for {meal}</Text>}
               />
-            </View>
-          ))}
-        </>
-      ) : (
-        <Text style={styles.header}>No meals currently available</Text>
-      )}
-
-      {/* Order Table Button */}
+                {/* Order Table Button */}
       <TouchableOpacity style={styles.orderButton} onPress={toggleModal}>
         <Text style={styles.orderButtonText}>Reserve a Table</Text>
       </TouchableOpacity>
 
+            </View>
+            
+          ))}
+        </>
+      ) : (
+        <View style={styles.modalContainer}>
+          <Text style={styles.header}>No meals currently available</Text>
+          <Text style={styles.header}>Please come back during meal hours:</Text>
+          <FlatList style={styles.container}
+            data={mealSchedules}
+            renderItem={({ item }) => (
+              <Text style={styles.item}>{`${item.meal} - ${item.startTime} to ${item.endTime}`}</Text>
+            )}
+          />
+        </View>
+   
+
+      )}
+
+    
       {/* Reservation Modal */}
       <Modal animationType="slide" transparent={true} visible={isModalVisible}>
         <View style={styles.modalContainer}>
@@ -150,6 +163,7 @@ const styles = StyleSheet.create({
   item: {
     fontSize: 16,
     marginVertical: 8,
+    
   },
   orderButton: {
     backgroundColor: '#3498db',
