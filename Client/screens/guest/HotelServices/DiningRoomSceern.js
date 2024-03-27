@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
+import {Picker, Item} from '@react-native-picker/picker';
 import moment from 'moment';
 
 const hotelDishes = {
@@ -26,6 +27,7 @@ function DiningRoomScreen() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [numberOfDiners, setNumberOfDiners] = useState('');
   const [arrivalTime, setArrivalTime] = useState('');
+
   const [roomNumber, setRoomNumber] = useState('');
 
   useEffect(() => {
@@ -41,13 +43,27 @@ function DiningRoomScreen() {
   };
 
   const handleReservation = () => {
-    // Handle reservation logic here
+    //if number of diners is not a number
+    if (!numberOfDiners || !arrivalTime) {
+     
+      alert('Please enter the number of diners and arrival time');
+      return;
+  }
+  if(isNaN(numberOfDiners)){
+    alert('Only numbers are allowed for the number of diners');
+    return;
+  }
+  if(numberOfDiners <= 0 || numberOfDiners >= 13){
+    alert('Number of diners should be between 1 and 12');
+    return;
+  }
+    console.log(`Reservation for ${numberOfDiners} diners at ${arrivalTime}`);
     toggleModal(); // Close the modal after handling the reservation
   };
 
   // Define the scheduled times for each meal
   const mealSchedules = [
-    { meal: 'Breakfast', startTime: '07:30', endTime: '10:30' },
+    { meal: 'Breakfast', startTime: '07:00', endTime: '10:00' },
     { meal: 'Lunch', startTime: '12:00', endTime: '15:00' },
     { meal: 'Dinner', startTime: '18:00', endTime: '21:00' },
   ];
@@ -55,7 +71,9 @@ function DiningRoomScreen() {
   // Filter the meals based on current time and meal schedules
   const availableMeals = mealSchedules.filter(
     ({ startTime, endTime }) => currentTime >= startTime && currentTime <= endTime
+   
   );
+  console.log(currentTime);
 
   return (
     <View style={styles.container}>
@@ -110,20 +128,45 @@ function DiningRoomScreen() {
               onChangeText={(text) => setNumberOfDiners(text)}
             />
 
-            <TextInput
+<Picker
+              selectedValue={arrivalTime}
               style={styles.input}
-              placeholder="Arrival Time"
-              value={arrivalTime}
-              onChangeText={(text) => setArrivalTime(text)}
-            />
+              onValueChange={(itemValue) => setArrivalTime(itemValue)}
+            >
+              <Picker.Item label="Select Arrival Time" value="" />
+              {availableMeals.map(({ meal, startTime, endTime }) => {
+                const startHour = parseInt(startTime.split(':')[0]);
+                const endHour = parseInt(endTime.split(':')[0]);
+                const currentHour = parseInt(currentTime.split(':')[0]);
+                const currentMinute = parseInt(currentTime.split(':')[1]);
+                const arrivalTimes = [];
+                for (let hour = currentHour-1 + 1; hour <= endHour; hour++) {
+                  const formattedHour = hour < 10 ? `0${hour}` : `${hour}`;
+                  arrivalTimes.push(`${formattedHour}:00`);
+                  if (hour < endHour ) {
+                  arrivalTimes.push(`${formattedHour}:15`);
+                  arrivalTimes.push(`${formattedHour}:30`);
+                  arrivalTimes.push(`${formattedHour}:45`);
+                  }
+                }
 
+                return arrivalTimes.map((arrivalTime) => (
+                  <Picker.Item key={`${meal}-${arrivalTime}`} label={arrivalTime} value={arrivalTime} />
+                ));
+              })}
+            </Picker>
+            
+
+
+{/* 
             <TextInput
               style={styles.input}
               placeholder="Room Number"
               keyboardType="numeric"
               value={roomNumber}
+
               onChangeText={(text) => setRoomNumber(text)}
-            />
+            /> */}
 
             <TouchableOpacity style={styles.reserveButton} onPress={handleReservation}>
               <Text style={styles.reserveButtonText}>Reserve</Text>
