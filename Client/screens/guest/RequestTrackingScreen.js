@@ -48,22 +48,31 @@ function RequestTracking() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>Request Tracking</Text>
-            {/* Display requests for each department */}
-            {Object.keys(groupedRequests).map((department, index) => (
-                <View key={index} style={styles.departmentContainer}>
-                    <Text style={styles.departmentTitle}>{department}</Text>
-                    {groupedRequests[department].map((request, index) => (
-                        <View key={index} style={styles.requestContainer}>
-                            <Text>{request.notice}</Text>
-                            <Text>{request.status}</Text>
-                        </View>
-                    ))}
+          <Text style={styles.heading}>Request Tracking</Text>
+          {/* Display requests for each department */}
+          {Object.keys(groupedRequests).map((department, index) => (
+            <View key={index} style={styles.departmentContainer}>
+              <Text style={styles.departmentTitle}>{department}</Text>
+              {groupedRequests[department].map((request, index) => (
+                <View key={index} style={styles.requestContainer}>
+                  <Text>{request.notice}</Text>
+                  <Text>{request.status}</Text>
+                  {/* Check if the request type is for dining */}
+                  {request.arrivalTime != undefined && (
+                    <View>
+                      <Text>Number of diners: {request.numberOfDiners}</Text>
+                      <Text>Arrival time: {request.arrivalTime}</Text>
+                    </View>
+                  )}
+                  {/* Add more conditions for other request types */}
+                  
                 </View>
-            ))}
+              ))}
+            </View>
+          ))}
         </View>
-    );
-}
+      );
+}      
 
 const styles = StyleSheet.create({
     container: {

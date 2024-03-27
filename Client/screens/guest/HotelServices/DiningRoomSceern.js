@@ -3,6 +3,7 @@ import { View, FlatList, Text, TouchableOpacity, StyleSheet, Modal, TextInput } 
 import {Picker, Item} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
+import { sendPostRequest } from '../../../API/RequestCalls';
 
 const hotelDishes = {
   breakfast: [
@@ -29,14 +30,14 @@ function DiningRoomScreen() {
   const [numberOfDiners, setNumberOfDiners] = useState('');
   const [arrivalTime, setArrivalTime] = useState('');
 
-  const [roomNumber, setRoomNumber] = useState('');
+  const [guestData, setGuestData] = useState('');
 
   useEffect(() => {
     const getGuestData = async () => {
       try {
-        const guestData = await AsyncStorage.getItem('guestData');
+        const guest = await AsyncStorage.getItem('guestData');
         if (guestData !== null) {
-          setRoomNumber(JSON.parse(guestData).roomNumber);
+          setGuestData(JSON.parse(guest));
         }
       } catch (error) {
         console.error('AsyncStorage error', error);
@@ -54,23 +55,40 @@ function DiningRoomScreen() {
     setModalVisible(!isModalVisible);
   };
 
-  const handleReservation = () => {
-    //if number of diners is not a number
+  const handleReservation = async () => {
+    // Validate the number of diners and arrival time that is not undefined
     if (!numberOfDiners || !arrivalTime) {
-     
       alert('Please enter the number of diners and arrival time');
       return;
-  }
-  if(isNaN(numberOfDiners)){
-    alert('Only numbers are allowed for the number of diners');
-    return;
-  }
-  if(numberOfDiners <= 0 || numberOfDiners >= 13){
-    alert('Number of diners should be between 1 and 12');
-    return;
-  }
-    console.log(`Reservation for ${numberOfDiners} diners at ${arrivalTime}`);
-    toggleModal(); // Close the modal after handling the reservation
+    }
+    //if number of diners is not a number
+    if(isNaN(numberOfDiners)){
+      alert('Only numbers are allowed for the number of diners');
+      return;
+    }
+    if(numberOfDiners <= 0 || numberOfDiners >= 13){
+      alert('Number of diners should be between 1 and 12');
+      return;
+    }
+      console.log(`Reservation for ${numberOfDiners} diners at ${arrivalTime}`);
+      toggleModal(); // Close the modal after handling the reservation
+      try {
+        const bodyrequest = {
+          type : 'Dinning',
+          numberOfDiners: numberOfDiners,
+          arrivalTime: arrivalTime,
+          roomNumber: guestData.roomNumber,
+          hotel: guestData.selectedHotel,
+          time: moment().format('YYYY-MM-DD HH:mm:ss'),
+        };
+        // Send reservation data to the server
+        await sendPostRequest(bodyrequest);
+        alert('Reservation successful');
+      } catch (error) {
+        console.error('handleReservation error', error);
+        alert('Reservation failed');
+      }
+
   };
 
   // Define the scheduled times for each meal
@@ -91,7 +109,7 @@ function DiningRoomScreen() {
     <View style={styles.container}>
       {availableMeals.length > 0 ? (
         <>
-        <Text >Room Number {roomNumber}</Text>
+        <Text >Room Number {guestData.roomNumber}</Text>
           <Text style={styles.header}>Available Meals</Text>
           {availableMeals.map(({ meal, startTime, endTime }) => (
             <View key={meal}>
