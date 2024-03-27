@@ -56,14 +56,20 @@ function ClientMainMenu({route}) {
     { id: '7', title: "check out", screen: "CheckOutScreen" },
   ];
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() => handleNavigate(item.screen)}
-    >
-      <Text style={styles.menuItemText}>{item.title}</Text>
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => {
+    // Check if the item title is "Check Out" to conditionally apply styles
+    const buttonStyle = item.title === "check out" ? styles.checkoutButton : styles.menuItem;
+    const textStyle = item.title === "check out" ? styles.checkoutButtonText : styles.menuItemText;
+  
+    return (
+      <TouchableOpacity
+        style={buttonStyle}
+        onPress={() => handleNavigate(item.screen)}
+      >
+        <Text style={textStyle}>{item.title}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -101,6 +107,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   menuItemText: {
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  checkoutButton: {
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#eb2d2d', // Red color for "Check Out" button
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  checkoutButtonText: {
     fontSize: 18,
     color: '#fff',
     fontWeight: 'bold',

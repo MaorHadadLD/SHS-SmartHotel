@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
-import { getDatabase, ref, push } from 'firebase/database';
-import firebaseApp from '../../../firebaseConfig';
-
+import moment from 'moment';
 
 const hotelDishes = {
   breakfast: [
@@ -24,67 +22,61 @@ const hotelDishes = {
 };
 
 function DiningRoomScreen() {
+  const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
   const [isModalVisible, setModalVisible] = useState(false);
   const [numberOfDiners, setNumberOfDiners] = useState('');
   const [arrivalTime, setArrivalTime] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
-  
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(moment().format('HH:mm'));
+    }, 1000); // Update current time every second
+
+    return () => clearInterval(timer); // Cleanup on unmount
+  }, []);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
   const handleReservation = () => {
-    // try {
-    //   // Get a reference to the database
-    //   const db = getDatabase(firebaseApp);
-  
-    //   // Create a reference to the 'diningRoomReservations' node in the database
-    //   const diningRoomReservationsRef = ref(db, 'diningRoomReservations');
-  
-    //   // Push the reservation data to the database
-    //   const newReservationRef = push(diningRoomReservationsRef, {
-    //     numberOfDiners,
-    //     arrivalTime,
-    //     roomNumber,
-    //     timestamp: new Date().toISOString(), // Include a timestamp for record keeping
-    //   });
-  
-    //   console.log('Dining Room Reservation added with ID:', newReservationRef.key);
-  
-    //   // Dining Room Reservation successfully sent to the server
-    //   console.log('Dining Room Reservation successful!');
-    // } catch (error) {
-    //   // Handle errors
-    //   console.error('Error during Dining Room Reservation:', error.message);
-    // }
-  
-    // Close the modal after handling the reservation
-    toggleModal();
+    // Handle reservation logic here
+    toggleModal(); // Close the modal after handling the reservation
   };
+
+  // Define the scheduled times for each meal
+  const mealSchedules = [
+    { meal: 'Breakfast', startTime: '07:30', endTime: '10:30' },
+    { meal: 'Lunch', startTime: '12:00', endTime: '15:00' },
+    { meal: 'Dinner', startTime: '18:00', endTime: '21:00' },
+  ];
+
+  // Filter the meals based on current time and meal schedules
+  const availableMeals = mealSchedules.filter(
+    ({ startTime, endTime }) => currentTime >= startTime && currentTime <= endTime
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Breakfast</Text>
-      <FlatList
-        data={hotelDishes.breakfast}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
-      />
-
-      <Text style={styles.header}>Lunch</Text>
-      <FlatList
-        data={hotelDishes.lunch}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
-      />
-
-      <Text style={styles.header}>Dinner</Text>
-      <FlatList
-        data={hotelDishes.dinner}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
-      />
+      {availableMeals.length > 0 ? (
+        <>
+          <Text style={styles.header}>Available Meals</Text>
+          {availableMeals.map(({ meal, startTime, endTime }) => (
+            <View key={meal}>
+              <Text style={styles.mealHeader}>{meal}</Text>
+              <Text style={styles.mealTime}>{`Start Time: ${startTime} | End Time: ${endTime}`}</Text>
+              <FlatList
+                data={hotelDishes[meal.toLowerCase()]}
+                renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
+                ListEmptyComponent={<Text>No dishes available for {meal}</Text>}
+              />
+            </View>
+          ))}
+        </>
+      ) : (
+        <Text style={styles.header}>No meals currently available</Text>
+      )}
 
       {/* Order Table Button */}
       <TouchableOpacity style={styles.orderButton} onPress={toggleModal}>
@@ -143,6 +135,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 10,
+  },
+  mealHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    marginTop: 10,
+  },
+  mealTime: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: '#555',
   },
   item: {
     fontSize: 16,
