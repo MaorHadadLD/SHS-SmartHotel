@@ -1,12 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Modal, TextInput } from 'react-native';
+import moment from 'moment';
 import { getRequests } from '../../API/RequestCalls';
 import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
 
 function DinningRoomStaff({ route }) {
+    const mealSchedules = [
+        { meal: 'Breakfast', startTime: moment('01:00', 'HH:mm'), endTime: moment('07:00', 'HH:mm') },
+        { meal: 'Lunch', startTime: moment('09:00', 'HH:mm'), endTime: moment('12:00', 'HH:mm') },
+        { meal: 'Dinner', startTime: moment('15:00', 'HH:mm'), endTime: moment('18:00', 'HH:mm') },
+      ];
   const [requests, setRequests] = useState([]);
-
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [newMeal, setNewMeal] = useState('');
+  const currentTime = moment();
+  const [breakfast, setBreakfast] = useState([{id: '1', name: 'Omelette' },
+  { id: '2', name: 'Scrambled Eggs' },
+  { id: '3', name: 'Egg Ein' },
+  { id: '4', name: "Chef's Special Breakfast" }]);
+    const [lunch, setLunch] = useState([{ id: '5', name: 'Schnitzel' },
+    { id: '6', name: 'Chicken Breast' },
+    { id: '7', name: "Chef's Special Lunch" }]);
+    const [dinner, setDinner] = useState([{ id: '8', name: 'Beef Fillet' },
+    { id: '9', name: 'Fish' },
+    { id: '10', name: "Chef's Special Dinner" }]);
+    console.log('breakfast', breakfast);
+    
+    const isBreakfastTime = currentTime.isBetween(mealSchedules[0].startTime, mealSchedules[0].endTime);
+    const isLunchTime = currentTime.isBetween(mealSchedules[1].startTime, mealSchedules[1].endTime);
+    const isDinnerTime = currentTime.isBetween(mealSchedules[2].startTime, mealSchedules[2].endTime);
+  
+    console.log('isBreakfastTime', isBreakfastTime);
+    console.log('isLunchTime', isLunchTime);
+    console.log('isDinnerTime', isDinnerTime);
   useEffect(() => {
+    
     const fetchRequests = async () => {
       try {
         const response = await getRequests(route.params.staffData.hotel, 'Dinning');
@@ -19,8 +47,49 @@ function DinningRoomStaff({ route }) {
         console.error('fetchRequests error:', error);
       }
     };
+    // get meals from the database request from the server
+    const getMeals = async () => {
+        try {
+            const response = await getMeals();
+            if (response.success) {
+                setMeals(response.data);
+                }
+        } catch (error) {
+            console.error('getMeals error:', error);
+        }
+    }
+    getMeals();
     fetchRequests();
   }, []);
+
+  const handleChangeMealForHotel = () => {
+    // Implement your logic to change meals for all guests from this hotel
+    // You can use the updateMealForGuests function here
+    setModalVisible(true); // Show the modal for editing the meal
+  };
+
+  const handleSaveMeal = () => {
+    // Implement logic to save the new meal and update the state accordingly
+    setModalVisible(false); // Close the modal after saving
+    // const res = await updateMealHotel(route.params.staffData.hotel, breakfast);
+    Alert.alert('Meal Change Success', `Meal changed to ${newMeal} for all guests from this hotel`);
+  };
+  const handleBreakfastChange = (id, text) => {
+    const updatedBreakfast = breakfast.map((item) =>
+      item.id === id ? { ...item, name: text } : item
+    );
+    setBreakfast(updatedBreakfast);
+  };
+  
+
+  const handleCancelEdit = () => {
+    // Clear the new meal and close the modal
+    setNewMeal('');
+    setModalVisible(false);
+  };
+ 
+
+
 
   return (
     <View style={globalStyles.container}>
@@ -38,46 +107,156 @@ function DinningRoomStaff({ route }) {
         )}
         ListEmptyComponent={<Text>No requests available</Text>}
       />
-    
-     <View style={staffHomeStyles.staffDetailsContainer}>
-     <Text style={staffHomeStyles.detailText}>
-       Name: {route.params.staffData.employeeName}
-     </Text>
-     <Text style={staffHomeStyles.detailText}>
-       Role: {route.params.staffData.role}
-     </Text>
-     <Text style={staffHomeStyles.detailText}>
-       Hotel: {route.params.staffData.hotel.hotelName}{' '}
-       {route.params.staffData.hotel.city}
-     </Text>
-   </View>
- </View>
-    
-
-    
+      
+        <TouchableOpacity
+          style={styles.changeMealButton}
+          onPress={handleChangeMealForHotel}
+          disabled={requests.length === 0} // Disable button if there are no requests
+        >
+          <Text style={styles.changeMealButtonText}>Change Meal for {route.params.staffData.hotel.hotelName}</Text>
+        </TouchableOpacity>
+      
+        <Text style={styles.changeMealButtonText}>Meal Change not allowed at this time</Text>
+      
+      {/* Staff details */}
+      <View style={staffHomeStyles.staffDetailsContainer}>
+        <Text style={staffHomeStyles.detailText}>Name: {route.params.staffData.employeeName}</Text>
+        <Text style={staffHomeStyles.detailText}>Role: {route.params.staffData.role}</Text>
+        <Text style={staffHomeStyles.detailText}>
+          Hotel: {route.params.staffData.hotel.hotelName} {route.params.staffData.hotel.city}
+        </Text>
+      </View>
+      {/* Modal for editing meal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalHeader}>Edit Meal</Text>
+            {isBreakfastTime && (
+         <FlatList
+         data={breakfast}
+         keyExtractor={(item) => item.id}
+         renderItem={({ item }) => (
+           <TextInput
+             style={styles.input}
+             placeholder="Enter New Meal"
+             value={item.name}
+             onChangeText={(text) => handleBreakfastChange(item.id, text)}
+           />
+         )}
+       />
+            ) 
+                }
+                {isLunchTime  && (
+                     <FlatList
+                     data={lunch}
+                     keyExtractor={(item) => item.id}
+                     renderItem={({ item }) => (
+                       <TextInput
+                         style={styles.input}
+                         placeholder="Enter New Meal"
+                         value={item.name}
+                         onChangeText={(text) => handleBreakfastChange(item.id, text)}
+                       />
+                     )}
+                   />
+                        ) 
+                            }
+                        {isDinnerTime  && (
+                            <FlatList
+                            data={dinner}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                              <TextInput
+                                style={styles.input}
+                                placeholder="Enter New Meal"
+                                value={item.name}
+                                onChangeText={(text) => handleBreakfastChange(item.id, text)}
+                              />
+                            )}
+                          />
+                               ) 
+                                   }
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.cancelButton} onPress={handleCancelEdit}>
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.saveButton} onPress={handleSaveMeal}>
+                <Text style={styles.buttonText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
+  changeMealButton: {
+    backgroundColor: '#3498db',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: 'center',
   },
-  heading: {
-    fontSize: 24,
+  changeMealButtonText: {
+    color: 'white',
     fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: 16,
   },
-  requestContainer: {
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+    width: '80%',
+  },
+  modalHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  input: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
   },
-  requestText: {
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  cancelButton: {
+    backgroundColor: '#e74c3c',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    width: '45%',
+  },
+  saveButton: {
+    backgroundColor: '#3498db',
+    padding: 10,
+    borderRadius: 5,
+   
+    alignItems: 'center',
+    width: '45%',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 5,
   },
 });
 
