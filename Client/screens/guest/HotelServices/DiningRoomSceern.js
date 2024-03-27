@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
 import {Picker, Item} from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 
 const hotelDishes = {
@@ -31,6 +32,17 @@ function DiningRoomScreen() {
   const [roomNumber, setRoomNumber] = useState('');
 
   useEffect(() => {
+    const getGuestData = async () => {
+      try {
+        const guestData = await AsyncStorage.getItem('guestData');
+        if (guestData !== null) {
+          setRoomNumber(JSON.parse(guestData).roomNumber);
+        }
+      } catch (error) {
+        console.error('AsyncStorage error', error);
+      }
+    };
+    getGuestData();
     const timer = setInterval(() => {
       setCurrentTime(moment().format('HH:mm'));
     }, 1000); // Update current time every second
@@ -79,6 +91,7 @@ function DiningRoomScreen() {
     <View style={styles.container}>
       {availableMeals.length > 0 ? (
         <>
+        <Text >Room Number {roomNumber}</Text>
           <Text style={styles.header}>Available Meals</Text>
           {availableMeals.map(({ meal, startTime, endTime }) => (
             <View key={meal}>
