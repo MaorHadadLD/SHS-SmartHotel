@@ -137,4 +137,21 @@ export const getHotelByNameAndCity = async (hotelName, city) => {
         console.error('Error getting available rooms:', error.message);
         throw error;
     }
+
+}
+export  const getMealByHotel = async (hotel) => {
+    try{
+        const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
+        console.log("getMealByHotel", hotelref.meals);
+        if(hotelref){
+            return {success: true, data: hotelref.meals};
+        }
+        else {
+            return {success: false, data: "Hotel not found"};
+        }
+    }
+    catch (error) {
+        console.error('Error getting meal:', error.message);
+        throw error;
+    }
 }

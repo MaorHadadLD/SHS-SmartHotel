@@ -34,3 +34,13 @@ export const updateRoomStatusAndGuestRoom = async (guestEmail, selectedRoom, hot
     console.error("updateRoomStatusAndGuestRoom", error);
   }
 }
+
+export const getMealsHotel = async (hotel) => {
+  console.log("getMealsHotel", hotel);
+  try {
+    const response = await axios.post(`${BaseURL}getMealsHotel`, { hotel });
+    return response.data.data;
+  } catch (error) {
+    console.error("getMealsHotel", error);
+  }
+}
