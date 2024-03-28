@@ -67,12 +67,20 @@ function DinningRoomStaff({ route }) {
     // You can use the updateMealForGuests function here
     setModalVisible(true); // Show the modal for editing the meal
   };
-
-  const handleSaveMeal = () => {
-    // Implement logic to save the new meal and update the state accordingly
+ 
+  
+  const handleSaveMeal = async () => {
     setModalVisible(false); // Close the modal after saving
-    // const res = await updateMealHotel(route.params.staffData.hotel, breakfast);
-    Alert.alert('Meal Change Success', `Meal changed to ${newMeal} for all guests from this hotel`);
+    console.log('handleSaveMeal function called');
+    try {
+      // Perform any asynchronous operations here
+      // const res = await updateMealHotel(route.params.staffData.hotel, breakfast);
+      console.log('Async operation completed successfully');
+      Alert.alert('Meal Change Success', `Meal changed to ${breakfast} for all guests from this hotel`);
+    } catch (error) {
+      console.error('Async operation failed:', error);
+      Alert.alert('Error', 'An error occurred while saving the meal changes');
+    }
   };
   const handleBreakfastChange = (id, text) => {
     const updatedBreakfast = breakfast.map((item) =>
@@ -80,11 +88,16 @@ function DinningRoomStaff({ route }) {
     );
     setBreakfast(updatedBreakfast);
   };
+  const handleLunchChange = (id, text) => {
+    const updatedLunch = lunch.map((item) =>
+        item.id === id ? { ...item, name: text } : item
+        );
+        setLunch(updatedLunch);
+    };
   
 
   const handleCancelEdit = () => {
     // Clear the new meal and close the modal
-    setNewMeal('');
     setModalVisible(false);
   };
  
@@ -143,7 +156,6 @@ function DinningRoomStaff({ route }) {
          renderItem={({ item }) => (
            <TextInput
              style={styles.input}
-             placeholder="Enter New Meal"
              value={item.name}
              onChangeText={(text) => handleBreakfastChange(item.id, text)}
            />
@@ -158,9 +170,8 @@ function DinningRoomStaff({ route }) {
                      renderItem={({ item }) => (
                        <TextInput
                          style={styles.input}
-                         placeholder="Enter New Meal"
                          value={item.name}
-                         onChangeText={(text) => handleBreakfastChange(item.id, text)}
+                         onChangeText={(text) => handleLunchChange(item.id, text)}
                        />
                      )}
                    />
@@ -173,7 +184,6 @@ function DinningRoomStaff({ route }) {
                             renderItem={({ item }) => (
                               <TextInput
                                 style={styles.input}
-                                placeholder="Enter New Meal"
                                 value={item.name}
                                 onChangeText={(text) => handleBreakfastChange(item.id, text)}
                               />
