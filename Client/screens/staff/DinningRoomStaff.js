@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Modal, TextInput, Animated } from 'react-native';
 import moment from 'moment';
 import { getRequests } from '../../API/RequestCalls';
-import { getMealsHotel } from '../../API/StaffCalls';
+import { getMealsHotel, updateMealHotel } from '../../API/StaffCalls';
 import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
 
 function DinningRoomStaff({ route }) {
@@ -81,7 +81,7 @@ function DinningRoomStaff({ route }) {
     setModalVisible(false); // Close the modal after saving
     try {
       // Perform any asynchronous operations here
-    //   const res = await updateMealHotel(route.params.staffData.hotel, newMeal);
+      const res = await updateMealHotel({ hotel: route.params.staffData.hotel, meals: { breakfast: breakfast, lunch: lunch, dinner: dinner }});
       console.log('Async operation completed successfully');
       Alert.alert('Meal Change Success', `Meal changed to ${newMeal} for all guests from this hotel`);
     } catch (error) {
@@ -113,9 +113,6 @@ function DinningRoomStaff({ route }) {
     setModalVisible(false);
   };
  
-
-
-
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.header}>Dinning Room Staff</Text>

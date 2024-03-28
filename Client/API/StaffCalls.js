@@ -44,3 +44,13 @@ export const getMealsHotel = async (hotel) => {
     console.error("getMealsHotel", error);
   }
 }
+
+export const updateMealHotel = async (hotel, meal) => {
+  console.log("updateMealHotelapi", hotel, meal);
+  try {
+    const response = await axios.put(`${BaseURL}updateMealHotel`,  hotel, meal );
+    return response.data;
+  } catch (error) {
+    console.error("updateMealHotel", error);
+  }
+}

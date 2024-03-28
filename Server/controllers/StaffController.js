@@ -1,4 +1,4 @@
-import  { StaffLogin, getAvailableRooms, updateRoomStatus, getMealByHotel } from '../actions/StaffAction.js';
+import  { StaffLogin, getAvailableRooms, updateRoomStatus, getMealByHotel, updateMealByHotel } from '../actions/StaffAction.js';
 import { updateGuestRoomNumber } from '../actions/GuestAction.js';
 import { deleteRoomRequest } from '../actions/RequestAction.js';
 
@@ -52,6 +52,17 @@ export const updateRoomController = async (req, res) => {
 export const getMealsHotelController = async (req, res) => {
     const { hotel } = req;
     const result = await getMealByHotel(hotel);
+    if (result !== null) {
+        return requestSuccess(result);
+    }
+    else {
+        return requestFailure(result);
+    }
+}
+
+export const updateMealHotelController = async (req, res) => {
+    const { hotel, meals } = req;
+    const result = await updateMealByHotel(hotel, meals);
     if (result !== null) {
         return requestSuccess(result);
     }

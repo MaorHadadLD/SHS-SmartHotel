@@ -1,5 +1,5 @@
 import express from 'express';
-import { StaffLoginController, availableRooms, updateRoomController,getMealsHotelController } from '../controllers/StaffController.js';
+import { StaffLoginController, availableRooms, updateRoomController,getMealsHotelController,updateMealHotelController } from '../controllers/StaffController.js';
 import { respond } from './utils.js';
 
 const staffRouter = express.Router();
@@ -19,6 +19,11 @@ staffRouter.put('/updateRoomStatusAndGuestRoom', async (req, res) => {
 
 staffRouter.post('/getMealsHotel', async (req, res) => {
     respond(await getMealsHotelController(req.body), res);
+});
+
+staffRouter.put('/updateMealHotel', async (req, res) => {
+    console.log("updateMealHotel", req.body);
+    respond(await updateMealHotelController(req.body), res);
 });
 
 export default staffRouter;

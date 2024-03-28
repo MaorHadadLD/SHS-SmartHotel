@@ -1,5 +1,5 @@
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, get, orderByChild, equalTo, query, update } from 'firebase/database';
+import { getDatabase, ref, get, orderByChild, equalTo, query, update,push } from 'firebase/database';
 
 const db = getDatabase(firebaseApp);
 export const StaffLogin = async (employeeNumber, password) => {
@@ -153,5 +153,42 @@ export  const getMealByHotel = async (hotel) => {
     catch (error) {
         console.error('Error getting meal:', error.message);
         throw error;
+    }
+}
+
+export const updateMealByHotel = async (hotel, meals) => {
+    console.log("updateMealHotel", hotel, meals);
+    try {
+        const hotelRefold = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
+        console.log("hotelref", hotelRefold);
+        if (hotelRefold && hotelRefold.meals) {
+            const updatedMeals = { meals };
+            console.log("updatedMealssssssss", updatedMeals);
+            //get ref hotel acording to hotel name and city
+            const hotelsRef = ref(db, 'Hotels');
+            const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotel.hotelName));
+            const snapshot = await get(hotelsQuery);
+            if (snapshot.exists()) {
+                const hotels = snapshot.val();
+                // Find the hotel with matching city
+                const hotelKey = Object.keys(hotels).find(key => {
+                const hotelFound = hotels[key];
+                const hotelCity = hotelFound.city || ''; // Handle the case where the city property might not be present
+                return hotelCity === hotel.city;
+            }
+            );
+            if (hotelKey) {
+                const hotelRef = ref(db, `Hotels/${hotelKey}`);
+                console.log("hotelRefaaaaaaaa", hotelKey);
+                await update(hotelRef, {meals: updatedMeals.meals});
+                return { success: true, data: 'Meals updated successfully' };
+                }
+            } else {
+                return { success: false, data: 'Hotel or meals not found' };
+            }
+        }
+    } catch (error) {
+        console.error('Error updating meal:', error.message);
+        return { success: false, data: error.message };
     }
 }
