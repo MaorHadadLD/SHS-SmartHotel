@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Modal, TextInput } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Modal, TextInput, Animated } from 'react-native';
 import moment from 'moment';
 import { getRequests } from '../../API/RequestCalls';
 import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
@@ -70,8 +70,9 @@ function DinningRoomStaff({ route }) {
  
   
   const handleSaveMeal = async () => {
-    setModalVisible(false); // Close the modal after saving
     console.log('handleSaveMeal function called');
+    setModalVisible(false); // Close the modal after saving
+
     try {
       // Perform any asynchronous operations here
       // const res = await updateMealHotel(route.params.staffData.hotel, breakfast);
@@ -135,9 +136,8 @@ function DinningRoomStaff({ route }) {
       <View style={staffHomeStyles.staffDetailsContainer}>
         <Text style={staffHomeStyles.detailText}>Name: {route.params.staffData.employeeName}</Text>
         <Text style={staffHomeStyles.detailText}>Role: {route.params.staffData.role}</Text>
-        <Text style={staffHomeStyles.detailText}>
-          Hotel: {route.params.staffData.hotel.hotelName} {route.params.staffData.hotel.city}
-        </Text>
+        <Text style={staffHomeStyles.detailText}>Hotel: {route.params.staffData.hotel.hotelName} {route.params.staffData.hotel.city}</Text>
+        <Text style={staffHomeStyles.detailText}> meal: {breakfast.map((item) => item.name).join(', ')}</Text>
       </View>
       {/* Modal for editing meal */}
       <Modal
@@ -195,7 +195,9 @@ function DinningRoomStaff({ route }) {
               <TouchableOpacity style={styles.cancelButton} onPress={handleCancelEdit}>
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.saveButton} onPress={handleSaveMeal}>
+              <TouchableOpacity 
+              style={styles.saveButton} 
+              onPress={() => handleSaveMeal()}>
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
             </View>
