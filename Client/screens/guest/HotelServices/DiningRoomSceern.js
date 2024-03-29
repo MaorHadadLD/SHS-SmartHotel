@@ -4,52 +4,82 @@ import {Picker, Item} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import { sendPostRequest } from '../../../API/RequestCalls';
+import { getMealsHotel } from '../../../API/StaffCalls';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
-const hotelDishes = {
-  breakfast: [
-    { id: '1', name: 'Omelette' },
-    { id: '2', name: 'Scrambled Eggs' },
-    { id: '3', name: 'Egg Ein' },
-    { id: '4', name: "Chef's Special Breakfast" },
-  ],
-  lunch: [
-    { id: '5', name: 'Schnitzel' },
-    { id: '6', name: 'Chicken Breast' },
-    { id: '7', name: "Chef's Special Lunch" },
-  ],
-  dinner: [
-    { id: '8', name: 'Beef Fillet' },
-    { id: '9', name: 'Fish' },
-    { id: '10', name: "Chef's Special Dinner" },
-  ],
-};
+// const hotelDishes = {
+//   breakfast: [
+//     { id: '1', name: 'Omelette' },
+//     { id: '2', name: 'Scrambled Eggs' },
+//     { id: '3', name: 'Egg Ein' },
+//     { id: '4', name: "Chef's Special Breakfast" },
+//   ],
+//   lunch: [
+//     { id: '5', name: 'Schnitzel' },
+//     { id: '6', name: 'Chicken Breast' },
+//     { id: '7', name: "Chef's Special Lunch" },
+//   ],
+//   dinner: [
+//     { id: '8', name: 'Beef Fillet' },
+//     { id: '9', name: 'Fish' },
+//     { id: '10', name: "Chef's Special Dinner" },
+//   ],
+// };
 
 function DiningRoomScreen() {
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
   const [isModalVisible, setModalVisible] = useState(false);
   const [numberOfDiners, setNumberOfDiners] = useState('');
   const [arrivalTime, setArrivalTime] = useState('');
-
-  const [guestData, setGuestData] = useState('');
+  const [guestData, setGuestData] = useState([]);
+  const [meals, setMeals] = useState([]);
 
   useEffect(() => {
     const getGuestData = async () => {
       try {
         const guest = await AsyncStorage.getItem('guestData');
-        if (guestData !== null) {
-          setGuestData(JSON.parse(guest));
+        console.log("guestttttttttttt>>>>", guest);
+        console.log("guestttttttttttt", JSON.parse(guest).selectedHotel);
+        const res = await getMealsHotel(JSON.parse(guest).selectedHotel);
+        console.log("res", res.data);
+        if (res.success) {
+          setMeals(res.data);
+          
         }
+        console.log("?>>>>>>>>>>>>>ss", meals.breakfast);
+        
+        setGuestData(JSON.parse(guest)  );
       } catch (error) {
         console.error('AsyncStorage error', error);
       }
     };
+  
+    // const getMeals = async () => {
+    //   try {
+    //     const 
+    //     console.log("ffddfdfdfdf", );
+    //     const response = await getMealsHotel(guestData.selectedHotel);
+    //     if (response.success) {
+    //       setMeals(response.data);
+    //       console.log(">?>>>>>>>>>>>>>ss", meals);
+    //     }
+    //   } catch (error) {
+    //     console.error('getMeals error', error);
+    //   }
+    // };
+  
     getGuestData();
+    
     const timer = setInterval(() => {
       setCurrentTime(moment().format('HH:mm'));
     }, 1000); // Update current time every second
-
+    // if (guestData !== undefined) {
+    //   getMeals();
+    // }
     return () => clearInterval(timer); // Cleanup on unmount
-  }, []);
+    
+  }, []); // Add guestData as a dependency to useEffect
+  
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -107,44 +137,39 @@ function DiningRoomScreen() {
 
   return (
     <View style={styles.container}>
-      {availableMeals.length > 0 ? (
-        <>
-        {/* <Text >Room Number {guestData.roomNumber}</Text> */}
-          <Text style={styles.header}>Available Meals</Text>
-          {availableMeals.map(({ meal, startTime, endTime }) => (
-            <View key={meal}>
-              <Text style={styles.mealHeader}>{meal}</Text>
-              <Text style={styles.mealTime}>{`Start Time: ${startTime} | End Time: ${endTime}`}</Text>
-              <FlatList
-                data={hotelDishes[meal.toLowerCase()]}
-                renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
-                ListEmptyComponent={<Text>No dishes available for {meal}</Text>}
-              />
-                {/* Order Table Button */}
-      <TouchableOpacity style={styles.orderButton} onPress={toggleModal}>
-        <Text style={styles.orderButtonText}>Reserve a Table</Text>
-      </TouchableOpacity>
-
-            </View>
-            
-          ))}
-        </>
-      ) : (
-        <View style={styles.modalContainer}>
-          <Text style={styles.header}>No meals currently available</Text>
-          <Text style={styles.header}>Please come back during meal hours:</Text>
-          <FlatList style={styles.container}
-            data={mealSchedules}
-            renderItem={({ item }) => (
-              <Text style={styles.item}>{`${item.meal} - ${item.startTime} to ${item.endTime}`}</Text>
-            )}
-          />
-        </View>
-   
-
-      )}
-
-    
+    {availableMeals.length > 0 ? (
+      <>
+        <Text style={styles.header}>Meals Menu</Text>
+        {availableMeals.map(({ meal, startTime, endTime }) => (
+          <View key={meal}>
+            <Text style={styles.mealTime}>{`Start Time: ${startTime} | End Time: ${endTime}`}</Text>
+            <Text style={styles.mealHeader}>{meal}</Text>
+            <FlatList
+              data={Object.entries(meals[meal.toLowerCase()] || {})}
+              renderItem={({ item }) => (
+                <Text style={styles.item}>{item[1]}</Text>
+              )}
+              ListEmptyComponent={<Text>No dishes available for {meal}</Text>}
+            />
+            {/* Order Table Button */}
+            <TouchableOpacity style={styles.orderButton} onPress={toggleModal}>
+              <Text style={styles.orderButtonText}>Reserve a Table</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </>
+    ) : (
+      <View style={styles.modalContainer}>
+        <Text style={styles.header}>No meals currently available</Text>
+        <Text style={styles.header}>Please come back during meal hours:</Text>
+        <FlatList
+          data={mealSchedules}
+          renderItem={({ item }) => (
+            <Text style={styles.item}>{`${item.meal} - ${item.startTime} to ${item.endTime}`}</Text>
+          )}
+        />
+      </View>
+    )}  
       {/* Reservation Modal */}
       <Modal animationType="slide" transparent={true} visible={isModalVisible}>
         <View style={styles.modalContainer}>
@@ -221,22 +246,27 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 5,
+    marginBottom: 10,
+    textAlign: 'center',
   },
   mealHeader: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
-    marginTop: 10,
+    marginTop: 25,
+    textAlign: 'center',
   },
   mealTime: {
     fontSize: 16,
     marginBottom: 5,
     color: '#555',
+    textAlign: 'center',
   },
   item: {
     fontSize: 16,
     marginVertical: 8,
+    textAlign: 'center',
     
   },
   orderButton: {
