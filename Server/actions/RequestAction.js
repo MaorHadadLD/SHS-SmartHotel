@@ -203,3 +203,32 @@ export const deleteRequest = async (body) => {
     }
 }
 
+export const checkStatusbyRoomNumberAndHotel = async (body) => {
+    console.log("checkStatusbyRoomNumberAndHotel", body.type);
+    try {
+        const requestsRef = ref(db, `requests/${body.type}`);
+        const snapshot = await get(requestsRef);
+        const data = snapshot.val();
+        console.log("checkStatusbyRoomNumberAndHoteldddddd", data);
+        if (data) {
+            const requestList = Object.values(data)
+                .filter(request => request.roomNumber === body.roomNumber && request.hotel.hotelName === body.hotel.hotelName && request.hotel.city === body.hotel.city)
+                .map(request => ({
+                    id: request.id,
+                    status: request.status,
+                }));
+            // console.log("checkStatusbyRoomNumberAndHotel?????", requestList);
+            if (requestList.length > 0) {
+                return {success: true, data: requestList};
+            } else {
+                return {success: false, data: "No request found"};
+            }
+        } else {
+            return {success: false, data: "No request found"};
+        }
+    }
+    catch (error) {
+        console.error("checkStatusbyRoomNumberAndHotel", error);
+        return {success: false};
+    }
+}

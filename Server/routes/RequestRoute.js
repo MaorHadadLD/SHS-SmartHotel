@@ -1,6 +1,7 @@
 import express from 'express';
-import { postRoomRequestController, getRequestsByDepartmentController, postRequestController, updateRequestController, deleteRequestController, getRequestsByRoomNumberController} from '../controllers/RequestController.js';
+import { checkStatusReqController ,postRoomRequestController, getRequestsByDepartmentController, postRequestController, updateRequestController, deleteRequestController, getRequestsByRoomNumberController} from '../controllers/RequestController.js';
 import { respond } from './utils.js';
+
 
 const requestRouter = express.Router();
 requestRouter.use(express.json());
@@ -28,8 +29,14 @@ requestRouter.put('/request/delete', async (req, res) => {
 });
 
 requestRouter.post('/request/getallbyroomnumber', async (req, res) => {
-    console.log("requestRouter.getallbyroomnumber", req.body);
+    // console.log("requestRouter.getallbyroomnumber", req.body);
     respond(await getRequestsByRoomNumberController(req.body), res);
+});
+
+requestRouter.post('/request/status', async (req, res) => {
+    console.log("requestRouter.checkstatus", req.body);
+    respond(await checkStatusReqController(req.body), res);
+
 });
 
 export default requestRouter;

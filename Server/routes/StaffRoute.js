@@ -22,7 +22,7 @@ staffRouter.post('/getMealsHotel', async (req, res) => {
 });
 
 staffRouter.put('/updateMealHotel', async (req, res) => {
-    console.log("updateMealHotel", req.body);
+    // console.log("updateMealHotel", req.body);
     respond(await updateMealHotelController(req.body), res);
 });
 

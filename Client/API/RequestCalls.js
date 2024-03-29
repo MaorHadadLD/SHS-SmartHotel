@@ -43,12 +43,13 @@ export const getAllRequstsByRoomNumberGuest = async (roomNumber) => {
     }
   };
 
-  export const checkStatusReq = async (roomNumber, type) => {
+  export const checkStatusReq = async (body) => {
     try {
-      const response = await axios.post(`${BaseURL}request/checkstatus`, { roomNumber, type });
-      return response.data;
+      console.log("checkStatusReq:::body:", body);
+      const response = await axios.post(`${BaseURL}request/status`, {body});
+      return response.data.data;
     } catch (error) {
-      console.error("checkStatusReq", error);
+      console.error("checkStatusReq::::", error);
     }
   }
 

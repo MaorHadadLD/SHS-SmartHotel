@@ -5,26 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import { sendPostRequest } from '../../../API/RequestCalls';
 import { getMealsHotel } from '../../../API/StaffCalls';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
-// const hotelDishes = {
-//   breakfast: [
-//     { id: '1', name: 'Omelette' },
-//     { id: '2', name: 'Scrambled Eggs' },
-//     { id: '3', name: 'Egg Ein' },
-//     { id: '4', name: "Chef's Special Breakfast" },
-//   ],
-//   lunch: [
-//     { id: '5', name: 'Schnitzel' },
-//     { id: '6', name: 'Chicken Breast' },
-//     { id: '7', name: "Chef's Special Lunch" },
-//   ],
-//   dinner: [
-//     { id: '8', name: 'Beef Fillet' },
-//     { id: '9', name: 'Fish' },
-//     { id: '10', name: "Chef's Special Dinner" },
-//   ],
-// };
+
 
 function DiningRoomScreen() {
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
@@ -38,15 +20,15 @@ function DiningRoomScreen() {
     const getGuestData = async () => {
       try {
         const guest = await AsyncStorage.getItem('guestData');
-        console.log("guestttttttttttt>>>>", guest);
-        console.log("guestttttttttttt", JSON.parse(guest).selectedHotel);
+        // console.log("guestttttttttttt>>>>", guest);
+        // console.log("guestttttttttttt", JSON.parse(guest).selectedHotel);
         const res = await getMealsHotel(JSON.parse(guest).selectedHotel);
-        console.log("res", res.data);
+        // console.log("res", res.data);
         if (res.success) {
           setMeals(res.data);
           
         }
-        console.log("?>>>>>>>>>>>>>ss", meals.breakfast);
+        // console.log("?>>>>>>>>>>>>>ss", meals);
         
         setGuestData(JSON.parse(guest)  );
       } catch (error) {
@@ -54,31 +36,15 @@ function DiningRoomScreen() {
       }
     };
   
-    // const getMeals = async () => {
-    //   try {
-    //     const 
-    //     console.log("ffddfdfdfdf", );
-    //     const response = await getMealsHotel(guestData.selectedHotel);
-    //     if (response.success) {
-    //       setMeals(response.data);
-    //       console.log(">?>>>>>>>>>>>>>ss", meals);
-    //     }
-    //   } catch (error) {
-    //     console.error('getMeals error', error);
-    //   }
-    // };
-  
     getGuestData();
     
     const timer = setInterval(() => {
       setCurrentTime(moment().format('HH:mm'));
     }, 1000); // Update current time every second
-    // if (guestData !== undefined) {
-    //   getMeals();
-    // }
+
     return () => clearInterval(timer); // Cleanup on unmount
     
-  }, []); // Add guestData as a dependency to useEffect
+  }, [meals]); 
   
 
   const toggleModal = () => {
@@ -133,7 +99,6 @@ function DiningRoomScreen() {
     ({ startTime, endTime }) => currentTime >= startTime && currentTime <= endTime
    
   );
-  console.log(currentTime);
 
   return (
     <View style={styles.container}>
@@ -184,7 +149,7 @@ function DiningRoomScreen() {
               onChangeText={(text) => setNumberOfDiners(text)}
             />
 
-<Picker
+          <Picker
               selectedValue={arrivalTime}
               style={styles.input}
               onValueChange={(itemValue) => setArrivalTime(itemValue)}
@@ -211,19 +176,6 @@ function DiningRoomScreen() {
                 ));
               })}
             </Picker>
-            
-
-
-{/* 
-            <TextInput
-              style={styles.input}
-              placeholder="Room Number"
-              keyboardType="numeric"
-              value={roomNumber}
-
-              onChangeText={(text) => setRoomNumber(text)}
-            /> */}
-
             <TouchableOpacity style={styles.reserveButton} onPress={handleReservation}>
               <Text style={styles.reserveButtonText}>Reserve</Text>
             </TouchableOpacity>
