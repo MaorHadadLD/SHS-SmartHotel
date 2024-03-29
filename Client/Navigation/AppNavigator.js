@@ -6,7 +6,6 @@ import { StatusBar } from 'expo-status-bar';
 import Login from '../screens/Login';
 import HotelSelection from '../screens/guest/HotelSelection';
 import HotelServicesScreen from '../screens/guest/HotelServicesScreen';
-// import RequestsMnOverview from '../screens/guest/RequestsMnOverview';
 import ClinetMainMenu from '../screens/guest/ClientMainMenu';
 import HotelInfoScreen from '../screens/guest/HotelInfoScreen';
 import SpaScreen from '../screens/guest/SpaScreen';
@@ -46,8 +45,8 @@ const MainStack = () => (
       component={HotelServicesScreen}
       options={{
         title: 'Departments menu',
-        headerStyle: { backgroundColor: 'green' },
-        headerTintColor: 'white',
+        headerStyle: { backgroundColor: 'white' },
+        headerTintColor: 'black',
         contentStyle: { backgroundColor: 'white' },
       }}
     />

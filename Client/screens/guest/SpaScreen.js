@@ -4,14 +4,10 @@ import RNPickerSelect from 'react-native-picker-select';
 import { getDatabase, ref, push } from "firebase/database";
 import firebaseApp from "../../firebaseConfig";
 
-// firebaseApp
-
-
-
 function SpaScreen({ navigation, route }) {
   const { selectedHotel } = route.params || {};
 
-  const spaOperatingHours = { start: 9, end: 18 };
+  const spaOperatingHours = { start: 11, end: 18 }; // Updated spa operating hours
   const massageDuration = 30;
 
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
@@ -41,7 +37,7 @@ function SpaScreen({ navigation, route }) {
 
   useEffect(() => {
     generateAvailableTimeSlots();
-  }, []);
+  }, [selectedTime]); // Update useEffect dependency
 
   const handleTimeSlotSelection = (time) => {
     setSelectedTime(time);
@@ -49,7 +45,6 @@ function SpaScreen({ navigation, route }) {
   };
 
   const handleBookingConfirmation = () => {
-    // Create an object with appointment details
     const appointmentData = {
       time: selectedTime,
       massageType: massageType,
@@ -62,12 +57,11 @@ function SpaScreen({ navigation, route }) {
     const appointmentsRef = ref(db, 'appointments');
     push(appointmentsRef, appointmentData);
 
-    // Reset state and close the modal
     setModalVisible(false);
     setSelectedTime(null);
-    setMassageType('single');
-    setTherapistGender('any');
-    setSecondTherapistGender('any');
+    setMassageType('Select Massage Type');
+    setTherapistGender('Select Therapist Gender');
+    setSecondTherapistGender('Select Therapist Gender');
     setAdditionalComments('');
   };
 
@@ -75,12 +69,14 @@ function SpaScreen({ navigation, route }) {
     <TouchableOpacity
       style={[
         styles.timeSlotItem,
-        item.disabled && { backgroundColor: '#ccc' }, // Change the background color for disabled slots
+        item.disabled && { backgroundColor: '#ccc' },
       ]}
       onPress={() => handleTimeSlotSelection(item.time)}
-      disabled={item.disabled} // Disable TouchableOpacity for disabled slots
+      disabled={item.disabled}
     >
-      <Text style={styles.timeSlotText}>{item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+      <Text style={styles.timeSlotText}>
+        {item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -90,7 +86,7 @@ function SpaScreen({ navigation, route }) {
 
       <FlatList
         data={availableTimeSlots}
-        keyExtractor={(item, index) => index.toString()}  // Ensure keys are unique
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
         contentContainerStyle={styles.flatListContainer}
       />
@@ -189,25 +185,24 @@ const pickerSelectStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: '#007bff', // Use the borderColor from picker style
+    borderColor: '#007bff',
     borderRadius: 4,
     color: 'black',
     paddingRight: 30,
-    backgroundColor: '#fafafa', // Use the backgroundColor from picker style
+    backgroundColor: '#fafafa',
   },
   inputAndroid: {
     fontSize: 16,
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderWidth: 0.5,
-    borderColor: '#007bff', // Use the borderColor from picker style
+    borderColor: '#007bff',
     borderRadius: 8,
     color: 'black',
     paddingRight: 30,
-    backgroundColor: '#fafafa', // Use the backgroundColor from picker style
+    backgroundColor: '#fafafa',
   },
 });
-
 
 const styles = StyleSheet.create({
   container: {
@@ -281,20 +276,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  pickerContainer: {
-    height: 40,
-    marginBottom: 10,
-  },
-  picker: {
-    backgroundColor: '#fafafa',
-    borderColor: '#007bff',
-  },
-  pickerItem: {
-    justifyContent: 'flex-start',
-  },
-  dropDownPicker: {
-    backgroundColor: '#fafafa',
   },
 });
 
