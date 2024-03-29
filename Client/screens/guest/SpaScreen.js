@@ -17,9 +17,9 @@ function SpaScreen({ navigation, route }) {
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
   const [selectedTime, setSelectedTime] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [massageType, setMassageType] = useState('single');
-  const [therapistGender, setTherapistGender] = useState('any');
-  const [secondTherapistGender, setSecondTherapistGender] = useState('any');
+  const [massageType, setMassageType] = useState('Select Massage Type');
+  const [therapistGender, setTherapistGender] = useState('Select Therapist Gender');
+  const [secondTherapistGender, setSecondTherapistGender] = useState('Select Therapist Gender');
   const [additionalComments, setAdditionalComments] = useState('');
 
   const generateAvailableTimeSlots = () => {

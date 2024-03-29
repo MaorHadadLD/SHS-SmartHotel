@@ -23,14 +23,8 @@ export default function CategoryList({setSelectedCategory}) {
             Value:'cafe',
             icon:require('../../assets/coffee-shop.png'),
         },
-        {
-            id:4,
-            name:'Marina',
-            Value:'marina',
-            icon:require('../../assets/ship.png'),
-        },
         { 
-            id:5,
+            id:4,
             name:'Shopping Mall',
             Value:'shopping_mall',
             icon:require('../../assets/mall.png'),
