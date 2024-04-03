@@ -26,7 +26,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.shs.smarthotel"
+      "package": "com.shs.smarthotel",
+      "googleMapsApiKey": "AIzaSyCh0dw3B5TMHQFgUUPjXCrvBM2y9pPyBJc",
+      "permissions": [
+        "android.permission.NFC"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,6 +38,11 @@
     "plugins": [
       "@react-native-firebase/app",
       "react-native-nfc-manager"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5e9d9af6-f8e3-45b9-b576-a7a938468ac3"
+      }
+    }
   }
 }

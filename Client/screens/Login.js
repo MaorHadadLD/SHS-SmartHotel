@@ -7,6 +7,8 @@ import { globalStyles } from '../styles/globalStyle';
 // import firebaseApp from '../firebaseConfig';
 import { sendLoginStaff } from '../API/StaffCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import HeaderHome from '../components/HeaderHome';
+
 
 const Login = () => {
   const [showStaffLogin, setShowStaffLogin] = useState(false);
@@ -77,7 +79,7 @@ const Login = () => {
 
   return (
     <View style={globalStyles.container}>
-      <Text style={globalStyles.header}>Welcome to Smart Hotel</Text>
+      <HeaderHome />
       <TouchableOpacity style={globalStyles.button} onPress={handleGuestLogin}>
         <Text style={globalStyles.buttonText}>Guest</Text>
       </TouchableOpacity>

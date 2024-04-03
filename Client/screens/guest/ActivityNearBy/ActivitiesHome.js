@@ -25,7 +25,7 @@ export default function ActivitiesHome() {
     })
   }
   return (
-    <ScrollView style={{padding:20,backgroundColor:'#fff',flex:1}}>
+    <ScrollView nestedScrollEnabled={true} style={{ width: "100%" }} >
       <Header/>
       <GoogleMapView placeList={placeList}/>
       <CategoryList setSelectedCategory={(value)=>GetNearBySearchPlace(value)}/>

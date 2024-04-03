@@ -28,7 +28,7 @@ function HotelSelection({ navigation }) {
   }, []);
 
   const handleSelectHotel = (item) => {
-    navigation.navigate('VerificationScreen', {
+    navigation.navigate('CodeQRScreen', {
       selectedHotel: item,
     });
     setModalVisible(false);
