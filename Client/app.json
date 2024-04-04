@@ -24,10 +24,10 @@
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "package": "com.shs.smarthotel",
+        "googleMapsApiKey": "AIzaSyCh0dw3B5TMHQFgUUPjXCrvBM2y9pPyBJc"
       },
-      "package": "com.shs.smarthotel",
-      "googleMapsApiKey": "AIzaSyCh0dw3B5TMHQFgUUPjXCrvBM2y9pPyBJc",
       "permissions": [
         "android.permission.NFC"
       ]

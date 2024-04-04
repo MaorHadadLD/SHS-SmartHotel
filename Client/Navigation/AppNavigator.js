@@ -28,11 +28,14 @@ import PoolBarScreen from '../screens/staff/PoolBarScreen';
 import CheckOutScreen from '../screens/guest/CheckOutScreen';
 import RequestTrackingScreen from '../screens/guest/RequestTrackingScreen';
 import DinningRoomStaff from '../screens/staff/DinningRoomStaff';
+import Home from '../screens/Home';
+
 //
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => (
-  <Stack.Navigator initialRouteName="Login">
+  <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+    <Stack.Screen name="Home" component={Home} />
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="HotelSelection" component={HotelSelection} />
     <Stack.Screen name="CodeQRScreen" component={CodeQRScreen} />

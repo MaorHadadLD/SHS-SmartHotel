@@ -8,6 +8,9 @@ import { globalStyles } from '../styles/globalStyle';
 import { sendLoginStaff } from '../API/StaffCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderHome from '../components/HeaderHome';
+import BackGround from '../components/BackGround';
+import Btn from '../components/Btn';
+import Field from '../components/Field';
 
 
 const Login = () => {
@@ -78,38 +81,51 @@ const Login = () => {
     
 
   return (
-    <View style={globalStyles.container}>
+    <BackGround> 
+    <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'flex' }}>
       <HeaderHome />
-      <TouchableOpacity style={globalStyles.button} onPress={handleGuestLogin}>
-        <Text style={globalStyles.buttonText}>Guest</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={globalStyles.button} onPress={handleStaffLogin}>
-        <Text style={globalStyles.buttonText}>Staff</Text>
-      </TouchableOpacity>
+      {/* <TouchableOpacity style={globalStyles.button} onPress={handleGuestLogin}> */}
+      <Btn bgColor="#FF6B3C" btnLabel="Guest" textColor="white" Press={handleGuestLogin}  />
+
+        {/* <Text style={globalStyles.buttonText}>Guest</Text> */}
+      {/* </TouchableOpacity> */}
+      {/* <TouchableOpacity style={globalStyles.button} onPress={handleStaffLogin}> */}
+      <Btn bgColor="#FF6B3C" btnLabel="Staff" textColor="white" Press={handleStaffLogin}/>
+        {/* <Text style={globalStyles.buttonText}>Staff</Text> */}
+      {/* </TouchableOpacity> */}
       {showStaffLogin && (
-        <View style={globalStyles.staffLoginContainer}>
+        <View style={{ alignItems: "center"}}>
+          {/* <Field placeholder="Employee Number" value={employeeNumber} onChangeText={(text) => setEmployeeNumber(text)}/> */}
           <TextInput
-            style={globalStyles.input}
+            style={{borderRadius: 100, color: "#bfbbba", paddingHorizontal: 10, width: '78%', 
+            backgroundColor: 'rgb(220,220,220)', marginVertical: 10}}
+            placeholderTextColor="#bfbbba"
             placeholder="Employee Number"
             value={employeeNumber}
             onChangeText={(text) => setEmployeeNumber(text)}
           />
+          {/* <Field placeholder="Password" secureTextEntry={true}  value={password} onChangeText={(text) => setPassword(text)}/> */}
           <TextInput
-            style={globalStyles.input}
+            style={{borderRadius: 100, color: "#bfbbba", paddingHorizontal: 10, width: '78%', 
+            backgroundColor: 'rgb(220,220,220)', marginVertical: 10}}
+            placeholderTextColor="#bfbbba"
             placeholder="Password"
             secureTextEntry
             value={password}
             onChangeText={(text) => setPassword(text)}
           />
-          <TouchableOpacity style={globalStyles.button} onPress={handleStaffSubmit}>
+          <Btn bgColor="#FF6B3C" btnLabel="Submit" textColor="white" Press={handleStaffSubmit}/>
+          {/* <TouchableOpacity style={globalStyles.button} onPress={handleStaffSubmit}>
             <Text style={globalStyles.buttonText}>Submit</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       )}
       <StatusBar style="auto" />
     </View>
+    </BackGround>
   );
 };
+// style={globalStyles.staffLoginContainer}
 
 // const styles = StyleSheet.create({
 //     container: {
