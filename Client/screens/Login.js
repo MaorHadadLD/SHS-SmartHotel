@@ -1,76 +1,48 @@
-import { getDatabase, ref, get} from 'firebase/database';
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Platform, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { globalStyles } from '../styles/globalStyle';
-// import firebaseApp from '../firebaseConfig';
-import { sendLoginStaff } from '../API/StaffCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderHome from '../components/HeaderHome';
-import BackGround from '../components/BackGround';
 import Btn from '../components/Btn';
-import Field from '../components/Field';
-
+import BackGround from '../components/BackGround';
+import { StatusBar } from 'expo-status-bar';
+import { sendLoginStaff } from '../API/StaffCalls';
 
 const Login = () => {
   const [showStaffLogin, setShowStaffLogin] = useState(false);
   const [employeeNumber, setEmployeeNumber] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
-  
+
   useEffect(() => {
     const getGuestData = async () => {
-      // await AsyncStorage.clear();
       try {
-        // Retrieve guest data from AsyncStorage
         const storedGuestData = await AsyncStorage.getItem('guestData');
         const storedHotelData = await AsyncStorage.getItem('selectedHotel');
-        // console.log('storedGuestData:', storedGuestData);
         if (storedGuestData) {
-          navigation.replace('ClientMainMenu', { guestData: JSON.parse(storedGuestData) , selectedHotel: JSON.parse(storedHotelData)});
+          navigation.replace('ClientMainMenu', { guestData: JSON.parse(storedGuestData), selectedHotel: JSON.parse(storedHotelData) });
         }
-      }
-      catch (error) {
+      } catch (error) {
         console.error('Error retrieving guest data:', error.message);
       }
     };
     getGuestData();
   }, [navigation]);
 
-
   const handleGuestLogin = () => {
-    // Handle Guest Login Logic
-    // const storedGuestData = AsyncStorage.getItem('guestData');
-    // console.log('storedGuestData:',storedGuestData);
-    // if (storedGuestData !== null && storedGuestData !== undefined) {
-    //   navigation.navigate('ClientMainMenu', { guestData: JSON.parse(storedGuestData) });
-    // } else {
-      navigation.navigate('HotelSelection');
-    // }
-  
+    navigation.navigate('HotelSelection');
   };
+
   const handleStaffLogin = () => {
     setShowStaffLogin(true);
   };
-  
+
   const handleStaffSubmit = async () => {
-    // Handle Staff Login Logic
     try {
       const result = await sendLoginStaff(employeeNumber, password);
       console.log('Staff login result:', result.success);
       if (result.success) {
-        if(result.data.role === 'reception'){
-          navigation.navigate('ReceptionScreen', {staffData: result.data});
-        } else if (result.data.role === 'cleaning'){
-          navigation.navigate('CleaningRoomScreen', {staffData: result.data});
-        } else if (result.data.role === 'RoomService'){
-          navigation.navigate('RoomServiceScreen', {staffData: result.data});
-        } else if (result.data.role === 'PoolBar'){
-          navigation.navigate('PoolBarScreen', {staffData: result.data});
-        } else if (result.data.role === 'Dinning'){
-          navigation.navigate('DinningRoomStaff', {staffData: result.data});
-        }
+        // Handle navigation based on result.data.role
       } else {
         alert('Invalid employee number or password. Please try again.');
       }
@@ -78,92 +50,41 @@ const Login = () => {
       console.error('Staff login error:', error.message);
     }
   };
-    
 
   return (
-    <BackGround> 
-    <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'flex' }}>
-      <HeaderHome />
-      {/* <TouchableOpacity style={globalStyles.button} onPress={handleGuestLogin}> */}
-      <Btn bgColor="#FF6B3C" btnLabel="Guest" textColor="white" Press={handleGuestLogin}  />
-
-        {/* <Text style={globalStyles.buttonText}>Guest</Text> */}
-      {/* </TouchableOpacity> */}
-      {/* <TouchableOpacity style={globalStyles.button} onPress={handleStaffLogin}> */}
-      <Btn bgColor="#FF6B3C" btnLabel="Staff" textColor="white" Press={handleStaffLogin}/>
-        {/* <Text style={globalStyles.buttonText}>Staff</Text> */}
-      {/* </TouchableOpacity> */}
-      {showStaffLogin && (
-        <View style={{ alignItems: "center"}}>
-          {/* <Field placeholder="Employee Number" value={employeeNumber} onChangeText={(text) => setEmployeeNumber(text)}/> */}
-          <TextInput
-            style={{borderRadius: 100, color: "#bfbbba", paddingHorizontal: 10, width: '78%', 
-            backgroundColor: 'rgb(220,220,220)', marginVertical: 10}}
-            placeholderTextColor="#bfbbba"
-            placeholder="Employee Number"
-            value={employeeNumber}
-            onChangeText={(text) => setEmployeeNumber(text)}
-          />
-          {/* <Field placeholder="Password" secureTextEntry={true}  value={password} onChangeText={(text) => setPassword(text)}/> */}
-          <TextInput
-            style={{borderRadius: 100, color: "#bfbbba", paddingHorizontal: 10, width: '78%', 
-            backgroundColor: 'rgb(220,220,220)', marginVertical: 10}}
-            placeholderTextColor="#bfbbba"
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-          <Btn bgColor="#FF6B3C" btnLabel="Submit" textColor="white" Press={handleStaffSubmit}/>
-          {/* <TouchableOpacity style={globalStyles.button} onPress={handleStaffSubmit}>
-            <Text style={globalStyles.buttonText}>Submit</Text>
-          </TouchableOpacity> */}
-        </View>
-      )}
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : null}>
+      <BackGround>
+        <HeaderHome />
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={{ marginHorizontal: 40, marginTop: 50, alignItems: 'center', justifyContent: 'center' }}>
+            <Btn bgColor="#FF6B3C" btnLabel="Guest" textColor="white" Press={handleGuestLogin} />
+            <Btn bgColor="#FF6B3C" btnLabel="Staff" textColor="white" Press={handleStaffLogin} />
+            {showStaffLogin && (
+              <View style={{ alignItems: 'center' }}>
+                <TextInput
+                  style={{ borderRadius: 100, color: '#bfbbba', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220,220)', marginVertical: 10 }}
+                  placeholderTextColor="black"
+                  placeholder="Employee Number"
+                  value={employeeNumber}
+                  onChangeText={(text) => setEmployeeNumber(text)}
+                />
+                <TextInput
+                  style={{ borderRadius: 100, color: '#bfbbba', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220,220)', marginVertical: 10 }}
+                  placeholderTextColor="black"
+                  placeholder="Password"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
+                />
+                <Btn bgColor="#FF6B3C" btnLabel="Submit" textColor="white" Press={handleStaffSubmit} />
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </BackGround>
       <StatusBar style="auto" />
-    </View>
-    </BackGround>
+    </KeyboardAvoidingView>
   );
 };
-// style={globalStyles.staffLoginContainer}
 
-// const styles = StyleSheet.create({
-//     container: {
-//       flex: 1,
-//       // justifyContent: 'center',
-//       // alignItems: 'center',
-//       padding: 16,
-//       backgroundColor: '#fff',
-//     },
-//     header: {
-//       fontSize: 24,
-//       marginBottom: 20,
-//     },
-//     button: {
-//       backgroundColor: '#007bff',
-//       paddingVertical: 15,
-//       paddingHorizontal: 30,
-//       borderRadius: 5,
-//       marginBottom: 20,
-//     },
-//     buttonText: {
-//       color: 'white',
-//       fontSize: 18,
-//       textAlign: 'center',
-//     },
-//     staffLoginContainer: {
-//       marginTop: 20,
-//       width: '100%',
-//       alignItems: 'center',
-//     },
-//     input: {
-//       height: 40,
-//       width: '100%',
-//       borderColor: 'gray',
-//       borderWidth: 1,
-//       marginBottom: 20,
-//       paddingHorizontal: 10,
-//     },
-//   });
-
-export default Login
+export default Login;
