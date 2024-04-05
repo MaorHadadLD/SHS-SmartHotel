@@ -62,14 +62,14 @@ const Login = () => {
             {showStaffLogin && (
               <View style={{ alignItems: 'center' }}>
                 <TextInput
-                  style={{ borderRadius: 100, color: '#bfbbba', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220,220)', marginVertical: 10 }}
+                  style={{ borderRadius: 100, color: 'black', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220,220)', marginVertical: 10 }}
                   placeholderTextColor="black"
                   placeholder="Employee Number"
                   value={employeeNumber}
                   onChangeText={(text) => setEmployeeNumber(text)}
                 />
                 <TextInput
-                  style={{ borderRadius: 100, color: '#bfbbba', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220,220)', marginVertical: 10 }}
+                  style={{ borderRadius: 100, color: 'black', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220,220)', marginVertical: 10 }}
                   placeholderTextColor="black"
                   placeholder="Password"
                   secureTextEntry

@@ -36,7 +36,7 @@ const CheckOutScreen = () => {
     await AsyncStorage.clear();
     navigation.reset({
     index: 0,
-    routes: [{ name: 'Login' }], // Replace with the name of your login screen
+    routes: [{ name: 'Home' }], // Replace with the name of your login screen
   });
   };
 

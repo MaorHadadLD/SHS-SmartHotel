@@ -98,32 +98,39 @@ const VerificationScreen = (route) => {
         <Text style={{ color: "white", fontSize: 64, marginVertical: 10 }}>
           Verifiy your Code
         </Text>
-        <TextInput
-          style={{
-            borderRadius: 100, color: "#bfbbba", paddingHorizontal: 10, width: '78%',
-            backgroundColor: 'rgb(220,220,220)', marginVertical: 10
-          }}
-          placeholder="Email"
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-        />
-        <TextInput
-          style={{
-            borderRadius: 100, color: "#bfbbba", paddingHorizontal: 10, width: '78%',
-            backgroundColor: 'rgb(220,220,220)', marginVertical: 10
-          }}
-          placeholder="OTP"
-          onChangeText={(text) => setOtp(text)}
-          value={otp}
-        />
-        <Btn bgColor="#FF6B3C" btnLabel="Verify" textColor="white" Press={handleVerification} />
+        <View style={{ alignItems: 'center', width: '85%' }}>
+          <TextInput
+            style={{
+              borderRadius: 100, color: "black", paddingHorizontal: 10, width: '78%',
+              backgroundColor: 'rgb(220,220,220)', marginVertical: 10
+            }}
+            placeholder="Email"
+            onChangeText={(text) => setEmail(text)}
+            value={email}
+          />
+          <TextInput
+            style={{
+              borderRadius: 100, color: "black", paddingHorizontal: 10, width: '78%',
+              backgroundColor: 'rgb(220,220,220)', marginVertical: 10
+            }}
+            placeholder="OTP"
+            onChangeText={(text) => setOtp(text)}
+            value={otp}
+          />
+
+
+          <Btn bgColor="#FF6B3C" btnLabel="Verify" textColor="white" Press={handleVerification} />
+        </View>
         {/* <Button title="Verify" onPress={handleVerification} /> */}
 
-        <View style={styles.resendContainer}>
-          <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>Didn't receive OTP?</Text>
+        <View style={{ alignItems: 'flex-start', width: '78%' }}>
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>Didn't receive OTP?</Text>
           {/* <Button title="Resend OTP" onPress={handleResendOTP} /> */}
         </View>
+        <View style={{ alignItems: 'center', width: '85%' }}>
+
         <Btn bgColor="#FF6B3C" btnLabel="Resend OTP" textColor="white" Press={handleResendOTP} />
+        </View>
       </View>
     </BackGround>
   );
