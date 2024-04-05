@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 10, // Adjust as needed for the gap between text and buttons
+    color: "white", // Adjust the color as needed
   },
   logo: {
     width: 200, // Adjust according to your logo size

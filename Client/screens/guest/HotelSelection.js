@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Modal, TouchableOpacity, Platform } from 'react-native';
 import firebase from '../../firebaseConfig';
 import { getDatabase, ref, get } from 'firebase/database';
+import BackGround from '../../components/BackGround';
+import Btn from '../../components/Btn';
 
 function HotelSelection({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -28,7 +30,7 @@ function HotelSelection({ navigation }) {
   }, []);
 
   const handleSelectHotel = (item) => {
-    navigation.navigate('CodeQRScreen', {
+    navigation.navigate('VerificationScreen', {
       selectedHotel: item,
     });
     setModalVisible(false);
@@ -44,11 +46,13 @@ function HotelSelection({ navigation }) {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Choose the hotel where you are staying</Text>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <Text style={styles.showModalButton}>Show Hotel List</Text>
-      </TouchableOpacity>
+    <BackGround>
+    <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'flex' }}>
+      <Text style={{ color: "#e3af12", fontSize: 30,  }}>Choose the hotel where you are staying</Text>
+      <Btn bgColor="#FF6B3C" btnLabel="Hotel List" textColor="white" Press={()=> setModalVisible(true)}/>
+      {/* <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <Text style={{fontSize: 30, color: "blue", fontWeight: "bold", }}>Show Hotel List</Text>
+      </TouchableOpacity> */}
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Hotel List</Text>
@@ -65,6 +69,7 @@ function HotelSelection({ navigation }) {
         </View>
       </Modal>
     </View>
+    </BackGround>
   );
 }
 

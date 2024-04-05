@@ -3,9 +3,11 @@ import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native';
 import { ref, getDatabase, get } from 'firebase/database';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import firebaseApp from '../../firebaseConfig';
-import { sendLoginGuest} from '../../API/GuestCalls';
+import { sendLoginGuest } from '../../API/GuestCalls';
 import { sendRoomRequest } from '../../API/RequestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackGround from '../../components/BackGround';
+import Btn from '../../components/Btn';
 
 const VerificationScreen = (route) => {
   const [email, setEmail] = useState('');
@@ -13,75 +15,75 @@ const VerificationScreen = (route) => {
   const navigation = useNavigation();
 
   const handleVerification = async () => {
-        try{
-            const results = await sendLoginGuest(email, otp, route.route.params);
-            console.log("handleVerification results", results.data.email);
-            if(results.success) {
-                if(results.data.roomNumber === "waitaing for room assignment"){
-                    await sendRoomRequest(results.data, route.route.params);
-                }
-                await AsyncStorage.setItem('guestData', JSON.stringify(results.data));
-                await AsyncStorage.setItem('selectedHotel', JSON.stringify(route.route.params.selectedHotel));
-                const datacheck = await AsyncStorage.getItem('guestData');
-                console.log("datacheck: ", datacheck);
-                console.log("handleVerification results", route.route.params.selectedHotel);
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: 'ClientMainMenu', params: { selectedHotel: route.route.params.selectedHotel, guestData: results.data } }],
-                });
-              } else {
-                  Alert.alert(results.data);
-              }
-        }catch (error) {
-            console.error('Verification error:', error.message);
-          }
+    try {
+      const results = await sendLoginGuest(email, otp, route.route.params);
+      console.log("handleVerification results", results.data.email);
+      if (results.success) {
+        if (results.data.roomNumber === "waitaing for room assignment") {
+          await sendRoomRequest(results.data, route.route.params);
         }
+        await AsyncStorage.setItem('guestData', JSON.stringify(results.data));
+        await AsyncStorage.setItem('selectedHotel', JSON.stringify(route.route.params.selectedHotel));
+        const datacheck = await AsyncStorage.getItem('guestData');
+        console.log("datacheck: ", datacheck);
+        console.log("handleVerification results", route.route.params.selectedHotel);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'ClientMainMenu', params: { selectedHotel: route.route.params.selectedHotel, guestData: results.data } }],
+        });
+      } else {
+        Alert.alert(results.data);
+      }
+    } catch (error) {
+      console.error('Verification error:', error.message);
+    }
+  }
 
-    // try {
-    //     const db = getDatabase(firebaseApp);
-    //     const userRef = ref(db, 'check-ins');
-  
-    //     // Retrieve user details from Firebase Realtime Database
-    //     const snapshot = await get(userRef);
-  
-    //     if (snapshot.exists()) {
-    //       const userData = snapshot.val();
-  
-    //       // Filter the results based on the email
-    //       const userWithEmail = Object.values(userData).find((user) => user.email === email);
-  
-    //       if (userWithEmail) {
-    //         const storedOtp = userWithEmail.otp;
-  
-    //         // Compare OTPs
-    //         if (otp === storedOtp) {
-    //           // Display success message or navigate to the next screen
-    //           Alert.alert('Verification Successful', 'Welcome!');
-    //         //   navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params });
-    //             navigation.dispatch(
-    //                 CommonActions.reset({
-    //                 index: 0,
-    //                 routes: [
-    //                     {
-    //                     name: 'ClientMainMenu',
-    //                     params: { selectedHotel: route.route.params },
-    //                     },
-    //                 ],
-    //                 })
-    //             );
-    //         } else {
-    //           Alert.alert('Verification Failed', 'Invalid OTP');
-    //         }
-    //       } else {
-    //         Alert.alert('Verification Failed', 'Email not found');
-    //       }
-    //     } else {
-    //       Alert.alert('Verification Failed', 'No user data found');
-    //     }
-    //   } catch (error) {
-    //     console.error('Verification error:', error.message);
-    //   }
-  
+  // try {
+  //     const db = getDatabase(firebaseApp);
+  //     const userRef = ref(db, 'check-ins');
+
+  //     // Retrieve user details from Firebase Realtime Database
+  //     const snapshot = await get(userRef);
+
+  //     if (snapshot.exists()) {
+  //       const userData = snapshot.val();
+
+  //       // Filter the results based on the email
+  //       const userWithEmail = Object.values(userData).find((user) => user.email === email);
+
+  //       if (userWithEmail) {
+  //         const storedOtp = userWithEmail.otp;
+
+  //         // Compare OTPs
+  //         if (otp === storedOtp) {
+  //           // Display success message or navigate to the next screen
+  //           Alert.alert('Verification Successful', 'Welcome!');
+  //         //   navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params });
+  //             navigation.dispatch(
+  //                 CommonActions.reset({
+  //                 index: 0,
+  //                 routes: [
+  //                     {
+  //                     name: 'ClientMainMenu',
+  //                     params: { selectedHotel: route.route.params },
+  //                     },
+  //                 ],
+  //                 })
+  //             );
+  //         } else {
+  //           Alert.alert('Verification Failed', 'Invalid OTP');
+  //         }
+  //       } else {
+  //         Alert.alert('Verification Failed', 'Email not found');
+  //       }
+  //     } else {
+  //       Alert.alert('Verification Failed', 'No user data found');
+  //     }
+  //   } catch (error) {
+  //     console.error('Verification error:', error.message);
+  //   }
+
 
   const handleResendOTP = () => {
     // Implement the logic to resend OTP
@@ -91,26 +93,39 @@ const VerificationScreen = (route) => {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        onChangeText={(text) => setEmail(text)}
-        value={email}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="OTP"
-        onChangeText={(text) => setOtp(text)}
-        value={otp}
-      />
-      <Button title="Verify" onPress={handleVerification} />
+    <BackGround>
+      <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'flex' }}>
+        <Text style={{ color: "white", fontSize: 64, marginVertical: 10 }}>
+          Verifiy your Code
+        </Text>
+        <TextInput
+          style={{
+            borderRadius: 100, color: "#bfbbba", paddingHorizontal: 10, width: '78%',
+            backgroundColor: 'rgb(220,220,220)', marginVertical: 10
+          }}
+          placeholder="Email"
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+        />
+        <TextInput
+          style={{
+            borderRadius: 100, color: "#bfbbba", paddingHorizontal: 10, width: '78%',
+            backgroundColor: 'rgb(220,220,220)', marginVertical: 10
+          }}
+          placeholder="OTP"
+          onChangeText={(text) => setOtp(text)}
+          value={otp}
+        />
+        <Btn bgColor="#FF6B3C" btnLabel="Verify" textColor="white" Press={handleVerification} />
+        {/* <Button title="Verify" onPress={handleVerification} /> */}
 
-      <View style={styles.resendContainer}>
-        <Text style={styles.resendText}>Didn't receive OTP?</Text>
-        <Button title="Resend OTP" onPress={handleResendOTP} />
+        <View style={styles.resendContainer}>
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>Didn't receive OTP?</Text>
+          {/* <Button title="Resend OTP" onPress={handleResendOTP} /> */}
+        </View>
+        <Btn bgColor="#FF6B3C" btnLabel="Resend OTP" textColor="white" Press={handleResendOTP} />
       </View>
-    </View>
+    </BackGround>
   );
 };
 
