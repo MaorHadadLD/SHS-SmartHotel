@@ -1,7 +1,7 @@
 import firebaseApp from '../firebaseConfig.js';
 import { getDatabase, ref, set, push, query, orderByChild, equalTo, get, update } from 'firebase/database';
 import { updateGuestRoomNumber } from './GuestAction.js';
-
+import { getHotelByNameAndCity } from './StaffAction.js';
 
 
 const db = getDatabase(firebaseApp);
@@ -229,6 +229,46 @@ export const checkStatusbyRoomNumberAndHotel = async (body) => {
     }
     catch (error) {
         console.error("checkStatusbyRoomNumberAndHotel", error);
+        return {success: false};
+    }
+}
+
+export const getTablesByHotel = async (hotel) => {
+
+    try {
+        const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
+        // console.log("getTablesByHotellllll", hotelref);
+        if (hotelref) {
+            const tables = hotelref.hotel.tables;
+            return {success: true, data: tables};
+        } else {
+            return {success: false};
+        }
+    }
+    catch (error) {
+        console.error("getTablesByHotel", error);
+        return {success: false};
+    }
+}
+
+export const updateTableStatus = async (hotel, tableNumber, status) => {
+    
+    console.log(`Update table ${tableNumber} status to ${status} in hotel ${hotel.hotelName}`);
+    try {
+        const hotelres= await getHotelByNameAndCity(hotel.hotelName, hotel.city);
+        const hotelRef = ref(db, `Hotels/${hotelres.hotelKey}`);
+        const snapshot = await get(hotelRef);
+        if (snapshot.exists()) {
+            const hotel = snapshot.val();
+            const tables = hotel.tables;
+            tables[tableNumber] = status;
+            await update(hotelRef, {tables});
+            return {success: true};
+        } else {
+            return {success: false, data: "Hotel not found"};
+        }
+    } catch (error) {
+        console.error("updateTableStatus", error);
         return {success: false};
     }
 }

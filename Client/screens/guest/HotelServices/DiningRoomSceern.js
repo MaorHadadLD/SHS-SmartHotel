@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import { sendPostRequest } from '../../../API/RequestCalls';
 import { getMealsHotel } from '../../../API/StaffCalls';
+import { useNavigation } from '@react-navigation/native';
+import TableReservation from './TableReservation';
 
 
 
@@ -15,7 +17,7 @@ function DiningRoomScreen() {
   const [arrivalTime, setArrivalTime] = useState('');
   const [guestData, setGuestData] = useState([]);
   const [meals, setMeals] = useState([]);
-
+  const navigation = useNavigation();
   useEffect(() => {
     const getGuestData = async () => {
       try {
@@ -44,7 +46,7 @@ function DiningRoomScreen() {
 
     return () => clearInterval(timer); // Cleanup on unmount
     
-  }, [meals]); 
+  }, []); 
   
 
   const toggleModal = () => {
@@ -117,7 +119,7 @@ function DiningRoomScreen() {
               ListEmptyComponent={<Text>No dishes available for {meal}</Text>}
             />
             {/* Order Table Button */}
-            <TouchableOpacity style={styles.orderButton} onPress={toggleModal}>
+            <TouchableOpacity style={styles.orderButton} onPress= {() => navigation.navigate('TableReservation')}>
               <Text style={styles.orderButtonText}>Reserve a Table</Text>
             </TouchableOpacity>
           </View>

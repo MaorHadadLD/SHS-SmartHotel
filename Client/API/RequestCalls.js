@@ -71,3 +71,20 @@ export const getAllRequstsByRoomNumberGuest = async (roomNumber) => {
       console.error("sendDeleteRequest", error);
     }
   }
+
+  export const getTablesHotel = async (hotel) => {
+    try {
+      const response = await axios.post(`${BaseURL}request/gettabeleshotel`,  hotel );
+      return response.data.data;
+    } catch (error) {
+      console.error("getTablesHotel", error);
+    }
+  }
+  export const updateTables = async (hotel, tables, status) => {
+    try {
+      const response = await axios.post(`${BaseURL}request/updatetables`, { hotel, tables, status});
+      return response.data.data;
+    } catch (error) {
+      console.error("updateTables", error);
+    }
+  }

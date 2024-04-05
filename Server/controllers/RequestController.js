@@ -1,4 +1,14 @@
-import {checkStatusbyRoomNumberAndHotel ,postRoomRequest, getRequestByDepartment, postRequest, updateRequest, deleteRequest, getAllRequstsByRoomNumber} from '../actions/RequestAction.js';
+import {
+    checkStatusbyRoomNumberAndHotel, 
+    postRoomRequest, 
+    getRequestByDepartment, 
+    postRequest, 
+    updateRequest, 
+    deleteRequest, 
+    getAllRequstsByRoomNumber,
+    getTablesByHotel,
+    updateTableStatus
+} from '../actions/RequestAction.js';
 
 
 export const requestSuccess = (data) => ({success: true, data})
@@ -73,6 +83,30 @@ export const checkStatusReqController = async (reqBody) => {
     console.log("checkStatusReqController", reqBody);
     const result = await checkStatusbyRoomNumberAndHotel(reqBody.body);
     console.log("checkStatusReqController result", result);
+    if (result) {
+        return requestSuccess(result);
+    }
+    else {
+        return requestFailure("No Requests");
+    }
+}
+
+export const getTablesHotelController = async (reqBody) => {
+    // console.log("getTablesHotelController", reqBody);
+    const result = await getTablesByHotel(reqBody);
+    // console.log("getTablesHotelController result", result);
+    if (result) {
+        return requestSuccess(result);
+    }
+    else {
+        return requestFailure("No Requests");
+    }
+}
+
+export const updateTableStatusController = async (reqBody) => {
+    // console.log("updateTableStatusController", reqBody);
+    const result = await updateTableStatus(reqBody.hotel, reqBody.tables, reqBody.status);
+    // console.log("updateTableStatusController result", result);
     if (result) {
         return requestSuccess(result);
     }

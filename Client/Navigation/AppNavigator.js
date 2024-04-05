@@ -10,6 +10,7 @@ import ClinetMainMenu from '../screens/guest/ClientMainMenu';
 import HotelInfoScreen from '../screens/guest/HotelInfoScreen';
 import SpaScreen from '../screens/guest/SpaScreen';
 import DiningRoomScreen from '../screens/guest/HotelServices/DiningRoomSceern';
+import TableReservation from '../screens/guest/HotelServices/TableReservation';
 import RoomCleaningRequestScreen from '../screens/guest/HotelServices/RoomCleaningRequestScreen';
 import RoomServiceRequestsScreen from '../screens/guest/HotelServices/RoomServiceRequestsScreen';
 import PoolBarRequestScreen from '../screens/guest/HotelServices/PoolBarRequestScreen';
@@ -55,6 +56,7 @@ const MainStack = () => (
     />
     <Stack.Screen name="SpaScreen" component={SpaScreen} />
     <Stack.Screen name="DiningRoomScreen" component={DiningRoomScreen} />
+    <Stack.Screen name="TableReservation" component={TableReservation} />
     <Stack.Screen name="RoomCleaningRequestScreen" component={RoomCleaningRequestScreen} />
     <Stack.Screen name="RoomServiceRequestsScreen" component={RoomServiceRequestsScreen} />
     <Stack.Screen name="PoolBarRequestScreen" component={PoolBarRequestScreen} />

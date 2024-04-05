@@ -124,7 +124,7 @@ export const getHotelByNameAndCity = async (hotelName, city) => {
         });
         if (hotelKey) {
             const hotel = hotels[hotelKey];
-            return hotel;
+            return {hotel, hotelKey};
         } else {
             console.log('Hotel not found in the given city');
             return null;
@@ -142,9 +142,9 @@ export const getHotelByNameAndCity = async (hotelName, city) => {
 export  const getMealByHotel = async (hotel) => {
     try{
         const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
-        console.log("getMealByHotel", hotelref.meals);
+        console.log("getMealByHotel", hotelref.hotel.meals);
         if(hotelref){
-            return {success: true, data: hotelref.meals};
+            return {success: true, data: hotelref.hotel.meals};
         }
         else {
             return {success: false, data: "Hotel not found"};
@@ -161,33 +161,32 @@ export const updateMealByHotel = async (hotel, meals) => {
     try {
         const hotelRefold = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
         console.log("hotelref", hotelRefold);
-        if (hotelRefold && hotelRefold.meals) {
+        if (hotelRefold && hotelRefold.hotel.meals) {
             const updatedMeals = { meals };
             console.log("updatedMealssssssss", updatedMeals);
             //get ref hotel acording to hotel name and city
-            const hotelsRef = ref(db, 'Hotels');
-            const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotel.hotelName));
-            const snapshot = await get(hotelsQuery);
-            if (snapshot.exists()) {
-                const hotels = snapshot.val();
-                // Find the hotel with matching city
-                const hotelKey = Object.keys(hotels).find(key => {
-                const hotelFound = hotels[key];
-                const hotelCity = hotelFound.city || ''; // Handle the case where the city property might not be present
-                return hotelCity === hotel.city;
-            }
-            );
-            if (hotelKey) {
-                const hotelRef = ref(db, `Hotels/${hotelKey}`);
+            // const hotelsRef = ref(db, 'Hotels');
+            // const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotel.hotelName));
+            // const snapshot = await get(hotelsQuery);
+            // if (snapshot.exists()) {
+            //     const hotels = snapshot.val();
+            //     // Find the hotel with matching city
+            //     const hotelKey = Object.keys(hotels).find(key => {
+            //     const hotelFound = hotels[key];
+            //     const hotelCity = hotelFound.city || ''; // Handle the case where the city property might not be present
+            //     return hotelCity === hotel.city;
+            // }
+            // );
+            // if (hotelKey) {
+                const hotelRef = ref(db, `Hotels/${hotelRefold.hotelKey}`);
                 console.log("hotelRefaaaaaaaa", hotelKey);
                 await update(hotelRef, {meals: updatedMeals.meals});
                 return { success: true, data: 'Meals updated successfully' };
-                }
+                
             } else {
                 return { success: false, data: 'Hotel or meals not found' };
             }
-        }
-    } catch (error) {
+        } catch (error) {
         console.error('Error updating meal:', error.message);
         return { success: false, data: error.message };
     }

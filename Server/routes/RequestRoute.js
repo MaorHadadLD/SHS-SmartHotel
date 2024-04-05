@@ -1,5 +1,15 @@
 import express from 'express';
-import { checkStatusReqController ,postRoomRequestController, getRequestsByDepartmentController, postRequestController, updateRequestController, deleteRequestController, getRequestsByRoomNumberController} from '../controllers/RequestController.js';
+import { 
+    checkStatusReqController,
+    postRoomRequestController, 
+    getRequestsByDepartmentController, 
+    postRequestController, 
+    updateRequestController, 
+    deleteRequestController, 
+    getRequestsByRoomNumberController,
+    getTablesHotelController,
+    updateTableStatusController
+} from '../controllers/RequestController.js';
 import { respond } from './utils.js';
 
 
@@ -34,9 +44,17 @@ requestRouter.post('/request/getallbyroomnumber', async (req, res) => {
 });
 
 requestRouter.post('/request/status', async (req, res) => {
-    console.log("requestRouter.checkstatus", req.body);
+    // console.log("requestRouter.checkstatus", req.body);
     respond(await checkStatusReqController(req.body), res);
 
+});
+requestRouter.post('/request/gettabeleshotel', async (req, res) => {
+    // console.log("requestRouter.gettabeleshotel", req.body);
+    respond(await getTablesHotelController(req.body), res);
+});
+requestRouter.post('/request/updatetables', async (req, res) => {
+    // console.log("requestRouter.getallbyroomnumber", req.body);
+    respond(await updateTableStatusController(req.body), res);
 });
 
 export default requestRouter;
