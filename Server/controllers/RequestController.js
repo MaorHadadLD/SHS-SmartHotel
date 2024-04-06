@@ -80,9 +80,9 @@ export const getRequestsByRoomNumberController = async (reqBody) => {
 } 
 
 export const checkStatusReqController = async (reqBody) => {
-    console.log("checkStatusReqController", reqBody);
+    // console.log("checkStatusReqController", reqBody);
     const result = await checkStatusbyRoomNumberAndHotel(reqBody.body);
-    console.log("checkStatusReqController result", result);
+    // console.log("checkStatusReqController result", result);
     if (result) {
         return requestSuccess(result);
     }
@@ -104,8 +104,8 @@ export const getTablesHotelController = async (reqBody) => {
 }
 
 export const updateTableStatusController = async (reqBody) => {
-    // console.log("updateTableStatusController", reqBody);
-    const result = await updateTableStatus(reqBody.hotel, reqBody.tables, reqBody.status);
+    console.log("updateTableStatusController", reqBody);
+    const result = await updateTableStatus(reqBody.hotel, reqBody.tableId, reqBody.status);
     // console.log("updateTableStatusController result", result);
     if (result) {
         return requestSuccess(result);

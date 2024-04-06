@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const BaseURL = 'http://192.168.1.124:3002/';
-const BaseURL = 'http://192.168.1.171:3002/';
+const BaseURL = 'http://192.168.1.175:3002/';
 
 
 export const sendRoomRequest = async (guest, hotel) => {
@@ -80,9 +80,9 @@ export const getAllRequstsByRoomNumberGuest = async (roomNumber) => {
       console.error("getTablesHotel", error);
     }
   }
-  export const updateTables = async (hotel, tables, status) => {
+  export const updateTables = async (hotel, tableId, status) => {
     try {
-      const response = await axios.post(`${BaseURL}request/updatetables`, { hotel, tables, status});
+      const response = await axios.post(`${BaseURL}request/updatetables`, { hotel, tableId, status});
       return response.data.data;
     } catch (error) {
       console.error("updateTables", error);

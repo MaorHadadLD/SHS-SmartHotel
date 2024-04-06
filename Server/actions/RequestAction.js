@@ -152,7 +152,7 @@ export const postRequest = async (body) => {
                 roomNumber: body.bodyrequest.roomNumber,
                 hotel: body.bodyrequest.hotel,
                 timestamp: body.bodyrequest.time,
-                // status: "waiting",
+                tableId: body.bodyrequest.tableId,
                 // notice: body.bodyrequest.request,
         });
         } else {
@@ -234,6 +234,7 @@ export const checkStatusbyRoomNumberAndHotel = async (body) => {
 }
 
 export const getTablesByHotel = async (hotel) => {
+    console.log("getTablesByHotel", hotel);
 
     try {
         const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
@@ -246,7 +247,7 @@ export const getTablesByHotel = async (hotel) => {
         }
     }
     catch (error) {
-        console.error("getTablesByHotel", error);
+        console.warn("getTablesByHotel", error);
         return {success: false};
     }
 }

@@ -142,7 +142,7 @@ export const getHotelByNameAndCity = async (hotelName, city) => {
 export  const getMealByHotel = async (hotel) => {
     try{
         const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
-        console.log("getMealByHotel", hotelref.hotel.meals);
+        // console.log("getMealByHotel", hotelref.hotel.meals);
         if(hotelref){
             return {success: true, data: hotelref.hotel.meals};
         }

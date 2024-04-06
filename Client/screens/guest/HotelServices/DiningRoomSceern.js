@@ -6,11 +6,11 @@ import moment from 'moment';
 import { sendPostRequest } from '../../../API/RequestCalls';
 import { getMealsHotel } from '../../../API/StaffCalls';
 import { useNavigation } from '@react-navigation/native';
-import TableReservation from './TableReservation';
 
 
 
-function DiningRoomScreen() {
+
+function DiningRoomScreen({route}) {
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
   const [isModalVisible, setModalVisible] = useState(false);
   const [numberOfDiners, setNumberOfDiners] = useState('');
@@ -46,7 +46,7 @@ function DiningRoomScreen() {
 
     return () => clearInterval(timer); // Cleanup on unmount
     
-  }, []); 
+  }, [guestData]); 
   
 
   const toggleModal = () => {
@@ -119,7 +119,7 @@ function DiningRoomScreen() {
               ListEmptyComponent={<Text>No dishes available for {meal}</Text>}
             />
             {/* Order Table Button */}
-            <TouchableOpacity style={styles.orderButton} onPress= {() => navigation.navigate('TableReservation')}>
+            <TouchableOpacity style={styles.orderButton} onPress= {() => navigation.navigate('TableReservation', {selectedHotel: route.params.selectedHotel, guestData: guestData})}>
               <Text style={styles.orderButtonText}>Reserve a Table</Text>
             </TouchableOpacity>
           </View>

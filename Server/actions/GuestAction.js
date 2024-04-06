@@ -81,7 +81,6 @@ export const updateGuestRoomNumber = async (guestEmail, roomNumber) => {
             };
 
             const guestRef = ref(db, `guests/${guestKey}`);
-
             // Use update to set the new guest data
             await update(guestRef, updatedGuestData);
 
