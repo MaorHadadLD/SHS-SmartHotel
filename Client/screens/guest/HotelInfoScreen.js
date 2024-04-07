@@ -36,6 +36,8 @@ const HotelInfoScreen = ({ route }) => {
   const [showLobbyBarInfo, setShowLobbyBarInfo] = useState(false);
   const [showSpaInfo, setShowSpaInfo] = useState(false);
   const [showwifiInfo, setShowwifiInfo] = useState(false);
+  const [showGymInfo, setShowGymInfo] = useState(false);
+
 
 
 
@@ -220,11 +222,7 @@ const HotelInfoScreen = ({ route }) => {
             </View>
           </View>
         )}
-             {/* <View style={styles.infoContainer}>
-         <Text style={styles.infoTitle}>Wifi:</Text>
-         <Text style={styles.infoText}>{wifiInfo}</Text>
-       </View> */}
-       {/* Button to show Spa info */}
+       {/* Button to show wifi info */}
        {!showwifiInfo && (
           <Btn
             bgColor="#FF6B3C"
@@ -243,9 +241,37 @@ const HotelInfoScreen = ({ route }) => {
               <View style={styles.buttonContainer}>
                 <Btn
                   bgColor="#FF6B3C"
-                  btnLabel="wifi Spa Info"
+                  btnLabel="wifi Info"
                   textColor="white"
                   Press={() => setShowwifiInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+        
+       {/* Button to show Gym info */}
+       {!showGymInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Gym Info"
+            textColor="white"
+            Press={() => setShowGymInfo(true)}
+          />
+        )}
+
+        {/* Show Gym info if the button is pressed */}
+        {showGymInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>Gym</Text>
+              <Text style={styles.infoText}>{gymInfo}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="Gym Info"
+                  textColor="white"
+                  Press={() => setShowGymInfo(false)}
                 />
               </View>
             </View>
