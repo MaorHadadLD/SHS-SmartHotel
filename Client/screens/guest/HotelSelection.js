@@ -47,8 +47,8 @@ function HotelSelection({ navigation }) {
 
   return (
     <BackGround>
-    <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'flex' }}>
-      <Text style={{ color: "#e3af12", fontSize: 30,  }}>Choose the hotel where you are staying</Text>
+    <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'center' }}>
+      <Text style={{ color: "white", fontSize: 30}}>Choose the hotel where you are staying</Text>
       <Btn bgColor="#FF6B3C" btnLabel="Hotel List" textColor="white" Press={()=> setModalVisible(true)}/>
       {/* <TouchableOpacity onPress={() => setModalVisible(true)}>
         <Text style={{fontSize: 30, color: "blue", fontWeight: "bold", }}>Show Hotel List</Text>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 460, height: 700 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     justifyContent: 'center',
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   closeModalButton: {
     marginTop: 16,
-    backgroundColor: '#007bff',
+    backgroundColor: '#FF6B3C',
     padding: 10,
     borderRadius: 5,
   },

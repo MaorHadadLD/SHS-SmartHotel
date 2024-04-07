@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'r
 import {Requests} from "../../../data/ClassDpData";
 
 import { sendPostRequest } from '../../../API/RequestCalls';
+import BackGround from '../../../components/BackGround';
+
 
 
 
@@ -66,6 +68,7 @@ function RoomCleaningRequestScreen({ route, navigation }) {
   }
 
   return (
+    <BackGround>
     <View style={styles.container}>
       <Text style={styles.title}>Choose a predefined request:</Text>
       <View style={styles.buttonContainer}>
@@ -81,7 +84,7 @@ function RoomCleaningRequestScreen({ route, navigation }) {
         onChangeText={(text) => setCustomRequest(text)}
         value={customRequest}
       />
-
+      {/* <Btn title="Submit Request" onPress={() => handleRequestSubmit(customRequest)} disabled={cleaningRoomRequests.length === 0} /> */}
       <TouchableOpacity
         style={styles.submitButton}
         onPress={() => handleRequestSubmit(customRequest)}
@@ -90,6 +93,7 @@ function RoomCleaningRequestScreen({ route, navigation }) {
         <Text style={styles.buttonText}>Submit Request</Text>
       </TouchableOpacity>
     </View>
+    </BackGround>
   );
 }
 
@@ -100,6 +104,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === 'ios' ? 40 : 0, // Adjust marginTop for iOS status bar
   },
   title: {
+    color: "white",
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 10,

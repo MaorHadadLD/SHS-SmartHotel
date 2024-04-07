@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, ScrollView, ImageBackground } from "react-native";
 import { useNavigation, useIsFocused} from '@react-navigation/native';
 import { getGuestDetails } from '../../API/GuestCalls';
 import { get } from "firebase/database";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackGround from "../../components/BackGround";
+import Btn from "../../components/Btn";
 
 function ClientMainMenu({route}) {
   // const selectedHotel  = route.params.selectedHotel ;
@@ -62,26 +64,41 @@ function ClientMainMenu({route}) {
     const textStyle = item.title === "check out" ? styles.checkoutButtonText : styles.menuItemText;
   
     return (
-      <TouchableOpacity
-        style={buttonStyle}
-        onPress={() => handleNavigate(item.screen)}
-      >
-        <Text style={textStyle}>{item.title}</Text>
-      </TouchableOpacity>
+      <View style={styles.container}>
+      <Btn bgColor="white" btnLabel={item.title} textColor="black" Press={() => handleNavigate(item.screen)} />
+      </View>
+      // <TouchableOpacity
+      //   style={buttonStyle}
+      //   onPress={() => handleNavigate(item.screen)}
+      // >
+      //   <Text style={textStyle}>{item.title}</Text>
+      // </TouchableOpacity>
     );
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}> Welcome to {hotelName ? `${hotelName}, ${city}` : 'your hotel'} </Text>
-      <Text style={styles.header}> {`guest ${guestEmail}`} </Text>
-      <FlatList
-        data={menuItems}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.flatListContainer}
-      />
-    </View>
+    
+      <View style={{ flex: 1 }}>
+        {/* <BackGround> */}
+        <ImageBackground source={require('../../assets/reception2.jpg')} style={{ flex: 1, resizeMode: "cover", justifyContent: "center" }}>
+        <Text style={{ color: "white", fontSize: 28, fontWeight: "bold", textAlign: 'center', marginTop: 50 }}>
+          Welcome to {hotelName ? `${hotelName}, ${city}` : 'your hotel'}
+        </Text>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+          <Text style={{ color: "white", fontSize: 28, fontWeight: "bold" }}>
+            {guestData.firstname}
+          </Text>
+        </View>
+        <FlatList
+          data={menuItems}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.flatListContainer}
+          scrollEnabled={true}
+        />
+        {/* </BackGround> */}
+        </ImageBackground>
+      </View>
   );
 }
 
@@ -89,11 +106,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    
+    
   },
   header: {
     fontSize: 24,
     marginBottom: 20,
+    alignItems: 'center'
   },
   flatListContainer: {
     paddingBottom: 20,

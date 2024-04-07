@@ -1,9 +1,14 @@
 // Import necessary modules from react-native
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { ClassDpCategories } from '../../data/ClassDpData';
 import DpClassCategoryGridTil from '../../components/DpClassCategoryGridTil';
 import { checkStatusReq } from '../../API/RequestCalls';
+import BackGround from '../../components/BackGround';
+
+
+
+
 
 function HotelServicesScreen({  route, navigation }) {
   console.log('HotelServicesScreen routeGUEST', route.params.guestData);

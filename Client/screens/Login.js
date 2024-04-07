@@ -37,12 +37,24 @@ const Login = () => {
     setShowStaffLogin(true);
   };
 
+
+
   const handleStaffSubmit = async () => {
     try {
       const result = await sendLoginStaff(employeeNumber, password);
       console.log('Staff login result:', result.success);
       if (result.success) {
-        // Handle navigation based on result.data.role
+        if (result.data.role === 'reception') {
+          navigation.navigate('ReceptionScreen', { staffData: result.data });
+        } else if (result.data.role === 'cleaning') {
+          navigation.navigate('CleaningRoomScreen', { staffData: result.data });
+        } else if (result.data.role === 'RoomService') {
+          navigation.navigate('RoomServiceScreen', { staffData: result.data });
+        } else if (result.data.role === 'PoolBar') {
+          navigation.navigate('PoolBarScreen', { staffData: result.data });
+        } else if (result.data.role === 'Dinning') {
+          navigation.navigate('DinningRoomStaff', { staffData: result.data });
+        }
       } else {
         alert('Invalid employee number or password. Please try again.');
       }
@@ -69,7 +81,7 @@ const Login = () => {
                   onChangeText={(text) => setEmployeeNumber(text)}
                 />
                 <TextInput
-                  style={{ borderRadius: 100, color: '#bfbbba', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220,220)', marginVertical: 10 }}
+                  style={{ borderRadius: 100, color: 'black', paddingHorizontal: 10, width: '78%', backgroundColor: 'rgb(220,220,220)', marginVertical: 10 }}
                   placeholderTextColor="black"
                   placeholder="Password"
                   secureTextEntry
