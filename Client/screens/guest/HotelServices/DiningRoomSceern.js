@@ -28,7 +28,6 @@ function DiningRoomScreen({route}) {
         // console.log("res", res.data);
         if (res.success) {
           setMeals(res.data);
-          
         }
         // console.log("?>>>>>>>>>>>>>ss", meals);
         
