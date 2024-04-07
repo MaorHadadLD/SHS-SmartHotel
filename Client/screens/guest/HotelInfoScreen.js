@@ -39,6 +39,8 @@ const HotelInfoScreen = ({ route }) => {
   const [showGymInfo, setShowGymInfo] = useState(false);
   const [showEntertainmentInfo, setShowEntertainmentInfo] = useState(false);
   const [showPoolInfo, setShowPoolInfo] = useState(false);
+  const [showPoolBarInfo, setShowPoolBarInfo] = useState(false);
+
 
 
 
@@ -337,6 +339,35 @@ const HotelInfoScreen = ({ route }) => {
             </View>
           </View>
         )}
+        
+        {/* Button to show Pool Bar info */}
+      {!showPoolBarInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Pool Bar Info"
+            textColor="white"
+            Press={() => setShowPoolBarInfo(true)}
+          />
+        )}
+
+        {/* Show Pool Bar info if the button is pressed */}
+        {showPoolBarInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>Pool Bar</Text>
+              <Text style={styles.infoText}>{PoolBarInfo}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="Pool Bar Info"
+                  textColor="white"
+                  Press={() => setShowPoolBarInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+
 
 
       </ScrollView>
