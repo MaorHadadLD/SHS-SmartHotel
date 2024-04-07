@@ -30,7 +30,7 @@ const HotelInfoScreen = ({ route }) => {
       </View>
     );
   }
- 
+  
   const [showBreakfastInfo, setShowBreakfastInfo] = useState(false);
   const [showDinnersInfo, setShowDinnersInfo] = useState(false);
   const [showLobbyBarInfo, setShowLobbyBarInfo] = useState(false);
@@ -41,6 +41,8 @@ const HotelInfoScreen = ({ route }) => {
   const [showPoolInfo, setShowPoolInfo] = useState(false);
   const [showPoolBarInfo, setShowPoolBarInfo] = useState(false);
   const [showSynagogueInfo, setShowSynagogueInfo] = useState(false);
+  const [showKeyOnSaturdayInfo, setShowKeyOnSaturdayInfo] = useState(false);
+
 
 
 
@@ -392,6 +394,34 @@ const HotelInfoScreen = ({ route }) => {
                   btnLabel="Synagogue Info"
                   textColor="white"
                   Press={() => setShowSynagogueInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+        
+       {/* Button to show Key On Saturday info */}
+      {!showKeyOnSaturdayInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Key On Saturday Info"
+            textColor="white"
+            Press={() => setShowKeyOnSaturdayInfo(true)}
+          />
+        )}
+
+        {/* Show Key On Saturday info if the button is pressed */}
+        {showKeyOnSaturdayInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>Key On Saturday</Text>
+              <Text style={styles.infoText}>{KeyOnSaturday}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="Key On Saturday Info"
+                  textColor="white"
+                  Press={() => setShowKeyOnSaturdayInfo(false)}
                 />
               </View>
             </View>
