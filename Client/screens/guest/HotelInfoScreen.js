@@ -34,6 +34,9 @@ const HotelInfoScreen = ({ route }) => {
   const [showBreakfastInfo, setShowBreakfastInfo] = useState(false);
   const [showDinnersInfo, setShowDinnersInfo] = useState(false);
   const [showLobbyBarInfo, setShowLobbyBarInfo] = useState(false);
+  const [showSpaInfo, setShowSpaInfo] = useState(false);
+  const [showwifiInfo, setShowwifiInfo] = useState(false);
+
 
 
   // return (
@@ -162,10 +165,7 @@ const HotelInfoScreen = ({ route }) => {
             </View>
           </View>
         )}
-        {/* <View style={styles.infoContainer}>
-         <Text style={styles.infoTitle}>Lobby Bar:</Text>
-         <Text style={styles.infoText}>{lobbyBarInfo}</Text>
-       </View> */}
+        
         {/* Button to show Lobby Bar info */}
         {!showLobbyBarInfo && (
           <Btn
@@ -193,6 +193,65 @@ const HotelInfoScreen = ({ route }) => {
             </View>
           </View>
         )}
+        {/* Button to show Spa info */}
+        {!showSpaInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Spa Info"
+            textColor="white"
+            Press={() => setShowSpaInfo(true)}
+          />
+        )}
+
+        {/* Show Spa info if the button is pressed */}
+        {showSpaInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>Spa</Text>
+              <Text style={styles.infoText}>{spaInfo}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="Hide Spa Info"
+                  textColor="white"
+                  Press={() => setShowSpaInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+             {/* <View style={styles.infoContainer}>
+         <Text style={styles.infoTitle}>Wifi:</Text>
+         <Text style={styles.infoText}>{wifiInfo}</Text>
+       </View> */}
+       {/* Button to show Spa info */}
+       {!showwifiInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="wifi Info"
+            textColor="white"
+            Press={() => setShowwifiInfo(true)}
+          />
+        )}
+
+        {/* Show wifi info if the button is pressed */}
+        {showwifiInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>wifi</Text>
+              <Text style={styles.infoText}>{wifiInfo}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="wifi Spa Info"
+                  textColor="white"
+                  Press={() => setShowwifiInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+
       </ScrollView>
     </BackGround>
   );
