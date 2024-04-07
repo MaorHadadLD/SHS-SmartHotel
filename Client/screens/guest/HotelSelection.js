@@ -48,7 +48,7 @@ function HotelSelection({ navigation }) {
   return (
     <BackGround>
     <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'center' }}>
-      <Text style={{ color: "#e3af12", fontSize: 30}}>Choose the hotel where you are staying</Text>
+      <Text style={{ color: "white", fontSize: 30}}>Choose the hotel where you are staying</Text>
       <Btn bgColor="#FF6B3C" btnLabel="Hotel List" textColor="white" Press={()=> setModalVisible(true)}/>
       {/* <TouchableOpacity onPress={() => setModalVisible(true)}>
         <Text style={{fontSize: 30, color: "blue", fontWeight: "bold", }}>Show Hotel List</Text>
