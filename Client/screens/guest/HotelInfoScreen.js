@@ -38,6 +38,8 @@ const HotelInfoScreen = ({ route }) => {
   const [showwifiInfo, setShowwifiInfo] = useState(false);
   const [showGymInfo, setShowGymInfo] = useState(false);
   const [showEntertainmentInfo, setShowEntertainmentInfo] = useState(false);
+  const [showPoolInfo, setShowPoolInfo] = useState(false);
+
 
 
 
@@ -307,6 +309,35 @@ const HotelInfoScreen = ({ route }) => {
             </View>
           </View>
         )}
+        
+       {/* Button to show Pool info */}
+      {!showPoolInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Pool Info"
+            textColor="white"
+            Press={() => setShowPoolInfo(true)}
+          />
+        )}
+
+        {/* Show Pool info if the button is pressed */}
+        {showPoolInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>Pool</Text>
+              <Text style={styles.infoText}>{poolInfo}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="Pool Info"
+                  textColor="white"
+                  Press={() => setShowPoolInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+
 
       </ScrollView>
     </BackGround>
