@@ -42,6 +42,8 @@ const HotelInfoScreen = ({ route }) => {
   const [showPoolBarInfo, setShowPoolBarInfo] = useState(false);
   const [showSynagogueInfo, setShowSynagogueInfo] = useState(false);
   const [showKeyOnSaturdayInfo, setShowKeyOnSaturdayInfo] = useState(false);
+  const [showCheckOutInfo, setShowCheckOutInfo] = useState(false);
+
 
 
 
@@ -422,6 +424,34 @@ const HotelInfoScreen = ({ route }) => {
                   btnLabel="Key On Saturday Info"
                   textColor="white"
                   Press={() => setShowKeyOnSaturdayInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+       
+       {/* Button to show Check Out info */}
+       {!showCheckOutInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Check Out Info"
+            textColor="white"
+            Press={() => setShowCheckOutInfo(true)}
+          />
+        )}
+
+        {/* Show Check Out info if the button is pressed */}
+        {showKeyOnSaturdayInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>Check Out</Text>
+              <Text style={styles.infoText}>{checkOutInfo}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="Check Out Info"
+                  textColor="white"
+                  Press={() => setShowCheckOutInfo(false)}
                 />
               </View>
             </View>
