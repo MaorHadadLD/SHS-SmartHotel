@@ -37,6 +37,8 @@ const HotelInfoScreen = ({ route }) => {
   const [showSpaInfo, setShowSpaInfo] = useState(false);
   const [showwifiInfo, setShowwifiInfo] = useState(false);
   const [showGymInfo, setShowGymInfo] = useState(false);
+  const [showEntertainmentInfo, setShowEntertainmentInfo] = useState(false);
+
 
 
 
@@ -272,6 +274,34 @@ const HotelInfoScreen = ({ route }) => {
                   btnLabel="Gym Info"
                   textColor="white"
                   Press={() => setShowGymInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+        
+      {/* Button to show Entertainment info */}
+      {!showEntertainmentInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Entertainment Info"
+            textColor="white"
+            Press={() => setShowEntertainmentInfo(true)}
+          />
+        )}
+
+        {/* Show Entertainment info if the button is pressed */}
+        {showEntertainmentInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>Entertainment</Text>
+              <Text style={styles.infoText}>{entertainmentInfo}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="Entertainment Info"
+                  textColor="white"
+                  Press={() => setShowEntertainmentInfo(false)}
                 />
               </View>
             </View>
