@@ -30,7 +30,7 @@ const HotelInfoScreen = ({ route }) => {
       </View>
     );
   }
-  
+ 
   const [showBreakfastInfo, setShowBreakfastInfo] = useState(false);
   const [showDinnersInfo, setShowDinnersInfo] = useState(false);
   const [showLobbyBarInfo, setShowLobbyBarInfo] = useState(false);
@@ -40,6 +40,8 @@ const HotelInfoScreen = ({ route }) => {
   const [showEntertainmentInfo, setShowEntertainmentInfo] = useState(false);
   const [showPoolInfo, setShowPoolInfo] = useState(false);
   const [showPoolBarInfo, setShowPoolBarInfo] = useState(false);
+  const [showSynagogueInfo, setShowSynagogueInfo] = useState(false);
+
 
 
 
@@ -362,6 +364,34 @@ const HotelInfoScreen = ({ route }) => {
                   btnLabel="Pool Bar Info"
                   textColor="white"
                   Press={() => setShowPoolBarInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+        
+       {/* Button to show Synagogue info */}
+      {!showSynagogueInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Synagogue Info"
+            textColor="white"
+            Press={() => setShowSynagogueInfo(true)}
+          />
+        )}
+
+        {/* Show Synagogue info if the button is pressed */}
+        {showSynagogueInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>Synagogue</Text>
+              <Text style={styles.infoText}>{SynagogueInfo}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="Synagogue Info"
+                  textColor="white"
+                  Press={() => setShowSynagogueInfo(false)}
                 />
               </View>
             </View>
