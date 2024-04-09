@@ -26,18 +26,18 @@ function DinningRoomStaff({ route }) {
     const isLunchTime = currentTime.isBetween(mealSchedules[1].startTime, mealSchedules[1].endTime);
     const isDinnerTime = currentTime.isBetween(mealSchedules[2].startTime, mealSchedules[2].endTime);
   
-    console.log('isBreakfastTime', isBreakfastTime);
-    console.log('isLunchTime', isLunchTime);
-    console.log('isDinnerTime', isDinnerTime);
+    // console.log('isBreakfastTime', isBreakfastTime);
+    // console.log('isLunchTime', isLunchTime);
+    // console.log('isDinnerTime', isDinnerTime);
   useEffect(() => {
-    
     const fetchRequests = async () => {
       try {
         const response = await getRequests(route.params.staffData.hotel, 'Dinning');
         if (response.success) {
           setRequests(response.data);
-        } else {
-          console.error('fetchRequests failed:', response.error); // Handle error from API
+        }
+        else {
+          setRequests([]);
         }
       } catch (error) {
         console.error('fetchRequests error:', error);
@@ -48,7 +48,7 @@ function DinningRoomStaff({ route }) {
         try {
             const response = await getMealsHotel(route.params.staffData.hotel);
             if (response.success) {
-                 console.log('getMeals response:', response.data);
+                //  console.log('getMeals response:', response.data);
               
                     setBreakfast(response.data.breakfast);
                     // console.log('breakfast59999', response.data.breakfast);
@@ -160,13 +160,10 @@ function DinningRoomStaff({ route }) {
         <TouchableOpacity
           style={styles.changeMealButton}
           onPress={handleChangeMealForHotel}
-          disabled={requests.length === 0} // Disable button if there are no requests
         >
           <Text style={styles.changeMealButtonText}>Change Meal for {route.params.staffData.hotel.hotelName}</Text>
         </TouchableOpacity>
-      
-        <Text style={styles.changeMealButtonText}>Meal Change not allowed at this time</Text>
-      
+        {/* <Text style={styles.changeMealButtonText}>Meal Change not allowed at this time</Text> */}
       {/* Staff details */}
       <View style={staffHomeStyles.staffDetailsContainer}>
         <Text style={staffHomeStyles.detailText}>Name: {route.params.staffData.employeeName}</Text>
@@ -249,28 +246,29 @@ function DinningRoomStaff({ route }) {
       </View>
         </>
       ) : (
-       
         <>
-          <Text style={styles.modalHeader}>No meals currently available</Text>
-          <Text style={styles.modalHeader}>Please come back during meal hours:</Text>
+          <Text style={styles.modalHeader}>Meal Change not allowed at this time.</Text>
+          <Text style={styles.modalHeader}>Please come back during meal changing hours:</Text>
           <FlatList
             data={mealSchedules}
             renderItem={({ item }) => (
               <Text style={styles.item}> 
                 {`${item.meal} - ${item.startTime.format('HH:mm')} to ${item.endTime.format('HH:mm')}`}
               </Text>
+              
             )}
           />
-        </>
-       
-
-      )}
-      <View style={styles.buttonContainer}>
+             <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.saveButton} onPress={handleCancelEdit} >
           <Text style={styles.buttonText}>Close</Text>
         </TouchableOpacity>
       
       </View>
+        </>
+       
+
+      )}
+   
     </View>
   </View>
 </Modal>
