@@ -16,9 +16,9 @@ export const requestFailure = (data) => ({ success: false, data });
 
 //* GET REQUEST CONTROLLER *//
 export const getRequestsByDepartmentController = async (reqBody) => {
-    console.log("getRequestsByDepartmentController", reqBody);
+    // console.log("getRequestsByDepartmentController", reqBody);
     const result = await getRequestByDepartment(reqBody );
-    console.log("getRequestsByDepartmentController result", result);
+    // console.log("getRequestsByDepartmentController result", result);
     if (result) {
         return requestSuccess(result);
     }
@@ -104,9 +104,22 @@ export const getTablesHotelController = async (reqBody) => {
 }
 
 export const updateTableStatusController = async (reqBody) => {
-    console.log("updateTableStatusController", reqBody);
+    // console.log("updateTableStatusController", reqBody);
     const result = await updateTableStatus(reqBody.hotel, reqBody.tableId, reqBody.status);
     // console.log("updateTableStatusController result", result);
+    if (result) {
+        return requestSuccess(result);
+    }
+    else {
+        return requestFailure("No Requests");
+    }
+}
+
+export const deleteDiningTableController = async (reqBody) => {
+    // console.log("deleteDiningTableControllerrrrrrrr", reqBody);
+    const result = await deleteRequest({id: reqBody.id, type: reqBody.type});
+    const result2 = await updateTableStatus(reqBody.hotel, reqBody.tableId, 'available');
+    // console.log("deleteDiningTableController result", result);
     if (result) {
         return requestSuccess(result);
     }

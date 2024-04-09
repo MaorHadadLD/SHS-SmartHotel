@@ -1,11 +1,12 @@
 // styles.js
-
+import { StatusBar } from 'react-native';
 import { StyleSheet } from 'react-native';
 
 export const globalStyles = StyleSheet.create({
   container: {
+    marginTop: 25,
     flex: 1,
-    padding: 16,
+    
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -43,6 +44,7 @@ export const globalStyles = StyleSheet.create({
 export const staffHomeStyles = StyleSheet.create({
   requestItem: {
     padding: 10,
+    width: 340,
     marginBottom: 10,
     borderWidth: 1,
     borderColor: '#ccc',

@@ -19,7 +19,7 @@ const PoolBarScreen = ({ route }) => {
         };
 
         fetchRequests();
-    }, []);
+    }, [requests]);
 
     const handleRequestStatusChange = async (id, newStatus) => {
         if (newStatus === 'Done') {

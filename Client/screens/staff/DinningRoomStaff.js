@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Modal, TextInput, Animated } from 'react-native';
 import moment from 'moment';
-import { getRequests } from '../../API/RequestCalls';
+import { getRequests, deleteDiningTableRequest } from '../../API/RequestCalls';
 import { getMealsHotel, updateMealHotel } from '../../API/StaffCalls';
 import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
 
@@ -51,7 +51,7 @@ function DinningRoomStaff({ route }) {
                  console.log('getMeals response:', response.data);
               
                     setBreakfast(response.data.breakfast);
-                    console.log('breakfast59999', response.data.breakfast);
+                    // console.log('breakfast59999', response.data.breakfast);
                 
                     setLunch(response.data.lunch);
                 
@@ -64,8 +64,30 @@ function DinningRoomStaff({ route }) {
     }
     getMeals();
     fetchRequests();
-  }, []);
+  }, [requests]);
 
+  const handleRequestStatusChange = async (req) => {
+    try {
+      const body = {
+        id: req.id, 
+        tableId: req.tableId,
+        hotel: req.hotel,
+        type: 'Dinning'
+      };
+      const response = await deleteDiningTableRequest(body);
+      if (response.success) {
+        // Remove the request from the list
+        setRequests((prevRequests) => prevRequests.filter((request) => request.id !== req.id));
+        Alert.alert('Request Completed', 'Request has been marked as completed');
+      } else {
+        console.error('handleRequestStatusChange failed:', response.error);
+        Alert.alert('Error', 'An error occurred while updating the request status');
+      }
+    } catch (error) {
+      console.error('handleRequestStatusChange error:', error);
+     
+    }
+  };
   const handleChangeMealForHotel = () => {
     setUpdatedBreakfast(breakfast);
     setUpdatedLunch(lunch);
@@ -108,7 +130,7 @@ function DinningRoomStaff({ route }) {
   const handleCancelEdit = () => {
     // Reset the meal to the original values
     setBreakfast(updatedBreakfast);
-    setLunch(updatedBreakfast);
+    setLunch(updatedLunch);
     setDinner(updatedDinner)
     setModalVisible(false);
   };
@@ -126,7 +148,7 @@ function DinningRoomStaff({ route }) {
             <Text style={staffHomeStyles.requestItemText}>Room Number: {item.roomNumber}</Text>
             <Text style={staffHomeStyles.requestItemText}>Hotel: {item.hotel.hotelName}, {item.hotel.city}</Text>
             <Text style={staffHomeStyles.requestItemText}>Table Number: {item.tableId}</Text>
-            <TouchableOpacity style={staffHomeStyles.startCompleteButton} onPress={() => handleRequestStatusChange(item.id, 'In Progress')}>
+            <TouchableOpacity style={staffHomeStyles.startCompleteButton} onPress={() => handleRequestStatusChange(item)}>
               <Text style={staffHomeStyles.startCompleteButtonText}>Finish</Text>
             </TouchableOpacity>
 
@@ -161,67 +183,98 @@ function DinningRoomStaff({ route }) {
   )}
       </View>
       {/* Modal for editing meal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalHeader}>Edit Meal</Text>
-            {isBreakfastTime && (
-                 <FlatList
-                 data={Object.keys(breakfast).map((key) => ({ id: key, name: breakfast[key] }))}
-                 keyExtractor={(item) => item.id}
-                 renderItem={({ item }) => (
-                   <TextInput
-                     style={styles.input}
-                     value={breakfast[item.id]}
-                     onChangeText={(text) => handleBreakfastChange(item.id, text)}
-                   />
-                 )}
-               />
-             )}
-            {isLunchTime && (
-                 <FlatList
-                data={Object.keys(lunch).map((key) => ({ id: key, name: lunch[key] }))}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <TextInput
-                    style={styles.input}
-                    value={item.name}
-                    onChangeText={(text) => handleLunchChange(item.id, text)}
-                  />
-                )}
-              />
-                )}
-                {isDinnerTime && (
-                    <FlatList
-                        data={Object.keys(dinner).map((key) => ({ id: key, name: dinner[key] }))}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                        <TextInput
-                            style={styles.input}
-                            value={dinner[item.id]}
-                            onChangeText={(text) => handleDinnerChange(item.id, text)}
-                        />
-                        )}
-                    />
-                    )}
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.cancelButton} onPress={handleCancelEdit}>
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-              style={styles.saveButton} 
-              onPress={() => handleSaveMeal()}>
-                <Text style={styles.buttonText}>Save</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+<Modal
+  animationType="slide"
+  transparent={true}
+  visible={isModalVisible}
+  onRequestClose={() => setModalVisible(false)}
+>
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      <Text style={styles.modalHeader}>Edit Meal</Text>
+          
+      {(isBreakfastTime || isLunchTime || isDinnerTime) ? (
+        <>
+          {isBreakfastTime && (
+            <FlatList
+              data={Object.keys(breakfast).map((key) => ({ id: key, name: breakfast[key] }))}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TextInput
+                  style={styles.input}
+                  value={breakfast[item.id]}
+                  onChangeText={(text) => handleBreakfastChange(item.id, text)}
+                />
+              )}
+            />
+          )}
+          {isLunchTime && (
+            
+            <FlatList
+            
+              data={Object.keys(lunch).map((key) => ({ id: key, name: lunch[key] }))}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TextInput
+                  style={styles.input}
+                  value={item.name}
+                  onChangeText={(text) => handleLunchChange(item.id, text)}
+
+                />
+                
+              )}
+              
+            />
+          )}
+          {isDinnerTime && (
+            <FlatList
+              data={Object.keys(dinner).map((key) => ({ id: key, name: dinner[key] }))}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TextInput
+                  style={styles.input}
+                  value={dinner[item.id]}
+                  onChangeText={(text) => handleDinnerChange(item.id, text)}
+                />
+              )}
+            />
+          )}
+          <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.cancelButton} onPress={handleCancelEdit}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSaveMeal}>
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
+      </View>
+        </>
+      ) : (
+       
+        <>
+          <Text style={styles.modalHeader}>No meals currently available</Text>
+          <Text style={styles.modalHeader}>Please come back during meal hours:</Text>
+          <FlatList
+            data={mealSchedules}
+            renderItem={({ item }) => (
+              <Text style={styles.item}> 
+                {`${item.meal} - ${item.startTime.format('HH:mm')} to ${item.endTime.format('HH:mm')}`}
+              </Text>
+            )}
+          />
+        </>
+       
+
+      )}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.saveButton} onPress={handleCancelEdit} >
+          <Text style={styles.buttonText}>Close</Text>
+        </TouchableOpacity>
+      
+      </View>
+    </View>
+  </View>
+</Modal>
+
     </View>
   );
 }
@@ -269,6 +322,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cancelButton: {
+    marginVertical: 10,
     backgroundColor: '#e74c3c',
     padding: 10,
     borderRadius: 5,
@@ -276,6 +330,7 @@ const styles = StyleSheet.create({
     width: '45%',
   },
   saveButton: {
+    marginVertical: 10,
     backgroundColor: '#3498db',
     padding: 10,
     borderRadius: 5,

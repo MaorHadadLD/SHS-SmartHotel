@@ -19,6 +19,7 @@ const TableReservation = (route) => {
   const [arrivalTime, setArrivalTime] = useState('');
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
   const [tableId, setTableId] = useState(''); // Add this state to store the selected table ID
+
   const navigation = useNavigation();
   // console.log('TableReservation route', route.route.params.selectedHotel);
   useEffect(() => {
@@ -48,12 +49,20 @@ const TableReservation = (route) => {
     return () => clearInterval(timer); // Cleanup on unmount
     
   
-  }, [guestData]);
+  }, [guestData,tables]);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
+  const handleCancelReservation = async () => {
+    // Reset the table status to 'available' if the reservation is canceled
+    console.log('tableId befffffoerre:', tableId)
+    setTables((prevTables) =>
+      prevTables.map((item) => (item.id === tableId ? { ...item, status: 'available' } : item))
+    );
+    toggleModal(); // Close the modal
+  };
+  
 
   const handleTableClick = async (tableId) => {
     const table = tables.find((item) => item.id === tableId);
@@ -214,7 +223,7 @@ const TableReservation = (route) => {
               <Text style={styles.reserveButtonText}>Reserve</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
+            <TouchableOpacity style={styles.closeButton} onPress={handleCancelReservation}>
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
           </View>

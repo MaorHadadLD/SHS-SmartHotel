@@ -71,7 +71,7 @@ export const deleteRoomRequest = async (guestEmail, type) => {
 
 // get the request by department and by hotel 
 export const getRequestByDepartment = async (reqBody) => {
-    console.log("getRequestByDpartment", reqBody);
+    // console.log("getRequestByDpartment", reqBody);
     const requestsRef = ref(db, `requests/${reqBody.type}`);
     const snapshot = await get(requestsRef);
     const data = snapshot.val();
@@ -88,7 +88,7 @@ export const getRequestByDepartment = async (reqBody) => {
                 tableId: request.tableId,
                 reservedTime: request.timestamp,
             }));
-            console.log("getRequestByDpartment159",  requestList);
+            // console.log("getRequestByDpartment159",  requestList);
             return {success: true, data: requestList};
         }
         else {
@@ -101,7 +101,7 @@ export const getRequestByDepartment = async (reqBody) => {
             hotel: request.hotel,
             status: request.status,
           }));
-          console.log("getRequestByDpartment159",  requestList);
+        //   console.log("getRequestByDpartment159",  requestList);
           return {success: true, data: requestList};
         }
     }
@@ -195,6 +195,7 @@ export const deleteRequest = async (body) => {
     console.log("deleteRequest", body);
     try {
         const requestRef = ref(db, `requests/${body.type}/${body.id}`);
+     
         set(requestRef, null);
         return {success: true};
     }
@@ -236,7 +237,7 @@ export const checkStatusbyRoomNumberAndHotel = async (body) => {
 }
 
 export const getTablesByHotel = async (hotel) => {
-    console.log("getTablesByHotel", hotel);
+    // console.log("getTablesByHotel", hotel); 
 
     try {
         const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);

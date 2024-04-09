@@ -179,7 +179,7 @@ export const updateMealByHotel = async (hotel, meals) => {
             // );
             // if (hotelKey) {
                 const hotelRef = ref(db, `Hotels/${hotelRefold.hotelKey}`);
-                console.log("hotelRefaaaaaaaa", hotelKey);
+                console.log("hotelRefaaaaaaaa", hotelRefold.hotelKey);
                 await update(hotelRef, {meals: updatedMeals.meals});
                 return { success: true, data: 'Meals updated successfully' };
                 

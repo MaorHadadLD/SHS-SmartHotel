@@ -8,7 +8,8 @@ import {
     deleteRequestController, 
     getRequestsByRoomNumberController,
     getTablesHotelController,
-    updateTableStatusController
+    updateTableStatusController,
+    deleteDiningTableController
 } from '../controllers/RequestController.js';
 import { respond } from './utils.js';
 
@@ -55,6 +56,10 @@ requestRouter.post('/request/gettabeleshotel', async (req, res) => {
 requestRouter.post('/request/updatetables', async (req, res) => {
     // console.log("requestRouter.getallbyroomnumber", req.body);
     respond(await updateTableStatusController(req.body), res);
+});
+
+requestRouter.put('/request/deletediningtable',async (req, res) => {
+    respond(await deleteDiningTableController(req.body), res);
 });
 
 export default requestRouter;
