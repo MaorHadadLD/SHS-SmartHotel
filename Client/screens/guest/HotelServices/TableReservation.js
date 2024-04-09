@@ -4,7 +4,7 @@ import { View, FlatList, Text, TouchableOpacity, StyleSheet, Modal, TextInput, A
 import { FontAwesome } from '@expo/vector-icons'; // Assuming you're using Expo Icons
 import { Picker } from '@react-native-picker/picker';
 import { getTablesHotel,updateTables } from '../../../API/RequestCalls';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import moment from 'moment';
 import { sendPostRequest } from '../../../API/RequestCalls';
 

@@ -54,21 +54,23 @@ export const staffHomeStyles = StyleSheet.create({
     color: '#333',
   },
   startCompleteButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#3498db',
     padding: 10,
     borderRadius: 5,
     marginTop: 5,
   },
   startCompleteButtonText: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'center',
+    fontWeight: 'bold',
+  
   },
   staffDetailsContainer: {
     marginBottom: 20,
     padding: 10,
     borderWidth: 1,
-    borderColor: '#007bff',
+    borderColor: '#3498db',
     borderRadius: 5,
   },
   staffDetailText: {

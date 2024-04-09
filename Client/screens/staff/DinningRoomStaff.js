@@ -125,6 +125,11 @@ function DinningRoomStaff({ route }) {
             <Text style={staffHomeStyles.requestItemText}>Number of Diners: {item.numberOfDiners}</Text>
             <Text style={staffHomeStyles.requestItemText}>Room Number: {item.roomNumber}</Text>
             <Text style={staffHomeStyles.requestItemText}>Hotel: {item.hotel.hotelName}, {item.hotel.city}</Text>
+            <Text style={staffHomeStyles.requestItemText}>Table Number: {item.tableId}</Text>
+            <TouchableOpacity style={staffHomeStyles.startCompleteButton} onPress={() => handleRequestStatusChange(item.id, 'In Progress')}>
+              <Text style={staffHomeStyles.startCompleteButtonText}>Finish</Text>
+            </TouchableOpacity>
+
           </View>
         )}
         ListEmptyComponent={<Text>No requests available</Text>}

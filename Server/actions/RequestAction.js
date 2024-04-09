@@ -85,6 +85,8 @@ export const getRequestByDepartment = async (reqBody) => {
                 arrivalTime: request.arrivalTime,
                 roomNumber: request.roomNumber,
                 hotel: request.hotel,
+                tableId: request.tableId,
+                reservedTime: request.timestamp,
             }));
             console.log("getRequestByDpartment159",  requestList);
             return {success: true, data: requestList};

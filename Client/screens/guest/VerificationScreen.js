@@ -39,53 +39,8 @@ const VerificationScreen = (route) => {
     }
   }
 
-  // try {
-  //     const db = getDatabase(firebaseApp);
-  //     const userRef = ref(db, 'check-ins');
 
-  //     // Retrieve user details from Firebase Realtime Database
-  //     const snapshot = await get(userRef);
-
-  //     if (snapshot.exists()) {
-  //       const userData = snapshot.val();
-
-  //       // Filter the results based on the email
-  //       const userWithEmail = Object.values(userData).find((user) => user.email === email);
-
-  //       if (userWithEmail) {
-  //         const storedOtp = userWithEmail.otp;
-
-  //         // Compare OTPs
-  //         if (otp === storedOtp) {
-  //           // Display success message or navigate to the next screen
-  //           Alert.alert('Verification Successful', 'Welcome!');
-  //         //   navigation.navigate('ClientMainMenu', { selectedHotel: route.route.params });
-  //             navigation.dispatch(
-  //                 CommonActions.reset({
-  //                 index: 0,
-  //                 routes: [
-  //                     {
-  //                     name: 'ClientMainMenu',
-  //                     params: { selectedHotel: route.route.params },
-  //                     },
-  //                 ],
-  //                 })
-  //             );
-  //         } else {
-  //           Alert.alert('Verification Failed', 'Invalid OTP');
-  //         }
-  //       } else {
-  //         Alert.alert('Verification Failed', 'Email not found');
-  //       }
-  //     } else {
-  //       Alert.alert('Verification Failed', 'No user data found');
-  //     }
-  //   } catch (error) {
-  //     console.error('Verification error:', error.message);
-  //   }
-
-
-  const handleResendOTP = () => {
+  const handleResendOTP = async () => {
     // Implement the logic to resend OTP
     // You can generate a new OTP and send it to the user's email
     // For simplicity, let's just display an alert here
