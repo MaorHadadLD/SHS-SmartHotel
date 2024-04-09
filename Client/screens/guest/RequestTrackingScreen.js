@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { getAllRequstsByRoomNumberGuest } from '../../API/RequestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackGround from '../../components/BackGround';
 
 function RequestTracking() {
     const [requests, setRequests] = useState([]);
@@ -47,8 +48,9 @@ function RequestTracking() {
     const groupedRequests = groupRequestsByDepartment();
 
     return (
+        <BackGround>
         <View style={styles.container}>
-          <Text style={styles.heading}>Request Tracking</Text>
+          <Text style={{ color: "white", fontSize: 58, fontWeight: 'bold', marginBottom: 10 }}>Request Tracking</Text>
           {/* Display requests for each department */}
           {Object.keys(groupedRequests).map((department, index) => (
             <View key={index} style={styles.departmentContainer}>
@@ -71,6 +73,7 @@ function RequestTracking() {
             </View>
           ))}
         </View>
+        </BackGround>
       );
 }      
 
