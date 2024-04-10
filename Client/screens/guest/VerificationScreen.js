@@ -98,7 +98,7 @@ const VerificationScreen = (route) => {
         <Text style={{ color: "white", fontSize: 64, marginVertical: 10 }}>
           Verifiy your Code
         </Text>
-        <View style={{ alignItems: 'center', width: '85%' }}>
+        <View style={{ alignItems: 'center', width: '100%' }}>
           <TextInput
             style={{
               borderRadius: 100, color: "black", paddingHorizontal: 10, width: '78%',
@@ -123,11 +123,11 @@ const VerificationScreen = (route) => {
         </View>
         {/* <Button title="Verify" onPress={handleVerification} /> */}
 
-        <View style={{ alignItems: 'flex-start', width: '78%' }}>
+        <View style={{ alignItems: 'flex-end', width: '100%' }}>
           <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>Didn't receive OTP?</Text>
           {/* <Button title="Resend OTP" onPress={handleResendOTP} /> */}
         </View>
-        <View style={{ alignItems: 'center', width: '85%' }}>
+        <View style={{ alignItems: 'center', width: '100%' }}>
 
         <Btn bgColor="#FF6B3C" btnLabel="Resend OTP" textColor="white" Press={handleResendOTP} />
         </View>

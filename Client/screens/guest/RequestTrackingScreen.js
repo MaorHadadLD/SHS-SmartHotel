@@ -39,8 +39,11 @@ function RequestTracking() {
         requests.forEach(request => {
             if (!groupedRequests[request.department]) {
                 groupedRequests[request.department] = [];
+                console.log('groupedRequests:::', request.department);
+                
             }
             groupedRequests[request.department].push(request);
+            console.log('groupedRequests', groupedRequests);
         });
         return groupedRequests;
     }
@@ -54,7 +57,7 @@ function RequestTracking() {
           {/* Display requests for each department */}
           {Object.keys(groupedRequests).map((department, index) => (
             <View key={index} style={styles.departmentContainer}>
-              <Text style={styles.departmentTitle}>{department}</Text>
+              <Text style={styles.departmentTitle}>{department}</Text>             
               {groupedRequests[department].map((request, index) => (
                 <View key={index} style={styles.requestContainer}>
                   <Text>{request.notice}</Text>

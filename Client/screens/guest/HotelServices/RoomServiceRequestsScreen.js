@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import {Requests} from "../../../data/ClassDpData";
 import { sendPostRequest } from '../../../API/RequestCalls';
+import BackGround from '../../../components/BackGround';
 
 function RoomServiceRequestsScreen({ route, navigation}) {
   const departmentId = 'RoomService'; // Adjust departmentId for room service
@@ -40,6 +41,7 @@ function RoomServiceRequestsScreen({ route, navigation}) {
   }
 
   return (
+    <BackGround>
     <View style={styles.container}>
       <Text style={styles.title}>Choose a predefined request:</Text>
       <View style={styles.buttonContainer}>
@@ -64,6 +66,7 @@ function RoomServiceRequestsScreen({ route, navigation}) {
         <Text style={styles.buttonText}>Submit Request</Text>
       </TouchableOpacity>
     </View>
+    </BackGround>
   );
 }
 
@@ -74,9 +77,10 @@ const styles = StyleSheet.create({
       marginTop: Platform.OS === 'ios' ? 40 : 0, // Adjust marginTop for iOS status bar
     },
     title: {
-      fontSize: 18,
+      fontSize: 24,
       fontWeight: 'bold',
       marginTop: 10,
+      color: 'white'
     },
     buttonContainer: {
       flexDirection: 'row',
