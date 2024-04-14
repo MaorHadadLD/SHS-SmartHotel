@@ -31,168 +31,202 @@ const HotelInfoScreen = ({ route }) => {
     );
   }
   
-  const [showBreakfastInfo, setShowBreakfastInfo] = useState(false);
-  const [showDinnersInfo, setShowDinnersInfo] = useState(false);
-  const [showLobbyBarInfo, setShowLobbyBarInfo] = useState(false);
+  
+  const [showwifiInfo, setShowwifiInfo] = useState(false);
+  const [showCheckOutInfo, setShowCheckOutInfo] = useState(false);
+  const [showHotelResturantInfo, setShowHotelResturantInfo] = useState(false);
+  const [showHotelActivityInfo, setShowHotelActivityInfo] = useState(false);
+  const [showSnacksduringthedayInfo, setShowSnacksduringthedayInfo] = useState(false);
+  const [showSabbathInfo, setShowSabbathInfo] = useState(false);
 
 
-  // return (
-  //   <BackGround>
-  //   <ScrollView style={styles.container}>
-  //     <Text style={styles.heading}>Hotel Information - {hotelName}</Text>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Breakfasts:</Text>
-  //       <Text style={styles.infoText}>{breakfastInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Dinners:</Text>
-  //       <Text style={styles.infoText}>{dinnerInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Lobby Bar:</Text>
-  //       <Text style={styles.infoText}>{lobbyBarInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Spa:</Text>
-  //       <Text style={styles.infoText}>{spaInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Wifi:</Text>
-  //       <Text style={styles.infoText}>{wifiInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Gym:</Text>
-  //       <Text style={styles.infoText}>{gymInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Entertainment:</Text>
-  //       <Text style={styles.infoText}>{entertainmentInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Pool:</Text>
-  //       <Text style={styles.infoText}>{poolInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Pool Bar:</Text>
-  //       <Text style={styles.infoText}>{PoolBarInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Synagogue:</Text>
-  //       <Text style={styles.infoText}>{SynagogueInfo}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Key On Saturday:</Text>
-  //       <Text style={styles.infoText}>{KeyOnSaturday}</Text>
-  //     </View>
-
-  //     <View style={styles.infoContainer}>
-  //       <Text style={styles.infoTitle}>Check Out:</Text>
-  //       <Text style={styles.infoText}>{checkOutInfo}</Text>
-  //     </View>
-  //   </ScrollView>
-  //   </BackGround>
-  // );
   return (
     <BackGround>
       <ScrollView style={styles.container}>
         <Text style={{ color: "white", fontSize: 58, fontWeight: 'bold', marginBottom: 10 }}>Hotel Information </Text>
-
-        {/* Button to show breakfast info */}
-        {!showBreakfastInfo && (
+        {/*Button to show hotel resturant category */}
+        {!showHotelResturantInfo && (
           <Btn
             bgColor="#FF6B3C"
-            btnLabel="Breakfast Info"
+            btnLabel="Hotel Resturant Info"
             textColor="white"
-            Press={() => setShowBreakfastInfo(true)}
+            Press={() => setShowHotelResturantInfo(true)}
           />
         )}
-
-        {/* Show breakfast info if the button is pressed */}
-        {showBreakfastInfo && (
+        
+        {/* Show hotel resturant info if the button is pressed */}
+        {showHotelResturantInfo && (
           <View style={styles.infoContainer}>
-            <View style={styles.infoContent}>
-              <Text style={styles.infoTitle}>Breakfasts</Text>
-              <Text style={styles.infoText}>{breakfastInfo}</Text>
-              <View style={styles.buttonContainer}>
-                <Btn
-                  bgColor="#FF6B3C"
-                  btnLabel="Hide Breakfast Info"
-                  textColor="white"
-                  Press={() => setShowBreakfastInfo(false)}
-                />
-              </View>
-            </View>
-          </View>
-        )}
-        {/* Button to show Dinners info */}
-        {!showDinnersInfo && (
-          <Btn
-            bgColor="#FF6B3C"
-            btnLabel="Dinners Info"
-            textColor="white"
-            Press={() => setShowDinnersInfo(true)}
-          />
-        )}
-
-        {/* Show Dinners info if the button is pressed */}
-        {showDinnersInfo && (
-          <View style={styles.infoContainer}>
-            <View style={styles.infoContent}>
+          <View style={styles.infoContent}>
+            <Text style={styles.infoTitle}>Breakfasts</Text>
+            <Text style={styles.infoText}>{breakfastInfo}</Text>
               <Text style={styles.infoTitle}>Dinners</Text>
               <Text style={styles.infoText}>{dinnerInfo}</Text>
-              <View style={styles.buttonContainer}>
-                <Btn
-                  bgColor="#FF6B3C"
-                  btnLabel="Hide Dinners Info"
-                  textColor="white"
-                  Press={() => setShowDinnersInfo(false)}
-                />
-              </View>
+            <View style={styles.buttonContainer}>
+              <Btn
+                bgColor="#FF6B3C"
+                btnLabel="Hide resturant Info"
+                textColor="white"
+                Press={() => setShowHotelResturantInfo(false)}
+              />
             </View>
           </View>
+        </View>
         )}
-        {/* <View style={styles.infoContainer}>
-         <Text style={styles.infoTitle}>Lobby Bar:</Text>
-         <Text style={styles.infoText}>{lobbyBarInfo}</Text>
-       </View> */}
-        {/* Button to show Lobby Bar info */}
-        {!showLobbyBarInfo && (
+
+         {/*Button to show hotel activity category */}
+         {!showHotelActivityInfo && (
           <Btn
             bgColor="#FF6B3C"
-            btnLabel="Lobby Bar Info"
+            btnLabel="Hotel activity Info"
             textColor="white"
-            Press={() => setShowLobbyBarInfo(true)}
+            Press={() => setShowHotelActivityInfo(true)}
+          />
+        )}
+        
+        {/* Show hotel activity info if the button is pressed */}
+        {showHotelActivityInfo && (
+          <View style={styles.infoContainer}>
+          <View style={styles.infoContent}>
+          <Text style={styles.infoTitle}>Pool</Text>
+              <Text style={styles.infoText}>{poolInfo}</Text>
+            <Text style={styles.infoTitle}>Spa</Text>
+            <Text style={styles.infoText}>{spaInfo}</Text>
+            <Text style={styles.infoTitle}>Gym</Text>
+              <Text style={styles.infoText}>{gymInfo}</Text>
+              <Text style={styles.infoTitle}>Entertainment</Text>
+              <Text style={styles.infoText}>{entertainmentInfo}</Text>
+            <View style={styles.buttonContainer}>
+              <Btn
+                bgColor="#FF6B3C"
+                btnLabel="Hide hotel activity Info"
+                textColor="white"
+                Press={() => setShowHotelActivityInfo(false)}
+              />
+            </View>
+          </View>
+        </View>
+        )}
+
+        {/*Button to show hotel activity category */}
+        {!showSnacksduringthedayInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Snacks during the day Info"
+            textColor="white"
+            Press={() => setShowSnacksduringthedayInfo(true)}
+          />
+        )}
+        
+        {/* Show Snacks during the day info if the button is pressed */}
+        {showSnacksduringthedayInfo && (
+          <View style={styles.infoContainer}>
+          <View style={styles.infoContent}>
+          <Text style={styles.infoTitle}>Lobby Bar</Text>
+              <Text style={styles.infoText}>{lobbyBarInfo}</Text>
+              <Text style={styles.infoTitle}>Pool Bar</Text>
+              <Text style={styles.infoText}>{PoolBarInfo}</Text>
+            <View style={styles.buttonContainer}>
+              <Btn
+                bgColor="#FF6B3C"
+                btnLabel="Hide Snacks during the day Info"
+                textColor="white"
+                Press={() => setShowSnacksduringthedayInfo(false)}
+              />
+            </View>
+          </View>
+        </View>
+        )}
+
+        {/*Button to show Sabbath category */}
+        {!showSabbathInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Shabbat Info"
+            textColor="white"
+            Press={() => setShowSabbathInfo(true)}
+          />
+        )}
+        
+        {/* Show Sabbath info if the button is pressed */}
+        {showSabbathInfo && (
+          <View style={styles.infoContainer}>
+          <View style={styles.infoContent}>
+          <Text style={styles.infoTitle}>Synagogue</Text>
+              <Text style={styles.infoText}>{SynagogueInfo}</Text>
+              <Text style={styles.infoTitle}>Key On Saturday</Text>
+              <Text style={styles.infoText}>{KeyOnSaturday}</Text>
+            <View style={styles.buttonContainer}>
+              <Btn
+                bgColor="#FF6B3C"
+                btnLabel="Hide Sabbath Info"
+                textColor="white"
+                Press={() => setShowSabbathInfo(false)}
+              />
+            </View>
+          </View>
+        </View>
+        )}
+        
+       {/* Button to show wifi info */}
+       {!showwifiInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="wifi Info"
+            textColor="white"
+            Press={() => setShowwifiInfo(true)}
           />
         )}
 
-        {/* Show Lobby Bar info if the button is pressed */}
-        {showLobbyBarInfo && (
+        {/* Show wifi info if the button is pressed */}
+        {showwifiInfo && (
           <View style={styles.infoContainer}>
             <View style={styles.infoContent}>
-              <Text style={styles.infoTitle}>Lobby Bar</Text>
-              <Text style={styles.infoText}>{lobbyBarInfo}</Text>
+              <Text style={styles.infoTitle}>wifi</Text>
+              <Text style={styles.infoText}>{wifiInfo}</Text>
               <View style={styles.buttonContainer}>
                 <Btn
                   bgColor="#FF6B3C"
-                  btnLabel="Hide Lobby Bar Info"
+                  btnLabel="wifi Info"
                   textColor="white"
-                  Press={() => setShowLobbyBarInfo(false)}
+                  Press={() => setShowwifiInfo(false)}
                 />
               </View>
             </View>
           </View>
         )}
+        
+       
+       {/* Button to show Check Out info */}
+       {!showCheckOutInfo && (
+          <Btn
+            bgColor="#FF6B3C"
+            btnLabel="Check Out Info"
+            textColor="white"
+            Press={() => setShowCheckOutInfo(true)}
+          />
+        )}
+
+        {/* Show Check Out info if the button is pressed */}
+        {showCheckOutInfo && (
+          <View style={styles.infoContainer}>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoTitle}>Check Out</Text>
+              <Text style={styles.infoText}>{checkOutInfo}</Text>
+              <View style={styles.buttonContainer}>
+                <Btn
+                  bgColor="#FF6B3C"
+                  btnLabel="Check Out Info"
+                  textColor="white"
+                  Press={() => setShowCheckOutInfo(false)}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+
+
+
       </ScrollView>
     </BackGround>
   );
@@ -217,9 +251,9 @@ const styles = StyleSheet.create({
   },
   infoContent: {
     backgroundColor: "white",
-    height: 700,
+    height: 800,
     width: 460,
-    borderTopLeftRadius: 250,
+    borderTopLeftRadius: 280,
     paddingTop: 100,
     alignItems: "center",
   },

@@ -19,7 +19,7 @@ const HeaderHome = () => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingTop: 0, // Adjust as needed for the gap between logo and text
+    paddingTop: 150, // Adjust as needed for the gap between logo and text
   },
   logoContainer: {
     paddingTop: 0, // Adjust as needed for the gap between logo and screen top

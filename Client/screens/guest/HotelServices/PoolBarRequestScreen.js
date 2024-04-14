@@ -64,6 +64,7 @@ function PoolBarRequestScreen({route, navigation}) {
       >
         <Text style={styles.buttonText}>Submit Request</Text>
       </TouchableOpacity>
+      
     </View>
   );
 }

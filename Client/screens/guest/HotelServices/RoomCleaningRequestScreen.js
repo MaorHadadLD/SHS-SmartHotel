@@ -81,6 +81,7 @@ function RoomCleaningRequestScreen({ route, navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Type your request here..."
+        color="white"
         onChangeText={(text) => setCustomRequest(text)}
         value={customRequest}
       />

@@ -1,22 +1,20 @@
 import React from "react";
-import { Pressable, View, Text, StyleSheet, Platform } from "react-native";
+import { Pressable, View, Text, StyleSheet, Image, Platform, Dimensions } from "react-native";
 
-
-
-function DpClassCategoryGridTil({ title, color, onPress }) {
+function DpClassCategoryGridTil({ title, color, onPress, image }) {
+  console.log("Image Path:", image); // Add this log statement to check the image prop
   return (
-    <View style={styles.gridItem}>
+    <View style={styles.container}>
       <Pressable
         android_ripple={{ color: "#f0f8ff", borderless: false }}
         style={({ pressed }) => [
           styles.button,
-          pressed ? styles.buttonPressed : null,
+          { backgroundColor: pressed ? color + "80" : color }, // Adjust opacity when pressed
         ]}
         onPress={onPress}
       >
-        <View style={[styles.innerContainer, { backgroundColor: color }]}>
-          <Text style={styles.title}>{title}</Text>
-        </View>
+        <Image source={image} style={styles.image} />
+        {/* <Text style={styles.title}>{title}</Text> */}
       </Pressable>
     </View>
   );
@@ -24,37 +22,34 @@ function DpClassCategoryGridTil({ title, color, onPress }) {
 
 export default DpClassCategoryGridTil;
 
+const windowWidth = Dimensions.get("window").width;
+
 const styles = StyleSheet.create({
-  gridItem: {
+  container: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
     margin: 16,
-    height: 150,
-    borderRadius: 8,
-    elevation: 4,
-    backgroundColor: "white",
-    shadowColor: "rgba(0, 0, 0, 0.2)",
-    shadowOpacity: 0.5,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    overflow: Platform.OS === "android" ? "hidden" : "visible",
   },
   button: {
-    flex: 1,
-    borderRadius: 8,
-  },
-  buttonPressed: {
-    opacity: 0.8,
-  },
-  innerContainer: {
-    flex: 1,
-    padding: 16,
+    width: windowWidth * 0.4, // Adjust the width of the slot
+    height: windowWidth * 0.4, // Adjust the height of the slot
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
+    elevation: 4,
+    overflow: "hidden",
   },
   title: {
     fontWeight: "bold",
-    fontSize: 16,
-    color: "#333", // Adjust text color to match your design
+    fontSize: 20,
+    color: "white",
+    marginTop: -100,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    resizeMode: "cover",
   },
 });

@@ -86,7 +86,7 @@ function ClientMainMenu({route}) {
         </Text>
         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
           <Text style={{ color: "white", fontSize: 28, fontWeight: "bold" }}>
-            {guestData.firstname + ' ' + guestData.lastname}
+          {guestData.firstname + ' ' + guestData.lastname}
           </Text>
         </View>
         <FlatList

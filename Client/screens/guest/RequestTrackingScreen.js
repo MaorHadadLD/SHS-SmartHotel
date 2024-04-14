@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { getAllRequstsByRoomNumberGuest } from '../../API/RequestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackGround from '../../components/BackGround';
 
 function RequestTracking() {
     const [requests, setRequests] = useState([]);
@@ -38,8 +39,11 @@ function RequestTracking() {
         requests.forEach(request => {
             if (!groupedRequests[request.department]) {
                 groupedRequests[request.department] = [];
+                console.log('groupedRequests:::', request.department);
+                
             }
             groupedRequests[request.department].push(request);
+            console.log('groupedRequests', groupedRequests);
         });
         return groupedRequests;
     }
@@ -47,12 +51,13 @@ function RequestTracking() {
     const groupedRequests = groupRequestsByDepartment();
 
     return (
+        <BackGround>
         <View style={styles.container}>
-          <Text style={styles.heading}>Request Tracking</Text>
+          <Text style={{ color: "white", fontSize: 58, fontWeight: 'bold', marginBottom: 10 }}>Request Tracking</Text>
           {/* Display requests for each department */}
           {Object.keys(groupedRequests).map((department, index) => (
             <View key={index} style={styles.departmentContainer}>
-              <Text style={styles.departmentTitle}>{department}</Text>
+              <Text style={styles.departmentTitle}>{department}</Text>             
               {groupedRequests[department].map((request, index) => (
                 <View key={index} style={styles.requestContainer}>
                   <Text>{request.notice}</Text>
@@ -71,6 +76,7 @@ function RequestTracking() {
             </View>
           ))}
         </View>
+        </BackGround>
       );
 }      
 

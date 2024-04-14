@@ -2,13 +2,19 @@ import ClassDpCategory from "../models/ClassDpCategory";
 import Request from "../models/ClassRequest";
 
 //This page contains the data of the departments in the hotel and the data of the requests
+import receptionImage from '../assets/reception.jpg';
+import roomServiceImage from '../assets/room_service.jpg';
+import cleaningRoomImage from '../assets/resort_cleaning.jpg';
+import poolBarImage from '../assets/pool_bar.jpg';
+import diningRoomImage from '../assets/dining_room.jpg';
+
 
 export const ClassDpCategories = [
-    new ClassDpCategory('Reception','Reception','white'),
-    new ClassDpCategory('RoomService','Room Service','white'),
-    new ClassDpCategory('CleaningRoom','Cleaning Room','white'),
-    new ClassDpCategory('PoolBar','Pool Bar','white'),
-    new ClassDpCategory('DiningRoom','Dining Room','white'),
+    new ClassDpCategory('Reception','Reception','white', receptionImage),
+    new ClassDpCategory('RoomService','Room Service','white', roomServiceImage),
+    new ClassDpCategory('CleaningRoom','Cleaning Room','white', cleaningRoomImage),
+    new ClassDpCategory('PoolBar','Pool Bar','white', poolBarImage),
+    new ClassDpCategory('DiningRoom','Dining Room','white', diningRoomImage),
 ];
 
 export const Requests = [
