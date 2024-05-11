@@ -100,6 +100,7 @@ export const getRequestByDepartment = async (reqBody) => {
             roomNumber: request.roomNumber,
             hotel: request.hotel,
             status: request.status,
+            department: reqBody.type,
           }));
         //   console.log("getRequestByDpartment159",  requestList);
           return {success: true, data: requestList};
@@ -164,6 +165,7 @@ export const postRequest = async (body) => {
                 notice: body.bodyrequest.request,
                 hotel: body.bodyrequest.selectedHotel,
                 roomNumber: body.bodyrequest.roomNumber,
+
             });
         }
         return {succees: true};

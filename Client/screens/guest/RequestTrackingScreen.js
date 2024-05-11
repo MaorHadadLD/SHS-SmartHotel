@@ -53,15 +53,15 @@ function RequestTracking() {
     return (
         <BackGround>
         <View style={styles.container}>
-          <Text style={{ color: "white", fontSize: 58, fontWeight: 'bold', marginBottom: 10 }}>Request Tracking</Text>
+          <Text style={{ color: "white", fontSize: 58, fontWeight: 'bold', marginBottom: 10, }}>Request Tracking</Text>
           {/* Display requests for each department */}
           {Object.keys(groupedRequests).map((department, index) => (
             <View key={index} style={styles.departmentContainer}>
               <Text style={styles.departmentTitle}>{department}</Text>             
               {groupedRequests[department].map((request, index) => (
                 <View key={index} style={styles.requestContainer}>
-                  <Text>{request.notice}</Text>
-                  <Text>{request.status}</Text>
+                  <Text>Request: {request.notice}</Text>
+                  <Text>Status: {request.status}</Text>
                   {/* Check if the request type is for dining */}
                   {request.arrivalTime != undefined && (
                     <View>
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
+        
     },
     departmentContainer: {
         marginBottom: 20,
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
+        color: '#FF6B3C'
     },
     requestContainer: {
         backgroundColor: '#f0f0f0',
