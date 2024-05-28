@@ -26,7 +26,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff",
         "package": "com.shs.smarthotel",
-        "googleMapsApiKey": "AIzaSyCh0dw3B5TMHQFgUUPjXCrvBM2y9pPyBJc"
+        "googleMapsApiKey": "AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0"
       },
       "permissions": [
         "android.permission.NFC"

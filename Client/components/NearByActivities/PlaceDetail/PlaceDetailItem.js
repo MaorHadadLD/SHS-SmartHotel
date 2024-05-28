@@ -32,7 +32,7 @@ export default function PlaceDetailItem({ place, onDirectionClick }) {
               "?maxwidth=400" +
               "&photo_reference=" +
               place?.photos[0]?.photo_reference +
-              "&key=AIzaSyCh0dw3B5TMHQFgUUPjXCrvBM2y9pPyBJc",
+              "&key=AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0",
           }}
           style={{
             width: "100%",
