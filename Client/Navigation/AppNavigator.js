@@ -29,6 +29,7 @@ import PoolBarScreen from '../screens/staff/PoolBarScreen';
 import CheckOutScreen from '../screens/guest/CheckOutScreen';
 import RequestTrackingScreen from '../screens/guest/RequestTrackingScreen';
 import DinningRoomStaff from '../screens/staff/DinningRoomStaff';
+import SpaStaffScreen from '../screens/staff/SpaStaffScreen';
 import SpaMainScreen from '../screens/guest/SpaMainScreen';
 import Home from '../screens/Home';
 
@@ -77,6 +78,7 @@ const MainStack = () => (
     <Stack.Screen name="RoomServiceScreen" component={RoomServiceScreen} />
     <Stack.Screen name="PoolBarScreen" component={PoolBarScreen} />
     <Stack.Screen name="DinningRoomStaff" component={DinningRoomStaff} />
+    <Stack.Screen name="SpaStaffScreen" component={SpaStaffScreen} />
   </Stack.Navigator>
 );
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import RNPickerSelect from 'react-native-picker-select';
 import { Modal, Text, View, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
-import { getDatabase, ref, push } from 'firebase/database';
+import { getDatabase, ref, push ,update} from 'firebase/database';
 import firebaseApp from '../firebaseConfig';
 
 function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
@@ -29,20 +29,26 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
             console.log('secondTherapistGender:', secondTherapistGender);
         }
         const appointmentData = {
+            id: '', // Initialize ID here
             guest: route.guestData.email,
             hotel: route.guestData.selectedHotel,
             date: date.dateString,
             time: selectedTime,
-            
+            status: 'pending',
             massageType: massageType,
             therapistGender: therapistGender,
             secondTherapistGender: secondTherapistGender,
             additionalComments: additionalComments,
         };
-
+    
         const db = getDatabase(firebaseApp);
         const appointmentsRef = ref(db, 'appointments');
-        push(appointmentsRef, appointmentData);
+        const newAppointmentRef = push(appointmentsRef); // Create a new child node with a unique ID
+        const appointmentId = newAppointmentRef.key; // Get the generated ID
+        appointmentData.id = appointmentId; // Assign the ID to the appointmentData
+    
+        update(newAppointmentRef, appointmentData); // Update the new child node with the appointmentData
+        // push(appointmentsRef, appointmentData);
 
         closeModal(); // Close the modal
         navigation.navigate('ClientMainMenu', {selectedHotel: route.selectedHotel, guestData: route.guestData}); // Navigate to the SpaScreen

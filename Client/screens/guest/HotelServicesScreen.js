@@ -36,7 +36,6 @@ function HotelServicesScreen({ route, navigation }) {
         }
 
       } else if (itemData.item.title === 'Cleaning Room') {
-
         try {
           const bodyrequest = {
             roomNumber: route.params.guestData.roomNumber,
