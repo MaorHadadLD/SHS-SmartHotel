@@ -1,5 +1,5 @@
-import { View, Text, ActivityIndicator, FlatList } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, FlatList } from 'react-native';
 import Header from '../../../components/NearByActivities/Header';
 import GoogleMapView from '../../../components/NearByActivities/GoogleMapView';
 import CategoryList from '../../../components/NearByActivities/CategoryList';
@@ -9,7 +9,8 @@ import PlaceList from '../../../components/NearByActivities/PlaceList';
 
 export default function ActivitiesHome() {
     const [placeList, setPlaceList] = useState([]);
-    const { location, setLocation } = useContext(UserLocationContext);
+    const { location } = useContext(UserLocationContext);
+    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         if (location && location.coords) {
@@ -18,6 +19,7 @@ export default function ActivitiesHome() {
     }, [location]);
 
     const GetNearBySearchPlace = (value) => {
+      setSearchText('');
         console.log("Searching for places in category:", value);
         if (location && location.coords) {
             GlobalApi.nearByPlace(
@@ -34,11 +36,25 @@ export default function ActivitiesHome() {
         }
     }
 
+    const handleSearch = () => {
+        if (searchText) {
+            GlobalApi.searchByText(searchText).then(resp => {
+                console.log("Search Response:", resp.data.results);
+                setPlaceList(resp.data.results);
+            }).catch(error => {
+                console.error("Error performing text search:", error);
+            });
+        }
+    }
+
     const renderHeader = () => (
         <View>
-            <Header />
+            {/* <Header setSearchText={setSearchText} onSearch={handleSearch} /> */}
             <GoogleMapView placeList={placeList} />
             <CategoryList setSelectedCategory={(value) => GetNearBySearchPlace(value)} />
+            {searchText && <Text style={{ fontSize: 20, marginTop: 10 }}>Search Results for "{searchText}"</Text>}
+            {placeList.length === 0 && <Text style={{ fontSize: 20, marginTop: 10 }}>No Places Found</Text>}
+            <Text style={{ fontSize: 20, marginTop: 10 }}>Found {placeList.length} Places</Text>
         </View>
     );
 
