@@ -51,7 +51,7 @@ export const updateRoomController = async (req, res) => {
 
 export const getMealsHotelController = async (req, res) => {
     const { hotel } = req;
-    console.log("getMealsHotelController", req);
+    // console.log("getMealsHotelController", req);
     const result = await getMealByHotel(hotel);
     if (result !== null) {
         return requestSuccess(result);

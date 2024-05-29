@@ -1,7 +1,7 @@
 import firebaseApp from '../firebaseConfig.js';
 import { getDatabase, ref, set, push, query, orderByChild, equalTo, get, update } from 'firebase/database';
 import { updateGuestRoomNumber } from './GuestAction.js';
-
+import { getHotelByNameAndCity } from './StaffAction.js';
 
 
 const db = getDatabase(firebaseApp);
@@ -71,7 +71,7 @@ export const deleteRoomRequest = async (guestEmail, type) => {
 
 // get the request by department and by hotel 
 export const getRequestByDepartment = async (reqBody) => {
-    console.log("getRequestByDpartment", reqBody);
+    // console.log("getRequestByDpartment", reqBody);
     const requestsRef = ref(db, `requests/${reqBody.type}`);
     const snapshot = await get(requestsRef);
     const data = snapshot.val();
@@ -85,8 +85,11 @@ export const getRequestByDepartment = async (reqBody) => {
                 arrivalTime: request.arrivalTime,
                 roomNumber: request.roomNumber,
                 hotel: request.hotel,
+                tableId: request.tableId,
+                reservedTime: request.timestamp,
+                department: reqBody.type,
             }));
-            console.log("getRequestByDpartment159",  requestList);
+            // console.log("getRequestByDpartment159",  requestList);
             return {success: true, data: requestList};
         }
         else {
@@ -98,8 +101,9 @@ export const getRequestByDepartment = async (reqBody) => {
             roomNumber: request.roomNumber,
             hotel: request.hotel,
             status: request.status,
+            department: reqBody.type,
           }));
-          console.log("getRequestByDpartment159",  requestList);
+        //   console.log("getRequestByDpartment159",  requestList);
           return {success: true, data: requestList};
         }
     }
@@ -152,7 +156,7 @@ export const postRequest = async (body) => {
                 roomNumber: body.bodyrequest.roomNumber,
                 hotel: body.bodyrequest.hotel,
                 timestamp: body.bodyrequest.time,
-                // status: "waiting",
+                tableId: body.bodyrequest.tableId,
                 // notice: body.bodyrequest.request,
         });
         } else {
@@ -162,6 +166,7 @@ export const postRequest = async (body) => {
                 notice: body.bodyrequest.request,
                 hotel: body.bodyrequest.selectedHotel,
                 roomNumber: body.bodyrequest.roomNumber,
+
             });
         }
         return {succees: true};
@@ -193,6 +198,7 @@ export const deleteRequest = async (body) => {
     console.log("deleteRequest", body);
     try {
         const requestRef = ref(db, `requests/${body.type}/${body.id}`);
+     
         set(requestRef, null);
         return {success: true};
     }
@@ -229,6 +235,47 @@ export const checkStatusbyRoomNumberAndHotel = async (body) => {
     }
     catch (error) {
         console.error("checkStatusbyRoomNumberAndHotel", error);
+        return {success: false};
+    }
+}
+
+export const getTablesByHotel = async (hotel) => {
+    // console.log("getTablesByHotel", hotel); 
+
+    try {
+        const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
+        // console.log("getTablesByHotellllll", hotelref);
+        if (hotelref) {
+            const tables = hotelref.hotel.tables;
+            return {success: true, data: tables};
+        } else {
+            return {success: false};
+        }
+    }
+    catch (error) {
+        console.warn("getTablesByHotel", error);
+        return {success: false};
+    }
+}
+
+export const updateTableStatus = async (hotel, tableNumber, status) => {
+    
+    console.log(`Update table ${tableNumber} status to ${status} in hotel ${hotel.hotelName}`);
+    try {
+        const hotelres= await getHotelByNameAndCity(hotel.hotelName, hotel.city);
+        const hotelRef = ref(db, `Hotels/${hotelres.hotelKey}`);
+        const snapshot = await get(hotelRef);
+        if (snapshot.exists()) {
+            const hotel = snapshot.val();
+            const tables = hotel.tables;
+            tables[tableNumber] = status;
+            await update(hotelRef, {tables});
+            return {success: true};
+        } else {
+            return {success: false, data: "Hotel not found"};
+        }
+    } catch (error) {
+        console.error("updateTableStatus", error);
         return {success: false};
     }
 }

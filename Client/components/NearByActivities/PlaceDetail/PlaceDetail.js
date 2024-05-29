@@ -4,6 +4,7 @@ import {useRoute} from '@react-navigation/native'
 import PlaceDetailItem from './PlaceDetailItem'
 import GoogleMapView from '../GoogleMapView'
 import { Ionicons } from "@expo/vector-icons";
+import GoogleMapViewFull from '../Search/GoogleMapViewFull'
 
 export default function PlaceDetail() {
   const param = useRoute().params;

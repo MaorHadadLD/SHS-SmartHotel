@@ -54,7 +54,7 @@ function ClientMainMenu({route}) {
     { id: '3', title: "Hotel Services", screen: "HotelServicesScreen" },
     { id: '4', title: "Request Tracking", screen: "RequestTrackingScreen"},
     { id: '5', title: "Nearby Activities", screen: "NearbyActivitiesScreen" },
-    { id: '6', title: "Spa", screen: "SpaScreen" },
+    { id: '6', title: "Spa", screen: "SpaMainScreen" },
     { id: '7', title: "check out", screen: "CheckOutScreen" },
   ];
 
@@ -86,7 +86,7 @@ function ClientMainMenu({route}) {
         </Text>
         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
           <Text style={{ color: "white", fontSize: 28, fontWeight: "bold" }}>
-            {guestData.firstname} {guestData.lastname}
+          {guestData.firstname + ' ' + guestData.lastname}
           </Text>
         </View>
         <FlatList

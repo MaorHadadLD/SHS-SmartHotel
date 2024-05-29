@@ -4,7 +4,6 @@ import { getDatabase, ref, get, query, orderByChild, equalTo ,update} from 'fire
 const db = getDatabase(firebaseApp);
 
 export const getGuestByEmail = async (email) => {
-    console.log("getGuestByEmail", email);
     try {
         const guestRef = ref(db, 'guests/');
         const emailQuery = query(guestRef, orderByChild('email'), equalTo(email));
@@ -30,7 +29,6 @@ export const updateGuestSelectedHotel = async (guestEmail, hotelName, city) => {
         const result = await getGuestByEmail(guestEmail);
         const guestData = Object.values(result)[0];
         const guestKey = Object.keys(result)[0];
-        console.log("guestData", guestData);
         if (!guestData) {
             return false;
         }
@@ -81,7 +79,6 @@ export const updateGuestRoomNumber = async (guestEmail, roomNumber) => {
             };
 
             const guestRef = ref(db, `guests/${guestKey}`);
-
             // Use update to set the new guest data
             await update(guestRef, updatedGuestData);
 

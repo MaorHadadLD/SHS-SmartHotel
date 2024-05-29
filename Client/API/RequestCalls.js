@@ -26,7 +26,7 @@ export const sendRoomRequest = async (guest, hotel) => {
   export const getRequests = async (hotel, type) => {
     try {
       const response = await axios.post(`${BaseURL}request/get`, { hotel, type });
-      console.log("getRequests", response.data.data);
+      // console.log("getRequests", response.data.data);
       return response.data.data;
     } catch (error) {
       console.error("getRequests", error);
@@ -71,3 +71,30 @@ export const getAllRequstsByRoomNumberGuest = async (roomNumber) => {
       console.error("sendDeleteRequest", error);
     }
   }
+
+  export const getTablesHotel = async (hotel) => {
+    try {
+      const response = await axios.post(`${BaseURL}request/gettabeleshotel`,  hotel );
+      return response.data.data;
+    } catch (error) {
+      console.error("getTablesHotel", error);
+    }
+  }
+  export const updateTables = async (hotel, tableId, status) => {
+    try {
+      const response = await axios.post(`${BaseURL}request/updatetables`, { hotel, tableId, status});
+      return response.data.data;
+    } catch (error) {
+      console.error("updateTables", error);
+    }
+  }
+
+
+export const deleteDiningTableRequest = async (reqBody) => {
+  try {
+    const response = await axios.put(`${BaseURL}request/deletediningtable`,  reqBody);
+    return response.data;
+  } catch (error) {
+    console.error("deleteDiningTableRequest", error);
+  }
+}

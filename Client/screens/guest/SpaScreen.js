@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Modal, TextInput } from "react-native";
 import RNPickerSelect from 'react-native-picker-select';
+import CalendarModal from "../../components/CalendarModal";
 import { getDatabase, ref, push } from "firebase/database";
 import firebaseApp from "../../firebaseConfig";
 
 function SpaScreen({ navigation, route }) {
-  const { selectedHotel } = route.params || {};
+  console.log('SpaScreen route:', route.params);  
 
   const spaOperatingHours = { start: 11, end: 18 }; // Updated spa operating hours
   const massageDuration = 30;
@@ -82,7 +83,9 @@ function SpaScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}> Spa Schedule </Text>
+      <CalendarModal
+      route={route.params}/>
+      {/* <Text style={styles.header}> Spa Schedule </Text>
 
       <FlatList
         data={availableTimeSlots}
@@ -174,35 +177,35 @@ function SpaScreen({ navigation, route }) {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </View>
   );
 }
 
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#007bff',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30,
-    backgroundColor: '#fafafa',
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: '#007bff',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30,
-    backgroundColor: '#fafafa',
-  },
-});
+// const pickerSelectStyles = StyleSheet.create({
+//   inputIOS: {
+//     fontSize: 16,
+//     paddingVertical: 12,
+//     paddingHorizontal: 10,
+//     borderWidth: 1,
+//     borderColor: '#007bff',
+//     borderRadius: 4,
+//     color: 'black',
+//     paddingRight: 30,
+//     backgroundColor: '#fafafa',
+//   },
+//   inputAndroid: {
+//     fontSize: 16,
+//     paddingHorizontal: 10,
+//     paddingVertical: 8,
+//     borderWidth: 0.5,
+//     borderColor: '#007bff',
+//     borderRadius: 8,
+//     color: 'black',
+//     paddingRight: 30,
+//     backgroundColor: '#fafafa',
+//   },
+// });
 
 const styles = StyleSheet.create({
   container: {
@@ -210,73 +213,73 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
   },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  flatListContainer: {
-    paddingBottom: 20,
-  },
-  timeSlotItem: {
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#007bff',
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  timeSlotText: {
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-  },
-  modalHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  commentsInput: {
-    height: 80,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
-  },
-  confirmButton: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  confirmButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  closeButton: {
-    backgroundColor: 'red',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  closeButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+  // header: {
+  //   fontSize: 24,
+  //   marginBottom: 20,
+  // },
+  // flatListContainer: {
+  //   paddingBottom: 20,
+  // },
+  // timeSlotItem: {
+  //   height: 60,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: '#007bff',
+  //   borderRadius: 10,
+  //   marginBottom: 10,
+  // },
+  // timeSlotText: {
+  //   fontSize: 16,
+  //   color: '#fff',
+  //   fontWeight: 'bold',
+  // },
+  // modalContainer: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  // },
+  // modalContent: {
+  //   width: '80%',
+  //   padding: 20,
+  //   backgroundColor: '#fff',
+  //   borderRadius: 10,
+  // },
+  // modalHeader: {
+  //   fontSize: 20,
+  //   fontWeight: 'bold',
+  //   marginBottom: 10,
+  // },
+  // commentsInput: {
+  //   height: 80,
+  //   borderColor: 'gray',
+  //   borderWidth: 1,
+  //   marginBottom: 10,
+  //   padding: 10,
+  // },
+  // confirmButton: {
+  //   backgroundColor: '#007bff',
+  //   padding: 10,
+  //   borderRadius: 5,
+  //   alignItems: 'center',
+  //   marginBottom: 10,
+  // },
+  // confirmButtonText: {
+  //   color: '#fff',
+  //   fontSize: 16,
+  //   fontWeight: 'bold',
+  // },
+  // closeButton: {
+  //   backgroundColor: 'red',
+  //   padding: 10,
+  //   borderRadius: 5,
+  //   alignItems: 'center',
+  // },
+  // closeButtonText: {
+  //   color: '#fff',
+  //   fontSize: 16,
+  //   fontWeight: 'bold',
+  // },
 });
 
 export default SpaScreen;

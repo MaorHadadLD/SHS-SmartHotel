@@ -1,11 +1,12 @@
 // styles.js
-
+import { StatusBar } from 'react-native';
 import { StyleSheet } from 'react-native';
 
 export const globalStyles = StyleSheet.create({
   container: {
+    marginTop: 25,
     flex: 1,
-    padding: 16,
+    
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -43,6 +44,7 @@ export const globalStyles = StyleSheet.create({
 export const staffHomeStyles = StyleSheet.create({
   requestItem: {
     padding: 10,
+    width: 340,
     marginBottom: 10,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -54,21 +56,23 @@ export const staffHomeStyles = StyleSheet.create({
     color: '#333',
   },
   startCompleteButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#3498db',
     padding: 10,
     borderRadius: 5,
     marginTop: 5,
   },
   startCompleteButtonText: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'center',
+    fontWeight: 'bold',
+  
   },
   staffDetailsContainer: {
     marginBottom: 20,
     padding: 10,
     borderWidth: 1,
-    borderColor: '#007bff',
+    borderColor: '#3498db',
     borderRadius: 5,
   },
   staffDetailText: {

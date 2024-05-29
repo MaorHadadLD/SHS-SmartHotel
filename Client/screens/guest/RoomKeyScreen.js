@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, ScrollView, Button, Platform } from 'rea
 import NfcManager , { NfcTech } from 'react-native-nfc-manager'; // Import NFC Manager
 import { sendRooomStatus } from '../../API/GuestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NfcProxy from '../../components/NfcProxy';
 
 const RoomKeyScreen = ({ route }) => {
     const [guest, setGuest] = useState(route.params.guestData);
@@ -21,7 +22,8 @@ const RoomKeyScreen = ({ route }) => {
         fetchGuestData();
 
         // Initialize NFC Manager when component mounts
-        initNfc();
+        // initNfc();
+        NfcProxy.init();
        
     }, []);
 
@@ -36,22 +38,24 @@ const RoomKeyScreen = ({ route }) => {
 
     // Function to broadcast room key using NFC
     const broadcastRoomKey = async () => {
-        try {
-            console.log("key")
-            const allo = await NfcManager.requestTechnology(NfcTech.Ndef);
-            console.log("rapehello", allo)
+        const tag = await NfcProxy.formatNdefAndroid();
+        console.log('tag', tag.ndefMessage);
+        // try {
+        //     console.log("key")
+        //     const allo = await NfcManager.requestTechnology(NfcTech.Ndef);
+        //     console.log("rapehello", allo)
             
 
-            const bytes = NfcManager.createNdefMessage({
-                roomKey: guest.roomKey // Assuming roomKey is a string
+        //     const bytes = NfcManager.createNdefMessage({
+        //         roomKey: guest.roomKey // Assuming roomKey is a string
 
-            });
+        //     });
           
-            console.log("bytes")
-            await NfcManager.setNdefPushMessage(bytes);
-        } catch (ex) {
-            console.warn('NFC broadcast error', ex.message);
-        }
+        //     console.log("bytes")
+        //     await NfcManager.setNdefPushMessage(bytes);
+        // } catch (ex) {
+        //     console.warn('NFC broadcast error', ex.message);
+        // }
     };
 
     return (

@@ -14,7 +14,7 @@ export default function BusinessItem({place}) {
           "?maxwidth=400" +
           "&photo_reference=" +
           place?.photos[0]?.photo_reference +
-          "&key=AIzaSyBHV26uOtdXka6czAzzxsB99hJO38hD9DE",
+          "&key=AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0",
         }}
         style={{ width: 120, height: 80, borderRadius: 10 }}
       />:
@@ -39,7 +39,7 @@ export default function BusinessItem({place}) {
             marginBottom:-5
           }}
         >
-          <AntDesign name="star" size={20} color={Colors.YELLOW} />
+          <AntDesign name="star" size={20} color='#ead306' />
           <Text>{place.rating}</Text>
         </View>
     </View>

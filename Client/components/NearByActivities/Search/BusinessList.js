@@ -3,6 +3,7 @@ import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import BusinessItem from './BusinessItem'; // Import the missing 'BusinessItem' component
+import PlaceDetail from '../PlaceDetail/PlaceDetail';
 
 export default function BusinessList({ placeList}) {
     const navigation=useNavigation();
@@ -23,7 +24,7 @@ export default function BusinessList({ placeList}) {
                         place: item
                     }
                 )}>
-                    <BusinessItem place={item} /> 
+                    <PlaceDetail place={item} /> 
                 </TouchableOpacity>
             )}
         />

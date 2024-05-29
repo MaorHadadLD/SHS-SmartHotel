@@ -20,7 +20,7 @@ export default function PlaceItem({ place }) {
             "?maxwidth=400" +
             "&photo_reference=" +
             place?.photos[0]?.photo_reference +
-            "&key=AIzaSyCh0dw3B5TMHQFgUUPjXCrvBM2y9pPyBJc",
+            "&key=AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0",
         }}
         style={{ width: 110, height: 110, borderRadius: 15 }}
       /> :
@@ -37,7 +37,7 @@ export default function PlaceItem({ place }) {
           style={{ fontSize: 18, marginBottom: 5 }}
           numberOfLines={2}>
           {place.vicinity}
-          </Text>
+        </Text>
       </View>
       <View
         style={{
