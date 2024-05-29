@@ -1,3 +1,4 @@
+// AppNavigator.js
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -30,7 +31,6 @@ import RequestTrackingScreen from '../screens/guest/RequestTrackingScreen';
 import DinningRoomStaff from '../screens/staff/DinningRoomStaff';
 import Home from '../screens/Home';
 
-//
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => (
@@ -64,10 +64,6 @@ const MainStack = () => (
     <Stack.Screen name="Search" component={ Search } />
     <Stack.Screen name="PlaceDetail" component={ PlaceDetail } />
     <Stack.Screen name="CheckOutScreen" component={CheckOutScreen} />
-
-    
-    
-    
     <Stack.Screen name="ReceptionScreen" component={ReceptionScreen} />
     <Stack.Screen name="CleaningRoomScreen" component={CleaningRoomScreen} />
     <Stack.Screen name="RoomServiceScreen" component={RoomServiceScreen} />
