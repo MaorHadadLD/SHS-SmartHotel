@@ -75,6 +75,7 @@ const PoolBarRequestScreen = ({ route }) => {
                     <View style={styles.container}>
                         <ImageBackground source={require('../../../assets/pool_bar_background.jpg')} style={styles.backgroundImage}>
                             <View style={styles.overlay}>
+                                <Text style={styles.caption}>Order now, the order will be waiting for you at the bar</Text>
                                 <CategoryListPool
                                     categoryList={categoryList}
                                     products={products}
@@ -118,6 +119,16 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         paddingHorizontal: 10,
+    },
+    caption: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+        textAlign: 'center',
+        marginVertical: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        padding: 10,
+        borderRadius: 5,
     },
 });
 
