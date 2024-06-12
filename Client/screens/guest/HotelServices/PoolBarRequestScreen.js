@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { categoryList, products } from '../../../data/PoolBarMenu';
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, ImageBackground, FlatList, Image } from 'react-native';
+import CategoryListPool from '../../../components/PoolBar/CategoryListPool';
 import CartScreen from './CartScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { categoryList, products } from '../../../data/PoolBarMenu';
 
 const PoolBarRequestScreen = ({ route }) => {
     const [cart, setCart] = useState([]);
@@ -71,55 +72,17 @@ const PoolBarRequestScreen = ({ route }) => {
                 }}
             >
                 {() => (
-                    <ScrollView style={styles.menuContainer}>
-                        {categoryList.map(category => (
-                            <View key={category.id} style={styles.categoryContainer}>
-                                <Text style={styles.categoryTitle}>{category.name}</Text>
-                                {category.subcategories ? (
-                                    category.subcategories.map((subcategory, subIndex) => (
-                                        <View key={subIndex}>
-                                            <Text style={styles.subcategoryTitle}>{subcategory.name}</Text>
-                                            {products
-                                                .filter(product => product.category === category.name && product.subcategories === subcategory.name)
-                                                .map(product => (
-                                                    <View key={product.id} style={styles.productContainer}>
-                                                          {/* <Image style={styles.productImage} /> */}
-                                                        <View style={styles.productDetails}>
-                                                            <Text style={styles.productName}>{product.name}</Text>
-                                                            <Text style={styles.productPrice}>${product.price.toFixed(2)}</Text>
-                                                            <TouchableOpacity
-                                                                style={styles.addButton}
-                                                                onPress={() => handleAddToCart(product, 1)}
-                                                            >
-                                                                <Text style={styles.addButtonText}>Add to Cart</Text>
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                    </View>
-                                                ))}
-                                        </View>
-                                    ))
-                                ) : (
-                                    products
-                                        .filter(product => product.category === category.name)
-                                        .map(product => (
-                                            <View key={product.id} style={styles.productContainer}>
-                                                {/* <Image style={styles.productImage} source={require('../../../assets/mod1.jpg')} /> */}
-                                                <View style={styles.productDetails}>
-                                                    <Text style={styles.productName}>{product.name}</Text>
-                                                    <Text style={styles.productPrice}>${product.price.toFixed(2)}</Text>
-                                                    <TouchableOpacity
-                                                        style={styles.addButton}
-                                                        onPress={() => handleAddToCart(product, 1)}
-                                                    >
-                                                        <Text style={styles.addButtonText}>Add to Cart</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </View>
-                                        ))
-                                )}
+                    <View style={styles.container}>
+                        <ImageBackground source={require('../../../assets/pool_bar_background.jpg')} style={styles.backgroundImage}>
+                            <View style={styles.overlay}>
+                                <CategoryListPool
+                                    categoryList={categoryList}
+                                    products={products}
+                                    onAddToCart={handleAddToCart}
+                                />
                             </View>
-                        ))}
-                    </ScrollView>
+                        </ImageBackground>
+                    </View>
                 )}
             </Tab.Screen>
             <Tab.Screen
@@ -144,64 +107,17 @@ const PoolBarRequestScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-    menuContainer: {
-        flex: 1,
-        backgroundColor: '#f8f8f8',
-    },
-    categoryContainer: {
-        marginVertical: 10,
-        padding: 10,
-        backgroundColor: '#fff',
-        borderRadius: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 5,
-    },
-    categoryTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    subcategoryTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginLeft: 10,
-        marginVertical: 5,
-    },
-    productContainer: {
-        flexDirection: 'row',
-        marginBottom: 10,
-    },
-    productImage: {
-        width: 80,
-        height: 80,
-        borderRadius: 8,
-        marginRight: 10,
-    },
-    productDetails: {
+    container: {
         flex: 1,
     },
-    productName: {
-        fontSize: 18,
-        fontWeight: 'bold',
+    backgroundImage: {
+        flex: 1,
+        resizeMode: 'cover',
     },
-    productPrice: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    addButton: {
-        marginTop: 5,
-        backgroundColor: '#28a745',
-        padding: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    addButtonText: {
-        color: '#fff',
-        fontSize: 16,
+    overlay: {
+        flex: 1,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        paddingHorizontal: 10,
     },
 });
 

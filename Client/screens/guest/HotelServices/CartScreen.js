@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const CartScreen = ({ cart, handleRemoveFromCart, handleUpdateQuantity, handleSendOrder }) => {
@@ -22,6 +22,7 @@ const CartScreen = ({ cart, handleRemoveFromCart, handleUpdateQuantity, handleSe
         <ScrollView style={styles.cartContainer}>
             {cart.map(item => (
                 <View key={item.product.id} style={styles.cartItem}>
+                    {/* <Image style={styles.productImage} source={require(`../../../assets/${item.product.image}`)} /> */}
                     <Text style={styles.productName}>{item.product.name}</Text>
                     <Text style={styles.productPrice}>${item.product.price.toFixed(2)}</Text>
                     <View style={styles.quantityContainer}>
@@ -62,6 +63,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 8,
         elevation: 5,
+    },
+    productImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 8,
+        marginRight: 10,
     },
     productName: {
         flex: 2,

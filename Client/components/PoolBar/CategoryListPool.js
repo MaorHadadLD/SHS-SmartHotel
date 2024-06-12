@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
 import { View, FlatList, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 
-export default function CategoryListPool({ categoryList, products, onProductSelect, onAddToCart }) {
+export default function CategoryListPool({ categoryList, products, onAddToCart }) {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
     const [quantities, setQuantities] = useState({});
 
     const handleCategorySelect = (category) => {
-        setSelectedCategory(category.name);
-        setSelectedSubcategory(null); // Reset selected subcategory when a category is selected
+        if (selectedCategory === category.name) {
+            setSelectedCategory(null);
+            setSelectedSubcategory(null);
+        } else {
+            setSelectedCategory(category.name);
+            setSelectedSubcategory(null); // Reset selected subcategory when a category is selected
+        }
     };
 
     const handleSubcategorySelect = (subcategoryName) => {
-        setSelectedSubcategory(subcategoryName);
+        if (selectedSubcategory === subcategoryName) {
+            setSelectedSubcategory(null);
+        } else {
+            setSelectedSubcategory(subcategoryName);
+        }
     };
 
     const handleQuantityChange = (productId, quantity) => {
@@ -51,7 +60,7 @@ export default function CategoryListPool({ categoryList, products, onProductSele
                     keyExtractor={(item) => item.name}
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={() => handleSubcategorySelect(item.name)}>
-                            <View style={styles.subcategoryButton}>
+                            <View style={[styles.subcategoryButton, selectedSubcategory === item.name && styles.selectedSubcategoryButton]}>
                                 <Text>{item.name}</Text>
                             </View>
                         </TouchableOpacity>
@@ -95,7 +104,8 @@ const styles = StyleSheet.create({
         borderStyle: 'solid'
     },
     selectedCategoryButton: {
-        backgroundColor: 'lightblue',
+        backgroundColor: '#28a745',
+        borderColor: '#28a745',
     },
     subcategoryButton: {
         backgroundColor: '#f9f9f9',
@@ -106,6 +116,10 @@ const styles = StyleSheet.create({
         borderColor: '#333',
         borderWidth: 1,
         borderStyle: 'solid'
+    },
+    selectedSubcategoryButton: {
+        backgroundColor: '#28a745',
+        borderColor: '#28a745',
     },
     productContainer: {
         padding: 10,

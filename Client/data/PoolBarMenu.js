@@ -30,11 +30,11 @@ export const categoryList = [
     export const products = [
         {
             id : 11,
-                 name: 'Hamburger + Chips + Drink', price: 45, category: 'Meals', image: '../../../assets/mod1.jpg'
+                 name: 'Hamburger & Chips & Drink', price: 45, category: 'Meals', image: '../../../assets/mod1.jpg'
         },
         {
             id: 12,
-            name: 'Schnitzels + Chips + Drink', price: 35 , category: 'Meals'   
+            name: 'Schnitzels & Chips & Drink', price: 35 , category: 'Meals'   
 
         },
         {
@@ -55,7 +55,7 @@ export const categoryList = [
         },
         {
             id: 22,
-            name: 'Nasty', price: 7, category: 'Drinks'
+            name: 'Nestea', price: 7, category: 'Drinks'
         },
         {
             id: 23,
@@ -63,7 +63,7 @@ export const categoryList = [
         },
         {
             id: 24,
-            name: 'Excel', price: 8, category: 'Drinks'
+            name: 'XL', price: 8, category: 'Drinks'
         },
         {
             id: 25,
@@ -99,7 +99,7 @@ export const categoryList = [
         },
         {
             id: 38,
-            name: 'Bloody Mary', price: 50, category: 'Alcohol', subcategories: 'Cocktails'
+            name: 'Aperol Spritz', price: 50, category: 'Alcohol', subcategories: 'Cocktails'
         },
         {
             id: 39,
