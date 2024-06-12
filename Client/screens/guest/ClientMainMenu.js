@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, ImageBackground } from "react-native";
+import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity, I18nManager } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { getGuestDetails } from '../../API/GuestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Btn from "../../components/Btn";
+import { FontAwesome5 } from '@expo/vector-icons';
 
-function ClientMainMenu({route}) {
-  const guestEmail  = route.params.guestData.email || {};
+function ClientMainMenu({ route }) {
+  const guestEmail = route.params.guestData.email || {};
   const [guestData, setGuestData] = useState([]);
   const navigation = useNavigation();
-  const { hotelName, city } =  route.params.selectedHotel;
+  const { hotelName, city } = route.params.selectedHotel;
 
   useEffect(() => {
     const getGuestData = async () => {
@@ -34,87 +34,114 @@ function ClientMainMenu({route}) {
   const handleNavigate = (screen) => {
     navigation.navigate(screen, {
       selectedHotel: route.params.selectedHotel,
-      guestData: guestData
+      guestData: guestData,
     });
   };
 
   const menuItems = [
-    { id: '1', title: "Hotel Information", screen: "HotelInfoScreen" },
-    { id: '2', title: "Room Key", screen: "RoomKeyScreen" },
-    { id: '3', title: "Hotel Services", screen: "HotelServicesScreen" },
-    { id: '4', title: "Request Tracking", screen: "RequestTrackingScreen" },
-    { id: '5', title: "Nearby Activities", screen: "NearbyActivitiesScreen" },
-    { id: '6', title: "Spa", screen: "SpaMainScreen" },
-    { id: '7', title: "check out", screen: "CheckOutScreen" },
+    { id: '1', title: "Hotel Information", screen: "HotelInfoScreen", icon: 'info-circle' },
+    { id: '2', title: "Room Key", screen: "RoomKeyScreen", icon: 'key' },
+    { id: '3', title: "Hotel Services", screen: "HotelServicesScreen", icon: 'concierge-bell' },
+    { id: '4', title: "Request Tracking", screen: "RequestTrackingScreen", icon: 'clipboard-list' },
+    { id: '5', title: "Nearby Activities", screen: "NearbyActivitiesScreen", icon: 'map-marker-alt' },
+    { id: '6', title: "Spa", screen: "SpaMainScreen", icon: 'spa' },
+    { id: '7', title: "Check Out", screen: "CheckOutScreen", icon: 'sign-out-alt' },
   ];
 
   const renderItem = ({ item }) => {
-    const buttonStyle = item.title === "check out" ? styles.checkoutButton : styles.menuItem;
-    const textStyle = item.title === "check out" ? styles.checkoutButtonText : styles.menuItemText;
-
     return (
-      <View style={styles.container}>
-        <Btn bgColor="white" btnLabel={item.title} textColor="black" Press={() => handleNavigate(item.screen)} />
-      </View>
+      <TouchableOpacity style={styles.card} onPress={() => handleNavigate(item.screen)}>
+        <FontAwesome5 name={item.icon} size={24} color="#333" style={styles.icon} />
+        <Text style={styles.cardText}>{item.title}</Text>
+      </TouchableOpacity>
     );
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground source={require('../../assets/reception2.jpg')} style={{ flex: 1, resizeMode: "cover", justifyContent: "center" }}>
-        <Text style={{ color: "white", fontSize: 28, fontWeight: "bold", textAlign: 'center', marginTop: 50 }}>
-          Welcome to {hotelName ? `${hotelName}, ${city}` : 'your hotel'}
-        </Text>
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
-          <Text style={{ color: "white", fontSize: 28, fontWeight: "bold" }}>
-            {guestData.firstname + ' ' + guestData.lastname}
+      <ImageBackground source={require('../../assets/reception2.jpg')} style={styles.backgroundImage}>
+        <View style={styles.overlay}>
+          <Text style={styles.welcomeText}>
+            Welcome to {hotelName ? `${hotelName}, ${city}` : 'your hotel'}
           </Text>
+          <View style={styles.guestInfo}>
+            <Text style={styles.guestName}>
+              {guestData.firstname + ' ' + guestData.lastname}
+            </Text>
+          </View>
+          <FlatList
+            data={menuItems}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={styles.flatListContainer}
+            scrollEnabled={true}
+          />
         </View>
-        <FlatList
-          data={menuItems}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.flatListContainer}
-          scrollEnabled={true}
-        />
       </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    padding: 8,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)', // Even lighter overlay
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  welcomeText: {
+    color: "white",
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: 'center',
+    marginTop: 50,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
+  },
+  guestInfo: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  guestName: {
+    color: "white",
+    fontSize: 28,
+    fontWeight: "bold",
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   flatListContainer: {
     paddingBottom: 10,
   },
-  menuItem: {
-    height: 70,
-    justifyContent: 'center',
+  card: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 15,
+    padding: 20,
+    marginVertical: 10,
     alignItems: 'center',
-    backgroundColor: '#007bff',
-    borderRadius: 10,
-    marginBottom: 10,
+    flexDirection: 'row-reverse', // Ensure icon is always on the left
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
-  menuItemText: {
+  cardText: {
+    color: '#333',
     fontSize: 18,
-    color: '#fff',
     fontWeight: 'bold',
+    marginRight: 20, // Ensure text is to the right of the icon
+    textAlign: 'left', // Ensure text alignment is consistent
   },
-  checkoutButton: {
-    height: 70,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#eb2d2d',
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  checkoutButtonText: {
-    fontSize: 18,
-    color: '#fff',
-    fontWeight: 'bold',
+  icon: {
+    marginLeft: 20, // Ensure icon is always to the left of the text
   },
 });
 
