@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet,ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { getAllRequstsByRoomNumberGuest } from '../../API/RequestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackGround from '../../components/BackGround';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 function RequestTracking() {
     const [requests, setRequests] = useState([]);
@@ -15,11 +16,8 @@ function RequestTracking() {
             try {
                 const guestData = await AsyncStorage.getItem('guestData');
                 setGuestData(JSON.parse(guestData));
-                console.log('guestData', guestData);
                 const res = await getAllRequstsByRoomNumberGuest(guestData);
-                console.log(' res', res);
                 if (res.success) {
-                    // Make sure res.data is an array before setting it
                     if (Array.isArray(res.data)) {
                         setRequests(res.data);
                     } else {
@@ -30,110 +28,133 @@ function RequestTracking() {
                 }
             } catch (error) {
                 console.error("RequestTracking: Error fetching requests:", error);
-            }finally {
-                // Artificial delay to show the loading indicator
-                setTimeout(() => {
-                  setLoading(false);
-                }, 500); // 2 seconds delay
-              }
-        }
+            } finally {
+                setLoading(false);
+            }
+        };
         getRequests();
     }, []);
 
-    // Group requests by department
     const groupRequestsByDepartment = () => {
         const groupedRequests = {};
         requests.forEach(request => {
             if (!groupedRequests[request.department]) {
                 groupedRequests[request.department] = [];
-                console.log('groupedRequests:::', request.department);
-                
             }
             groupedRequests[request.department].push(request);
-            console.log('groupedRequests', groupedRequests);
         });
         return groupedRequests;
-    }
+    };
 
     const groupedRequests = groupRequestsByDepartment();
 
     return (
         <BackGround>
-            {loading && 
-          <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FF6B3C" style={styles.loadingIndicator} />
-          </View>} 
-        <View style={styles.container}>
-          <Text style={{ color: "white", fontSize: 58, fontWeight: 'bold', marginBottom: 10, }}>Request Tracking</Text>
-          {/* Display requests for each department */}
-          {Object.keys(groupedRequests).map((department, index) => (
-            <View key={index} style={styles.departmentContainer}>
-              <Text style={styles.departmentTitle}>{department}</Text>             
-              {groupedRequests[department].map((request, index) => (
-                <View key={index} style={styles.requestContainer}>
-                  
-                  {/* Check if the request type is for dining */}
-                  {request.department != 'Dinning' && (
-                   <><Text>Request: {request.notice}</Text><Text>Status: {request.status}</Text></>
-                   
-                  )}
-                  {request.department === 'Dinning' && (
-                     <View>
-                     <Text>Number of diners: {request.numberOfDiners}</Text>
-                     <Text>Arrival time: {request.arrivalTime}</Text>
-                     <Text>Table Number: {request.tableId}</Text>
-                   </View>
-                   )}
-                  {/* Add more conditions for other request types */}
-                  
+            {loading &&
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#FF6B3C" style={styles.loadingIndicator} />
                 </View>
-              ))}
-            </View>
-          ))}
-        </View>
+            }
+            <ScrollView style={styles.container}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.heading}>Request Tracking</Text>
+                </View>
+                {Object.keys(groupedRequests).map((department, index) => (
+                    <View key={index} style={styles.departmentContainer}>
+                        <View style={styles.departmentHeader}>
+                            <FontAwesome5 name="tasks" size={24} color="#FF6B3C" />
+                            <Text style={styles.departmentTitle}>{department}</Text>
+                        </View>
+                        {groupedRequests[department].map((request, index) => (
+                            <View key={index} style={styles.requestCard}>
+                                <View style={styles.requestHeader}>
+                                    <Text style={styles.requestType}>Request:</Text>
+                                    <Text style={styles.requestNotice}>{request.notice}</Text>
+                                </View>
+                                <Text style={styles.requestStatus}>Status: {request.status}</Text>
+                            </View>
+                        ))}
+                    </View>
+                ))}
+            </ScrollView>
         </BackGround>
-      );
-}      
+    );
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
     },
-    heading: {
-        fontSize: 20,
-        fontWeight: 'bold',
+    titleContainer: {
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        padding: 10,
+        borderRadius: 10,
         marginBottom: 20,
-        
+    },
+    heading: {
+        color: "white",
+        fontSize: 32,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
     departmentContainer: {
         marginBottom: 20,
     },
-    departmentTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
+    departmentHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
         marginBottom: 10,
-        color: '#FF6B3C'
     },
-    requestContainer: {
-        backgroundColor: '#f0f0f0',
-        padding: 10,
+    departmentTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginLeft: 10,
+        color: '#FF6B3C',
+    },
+    requestCard: {
+        backgroundColor: '#fff',
+        padding: 15,
+        borderRadius: 15,
         marginBottom: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    requestHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+    },
+    requestType: {
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    requestNotice: {
+        color: '#555',
+    },
+    requestStatus: {
+        color: '#777',
     },
     loadingIndicator: {
         position: 'absolute',
         top: '50%',
         left: '50%',
         zIndex: 1000,
-      },
-      loadingContainer: {
+    },
+    loadingContainer: {
         ...StyleSheet.absoluteFillObject,
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1000,
         elevation: 1000,
         backgroundColor: 'rgba(0,0,0,0.8)',
-      },
+    },
 });
 
 export default RequestTracking;
