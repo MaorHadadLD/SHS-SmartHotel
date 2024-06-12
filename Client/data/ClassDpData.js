@@ -29,17 +29,6 @@ export const Requests = [
         ['Reception'],
         'The room is not as I ordered',
     ),
-    // Room Service
-    new Request(
-        'r3',
-        ['RoomService'],
-        'I would love to receive chocolates in the room',
-    ),
-    new Request(
-        'r4',
-        ['RoomService'],
-        'I would love to receive champagne in the room',
-    ),
     // Cleening room
     new Request(
         'r5',
@@ -60,18 +49,6 @@ export const Requests = [
         'r10',
         ['CleaningRoom'],
         'No toilet paper.',
-    ),
-    
-    // Pool Bar
-    new Request(
-        'r7',
-        ['PoolBar'],
-        'can i get some mango margarita?',
-    ),
-    new Request(
-        'r8',
-        ['PoolBar'],
-        'can i get some chips and schnitzel?',
     ),
     
 ];
