@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet, TextInput, ScrollView } from 'react-native';
 
 export default function CategoryListPool({ categoryList, products, onAddToCart }) {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -38,40 +38,44 @@ export default function CategoryListPool({ categoryList, products, onAddToCart }
             : [];
 
     return (
-        <View>
-            <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                data={categoryList}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        onPress={() => handleCategorySelect(item)}
-                        style={[styles.categoryButton, selectedCategory === item.name && styles.selectedCategoryButton]}>
-                        <Text>{item.name}</Text>
-                    </TouchableOpacity>
-                )}
-            />
-            {selectedCategory === 'Alcohol' && (
+        <ScrollView contentContainerStyle={styles.container}>
+            <View>
                 <FlatList
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    data={categoryList.find(category => category.name === 'Alcohol').subcategories}
-                    keyExtractor={(item) => item.name}
+                    data={categoryList}
+                    keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => handleSubcategorySelect(item.name)}>
-                            <View style={[styles.subcategoryButton, selectedSubcategory === item.name && styles.selectedSubcategoryButton]}>
-                                <Text>{item.name}</Text>
-                            </View>
+                        <TouchableOpacity
+                            onPress={() => handleCategorySelect(item)}
+                            style={[styles.categoryButton, selectedCategory === item.name && styles.selectedCategoryButton]}>
+                            <Text style={styles.categoryButtonText}>{item.name}</Text>
                         </TouchableOpacity>
                     )}
+                    contentContainerStyle={styles.categoryList}
                 />
-            )}
-            <View>
+                {selectedCategory === 'Alcohol' && (
+                    <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={categoryList.find(category => category.name === 'Alcohol').subcategories}
+                        keyExtractor={(item) => item.name}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => handleSubcategorySelect(item.name)}>
+                                <View style={[styles.subcategoryButton, selectedSubcategory === item.name && styles.selectedSubcategoryButton]}>
+                                    <Text style={styles.subcategoryButtonText}>{item.name}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        contentContainerStyle={styles.subcategoryList}
+                    />
+                )}
+            </View>
+            <View style={styles.productListContainer}>
                 {filteredProducts.map((product) => (
                     <View key={product.id} style={styles.productContainer}>
                         <Text style={styles.productName}>{product.name}</Text>
-                        <Text style={styles.productPrice}>Price: {product.price}</Text>
+                        <Text style={styles.productPrice}>${product.price}</Text>
                         <View style={styles.quantityContainer}>
                             <TextInput
                                 style={styles.input}
@@ -88,48 +92,79 @@ export default function CategoryListPool({ categoryList, products, onAddToCart }
                     </View>
                 ))}
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        paddingBottom: 20,
+    },
     categoryButton: {
         backgroundColor: '#f9f9f9',
-        padding: 10,
-        marginTop: 10,
-        marginHorizontal: 10,
-        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginVertical: 10,
+        marginHorizontal: 5,
+        borderRadius: 50, // Rounder shape like the example
         borderColor: '#333',
         borderWidth: 1,
-        borderStyle: 'solid'
+        borderStyle: 'solid',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
     },
     selectedCategoryButton: {
         backgroundColor: '#28a745',
         borderColor: '#28a745',
     },
+    categoryButtonText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#333',
+    },
     subcategoryButton: {
         backgroundColor: '#f9f9f9',
-        padding: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         marginTop: 10,
-        marginLeft: 10,
-        borderRadius: 10,
+        marginHorizontal: 5,
+        borderRadius: 50, // Rounder shape like the example
         borderColor: '#333',
         borderWidth: 1,
-        borderStyle: 'solid'
+        borderStyle: 'solid',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
     },
     selectedSubcategoryButton: {
         backgroundColor: '#28a745',
         borderColor: '#28a745',
     },
+    subcategoryButtonText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#333',
+    },
     productContainer: {
         padding: 10,
         marginVertical: 5,
         marginHorizontal: 10,
-        backgroundColor: '#f2f2f2',
-        borderRadius: 5,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
     },
     productName: {
         fontSize: 16,
+        fontWeight: 'bold',
     },
     productPrice: {
         fontSize: 14,
@@ -147,14 +182,32 @@ const styles = StyleSheet.create({
         padding: 8,
         width: 60,
         marginRight: 10,
-    },
-    addToBasketButton: {
-        backgroundColor: 'lightgreen',
-        padding: 5,
         borderRadius: 5,
     },
+    addToBasketButton: {
+        backgroundColor: '#28a745',
+        padding: 10,
+        borderRadius: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
+    },
     addToBasketButtonText: {
-        fontSize: 10,
+        fontSize: 14,
         fontWeight: 'bold',
+        color: '#fff',
+    },
+    categoryList: {
+        paddingHorizontal: 5,
+    },
+    subcategoryList: {
+        paddingHorizontal: 5,
+    },
+    productListContainer: {
+        flex: 1,
+        marginTop: 10,
+        paddingHorizontal: 10, // Added to ensure products are not too far from categories
     },
 });

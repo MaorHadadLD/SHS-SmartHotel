@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity, ImageBackground, FlatList, Image } from 'react-native';
+import { View, StyleSheet, Text, ImageBackground } from 'react-native';
 import CategoryListPool from '../../../components/PoolBar/CategoryListPool';
 import CartScreen from './CartScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { categoryList, products } from '../../../data/PoolBarMenu';
 
 const PoolBarRequestScreen = ({ route }) => {
@@ -74,13 +75,19 @@ const PoolBarRequestScreen = ({ route }) => {
                 {() => (
                     <View style={styles.container}>
                         <ImageBackground source={require('../../../assets/pool_bar_background.jpg')} style={styles.backgroundImage}>
+                            <LinearGradient
+                                colors={['rgba(0,0,0,0.6)', 'transparent']}
+                                style={styles.gradientOverlay}
+                            />
                             <View style={styles.overlay}>
-                                <Text style={styles.caption}>Order now, the order will be waiting for you at the bar</Text>
-                                <CategoryListPool
-                                    categoryList={categoryList}
-                                    products={products}
-                                    onAddToCart={handleAddToCart}
-                                />
+                                <Text style={styles.caption}>Order on the app,  the order will be waiting for you at the bar</Text>
+                                <View style={styles.menuContainer}>
+                                    <CategoryListPool
+                                        categoryList={categoryList}
+                                        products={products}
+                                        onAddToCart={handleAddToCart}
+                                    />
+                                </View>
                             </View>
                         </ImageBackground>
                     </View>
@@ -115,20 +122,37 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: 'cover',
     },
+    gradientOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 200,
+    },
     overlay: {
         flex: 1,
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         paddingHorizontal: 10,
+        paddingTop: 10, // Adjusted padding to move content higher
     },
     caption: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#fff',
         textAlign: 'center',
-        marginVertical: 10,
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        padding: 10,
-        borderRadius: 5,
+        marginVertical: 10, // Adjusted margin to move content higher
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        padding: 15,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
+    },
+    menuContainer: {
+        flex: 1,
+        marginTop: 10, // Adjusted margin to move content higher
     },
 });
 
