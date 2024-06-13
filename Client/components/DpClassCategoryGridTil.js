@@ -1,8 +1,9 @@
-import React from "react";
-import { Pressable, View, Text, StyleSheet, Image, Platform, Dimensions } from "react-native";
+import React, { useState } from "react";
+import { Pressable, View, Text, StyleSheet, Image, Dimensions } from "react-native";
 
 function DpClassCategoryGridTil({ title, color, onPress, image }) {
-  console.log("Image Path:", image); // Add this log statement to check the image prop
+  const [showBubble, setShowBubble] = useState(false);
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -12,9 +13,15 @@ function DpClassCategoryGridTil({ title, color, onPress, image }) {
           { backgroundColor: pressed ? color + "80" : color }, // Adjust opacity when pressed
         ]}
         onPress={onPress}
+        onPressIn={() => setShowBubble(true)}
+        onPressOut={() => setShowBubble(false)}
       >
         <Image source={image} style={styles.image} />
-        {/* <Text style={styles.title}>{title}</Text> */}
+        {showBubble && (
+          <View style={styles.bubble}>
+            <Text style={styles.bubbleText}>{title}</Text>
+          </View>
+        )}
       </Pressable>
     </View>
   );
@@ -34,17 +41,26 @@ const styles = StyleSheet.create({
   button: {
     width: windowWidth * 0.4, // Adjust the width of the slot
     height: windowWidth * 0.4, // Adjust the height of the slot
-    borderRadius: 8,
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 4,
+    elevation: 6,
     overflow: "hidden",
   },
-  title: {
-    fontWeight: "bold",
-    fontSize: 20,
-    color: "white",
-    marginTop: -100,
+  bubble: {
+    position: 'absolute',
+    top: '50%', // Center the bubble vertically
+    left: '50%', // Center the bubble horizontally
+    transform: [{ translateX: -windowWidth * 0.2 }, { translateY: -windowWidth * 0.2 }],
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Increased opacity for better contrast
+    paddingHorizontal: 12, // Increased padding for better readability
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  bubbleText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18, // Increased font size
   },
   image: {
     width: "100%",
