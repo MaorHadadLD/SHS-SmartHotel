@@ -1,21 +1,14 @@
 // Import necessary modules from react-native
 import React from 'react';
-import { FlatList, View, StyleSheet, Text } from 'react-native';
+import { FlatList, View, StyleSheet, Text, ImageBackground } from 'react-native';
 import { ClassDpCategories } from '../../data/ClassDpData';
 import DpClassCategoryGridTil from '../../components/DpClassCategoryGridTil';
 import { checkStatusReq } from '../../API/RequestCalls';
+import { LinearGradient } from 'expo-linear-gradient';
 import BackGround from '../../components/BackGround';
 
-
-
-
-
 function HotelServicesScreen({ route, navigation }) {
-  console.log('HotelServicesScreen routeGUEST', route.params.guestData);
-  console.log('HotelServicesScreen routeHOTEL', route.params.selectedHotel);
   function renderClassDpCategoryItem(itemData) {
-
-    console.log('itemData', itemData);
     const pressHandler = async () => {
       if (itemData.item.title === 'Dining Room') {
         try {
@@ -26,15 +19,13 @@ function HotelServicesScreen({ route, navigation }) {
           };
           const result = await checkStatusReq(bodyrequest);
           if (result.success) {
-            alert('You have already made a resevertion for Dining Room. Please wait to be served before making another request');
-
+            alert('You have already made a reservation for Dining Room. Please wait to be served before making another request');
           } else {
             navigation.navigate('DiningRoomScreen', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
           }
         } catch (error) {
           console.error('DiningRoom error: ', error);
         }
-
       } else if (itemData.item.title === 'Cleaning Room') {
         try {
           const bodyrequest = {
@@ -45,7 +36,6 @@ function HotelServicesScreen({ route, navigation }) {
           const result = await checkStatusReq(bodyrequest);
           if (result.success) {
             alert('You have already made a request for Cleaning Room. Please wait to be served before making another request');
-
           } else {
             navigation.navigate('RoomCleaningRequestScreen', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
           }
@@ -59,7 +49,7 @@ function HotelServicesScreen({ route, navigation }) {
       } else {
         alert('This service is not available');
       }
-    }
+    };
 
     return (
       <DpClassCategoryGridTil
@@ -73,31 +63,50 @@ function HotelServicesScreen({ route, navigation }) {
 
   return (
     <BackGround>
-      <FlatList
-        data={ClassDpCategories}
-        keyExtractor={(item) => item.id}
-        renderItem={renderClassDpCategoryItem}
-        numColumns={2}
-        ListHeaderComponent={() => (
+      <ImageBackground
+        source={{ uri: 'https://example.com/your-background-image.jpg' }} // Add your background image URL here
+        style={styles.backgroundImage}
+      >
+        <LinearGradient
+          colors={['rgba(0,0,0,0.8)', 'transparent']}
+          style={styles.headerGradient}
+        >
           <View style={styles.headerContainer}>
             <Text style={styles.headerText}>Welcome to Hotel Services</Text>
           </View>
-        )}
-      />
+        </LinearGradient>
+        <FlatList
+          data={ClassDpCategories}
+          keyExtractor={(item) => item.id}
+          renderItem={renderClassDpCategoryItem}
+          numColumns={2}
+          contentContainerStyle={styles.list}
+        />
+      </ImageBackground>
     </BackGround>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+  },
+  headerGradient: {
+    width: '100%',
+    paddingVertical: 20,
+  },
   headerContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
   },
   headerText: {
     fontSize: 30,
     fontWeight: 'bold',
     color: 'white',
+  },
+  list: {
+    paddingHorizontal: 10,
+    paddingBottom: 20,
   },
 });
 
