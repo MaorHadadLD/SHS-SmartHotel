@@ -3,18 +3,19 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import BackGround from '../../components/BackGround';
 
 function SpaMainScreen({ navigation, route }) {
-  const  selectedHotel = route.params.selectedHotel || {};
-  console.log('SpaMainScreen route:', route.params);
+  const selectedHotel = route.params.selectedHotel || {};
   const guestData = route.params.guestData || {};
 
   const handleOrderMassage = () => {
-    // Navigate to the order Spa screen
     navigation.navigate('SpaScreen', { selectedHotel, guestData });
   };
 
   const handlePriceMenu = () => {
-    // Navigate to the price menu screen
     navigation.navigate('PriceMenuScreen');
+  };
+
+  const handleViewAppointments = () => {
+    navigation.navigate('GuestAppointmentsScreen', { guestData });
   };
 
   return (
@@ -26,6 +27,9 @@ function SpaMainScreen({ navigation, route }) {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handlePriceMenu}>
           <Text style={styles.buttonText}>Prices</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleViewAppointments}>
+          <Text style={styles.buttonText}>View Appointments</Text>
         </TouchableOpacity>
       </View>
     </BackGround>
@@ -43,15 +47,14 @@ const styles = StyleSheet.create({
     fontSize: 58,
     fontWeight: 'bold',
     marginBottom: 10,
-    
   },
   button: {
-   borderRadius: 100,
-   alignItems: "center",
-   width: 350,
-   paddingVertical: 5,
-   marginVertical: 10,
-   backgroundColor: '#FF6B3C',
+    borderRadius: 100,
+    alignItems: "center",
+    width: 350,
+    paddingVertical: 5,
+    marginVertical: 10,
+    backgroundColor: '#FF6B3C',
   },
   buttonText: {
     color: 'white',

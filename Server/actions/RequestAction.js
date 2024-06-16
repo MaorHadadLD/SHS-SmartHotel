@@ -91,6 +91,19 @@ export const getRequestByDepartment = async (reqBody) => {
             }));
             // console.log("getRequestByDpartment159",  requestList);
             return {success: true, data: requestList};
+        }else if (reqBody.type === "PoolBar" || reqBody.type === "RoomService") {
+            const requestList = Object.values(data)
+            .filter(request => request.hotel.hotelName === reqBody.hotel.hotelName && request.hotel.city === reqBody.hotel.city)
+            .map(request => ({
+                id: request.id,
+                status: request.status,
+                cart: request.cart,
+                hotel: request.hotel,
+                roomNumber: request.roomNumber,
+                department: reqBody.type,
+            }));
+            // console.log("getRequestByDpartment159",  requestList);
+            return {success: true, data: requestList};
         }
         else {
         const requestList = Object.values(data)
@@ -159,7 +172,17 @@ export const postRequest = async (body) => {
                 tableId: body.bodyrequest.tableId,
                 // notice: body.bodyrequest.request,
         });
-        } else {
+        } else if (body.bodyrequest.type === "PoolBar" || body.bodyrequest.type === "RoomService") {
+            set(newRef, {
+                id: newRef.key,
+                status: "waiting",
+                cart: body.bodyrequest.cart,
+                hotel: body.bodyrequest.selectedHotel,
+                roomNumber: body.bodyrequest.roomNumber,
+                
+            });
+        } 
+        else {
             set(newRef,{
                 id: newRef.key,
                 status: "waiting",

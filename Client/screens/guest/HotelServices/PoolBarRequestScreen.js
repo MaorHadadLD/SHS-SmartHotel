@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { categoryList, products } from '../../../data/PoolBarMenu';
+import { sendPostRequest } from '../../../API/RequestCalls'; // Ensure you have this API function
 
 const PoolBarRequestScreen = ({ route }) => {
     const [cart, setCart] = useState([]);
@@ -25,15 +26,41 @@ const PoolBarRequestScreen = ({ route }) => {
         }
     };
 
+    // const handleSendOrder = async () => {
+    //     try {
+    //         if (cart.length > 0) {
+    //             const order = {
+    //                 cart: cart.map(item => ({
+    //                     productId: item.product.id,
+    //                     quantity: item.quantity,
+    //                 })),
+    //                 type: 'PoolBar', // Indicates this is a Pool Bar order
+    //                 roomNumber: route.params.guestData.roomNumber,
+    //                 selectedHotel: route.params.guestData.selectedHotel,
+    //             };
+    //             const response = await sendPostRequest(order); // Replace with your API request function
+    //             if (response.success) {
+    //                 alert('Order submitted successfully');
+    //                 setCart([]);
+    //             }
+    //         } else {
+    //             alert('Please add items to the cart before sending the order');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error sending order:', error.message);
+    //     }
+    // };
+
     const handleSendOrder = async () => {
         try {
             if (cart.length > 0) {
                 const order = {
                     cart: cart.map(item => ({
                         productId: item.product.id,
+                        productName: item.product.name,
                         quantity: item.quantity,
                     })),
-                    type: 'PoolBar',
+                    type: 'PoolBar', // Indicates this is a Pool Bar order
                     roomNumber: route.params.guestData.roomNumber,
                     selectedHotel: route.params.guestData.selectedHotel,
                 };
@@ -80,7 +107,7 @@ const PoolBarRequestScreen = ({ route }) => {
                                 style={styles.gradientOverlay}
                             />
                             <View style={styles.overlay}>
-                                <Text style={styles.caption}>Order on the app,  the order will be waiting for you at the bar</Text>
+                                <Text style={styles.caption}>Order on the app, the order will be waiting for you at the bar</Text>
                                 <View style={styles.menuContainer}>
                                     <CategoryListPool
                                         categoryList={categoryList}
@@ -133,14 +160,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         paddingHorizontal: 10,
-        paddingTop: 10, // Adjusted padding to move content higher
+        paddingTop: 10,
     },
     caption: {
         fontSize: 20,
         fontWeight: 'bold',
         color: '#fff',
         textAlign: 'center',
-        marginVertical: 10, // Adjusted margin to move content higher
+        marginVertical: 10,
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
         padding: 15,
         borderRadius: 10,
@@ -152,7 +179,7 @@ const styles = StyleSheet.create({
     },
     menuContainer: {
         flex: 1,
-        marginTop: 10, // Adjusted margin to move content higher
+        marginTop: 10,
     },
 });
 

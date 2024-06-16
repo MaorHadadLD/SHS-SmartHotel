@@ -46,7 +46,10 @@ function HotelServicesScreen({ route, navigation }) {
         navigation.navigate('RoomServiceRequestsScreen', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
       } else if (itemData.item.title === 'Pool Bar') {
         navigation.navigate('PoolBarRequestScreen', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
-      } else {
+      } else if (itemData.item.title === 'Reception') {
+        navigation.navigate('GuestChatScreen', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
+      }
+       else {
         alert('This service is not available');
       }
     };
