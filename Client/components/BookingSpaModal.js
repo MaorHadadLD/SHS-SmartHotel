@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import RNPickerSelect from 'react-native-picker-select';
 import { Modal, Text, View, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
-import { getDatabase, ref, push ,update} from 'firebase/database';
+import { getDatabase, ref, push, update, query, orderByChild, equalTo, get } from 'firebase/database';
 import firebaseApp from '../firebaseConfig';
 
 function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
@@ -15,43 +15,55 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
     console.log('BookingSpaModal route:', route);
 
     const handleBookingConfirmation = () => {
-        if (massageType === '' || therapistGender === '') {
-            Alert.alert('Attention!', 'Please select a massage type and therapist before confirming the booking.');
-            return;
-        }
-        if (massageType === 'double' && secondTherapistGender === '' ) {
-            Alert.alert('Attention!', 'Please select 2 therapists before confirming the booking.');
-            return;
-        }
-
-        if (massageType === 'single'){
-            setSecondTherapistGender('none');
-            console.log('secondTherapistGender:', secondTherapistGender);
-        }
-        const appointmentData = {
-            id: '', // Initialize ID here
-            guest: route.guestData.email,
-            hotel: route.guestData.selectedHotel,
-            date: date.dateString,
-            time: selectedTime,
-            status: 'pending',
-            massageType: massageType,
-            therapistGender: therapistGender,
-            secondTherapistGender: secondTherapistGender,
-            additionalComments: additionalComments,
-        };
-    
         const db = getDatabase(firebaseApp);
         const appointmentsRef = ref(db, 'appointments');
-        const newAppointmentRef = push(appointmentsRef); // Create a new child node with a unique ID
-        const appointmentId = newAppointmentRef.key; // Get the generated ID
-        appointmentData.id = appointmentId; // Assign the ID to the appointmentData
-    
-        update(newAppointmentRef, appointmentData); // Update the new child node with the appointmentData
-        // push(appointmentsRef, appointmentData);
+        const selectedDate = date.dateString;
 
-        closeModal(); // Close the modal
-        navigation.navigate('ClientMainMenu', {selectedHotel: route.selectedHotel, guestData: route.guestData}); // Navigate to the SpaScreen
+        // Fetch existing appointments for the guest on the selected date
+        const guestAppointmentsQuery = query(appointmentsRef, orderByChild('guest'), equalTo(route.guestData.email));
+        get(guestAppointmentsQuery).then((snapshot) => {
+            const appointments = snapshot.val();
+            const hasValidAppointmentToday = appointments && Object.values(appointments).some(appt => appt.date === selectedDate && appt.status !== 'declined');
+
+            if (hasValidAppointmentToday) {
+                Alert.alert('Attention!', 'You can only book one massage per day unless your previous appointment was refused.');
+                return;
+            }
+
+            if (massageType === '' || therapistGender === '') {
+                Alert.alert('Attention!', 'Please select a massage type and therapist before confirming the booking.');
+                return;
+            }
+            if (massageType === 'double' && secondTherapistGender === '') {
+                Alert.alert('Attention!', 'Please select 2 therapists before confirming the booking.');
+                return;
+            }
+
+            if (massageType === 'single') {
+                setSecondTherapistGender('none');
+                console.log('secondTherapistGender:', secondTherapistGender);
+            }
+            const appointmentData = {
+                id: '',
+                guest: route.guestData.email,
+                hotel: route.guestData.selectedHotel,
+                date: selectedDate,
+                time: selectedTime,
+                status: 'pending',
+                massageType: massageType,
+                therapistGender: therapistGender,
+                secondTherapistGender: secondTherapistGender,
+                additionalComments: additionalComments,
+            };
+
+            const newAppointmentRef = push(appointmentsRef);
+            const appointmentId = newAppointmentRef.key;
+            appointmentData.id = appointmentId;
+
+            update(newAppointmentRef, appointmentData);
+            closeModal();
+            navigation.navigate('ClientMainMenu', { selectedHotel: route.selectedHotel, guestData: route.guestData });
+        });
     };
 
     return (
