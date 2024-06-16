@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { getAllRequstsByRoomNumberGuest } from '../../API/RequestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackGround from '../../components/BackGround';
@@ -9,6 +9,8 @@ function RequestTracking() {
     const [requests, setRequests] = useState([]);
     const [guestData, setGuestData] = useState({});
     const [loading, setLoading] = useState(false);
+    const [selectedRequest, setSelectedRequest] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         const getRequests = async () => {
@@ -48,6 +50,21 @@ function RequestTracking() {
 
     const groupedRequests = groupRequestsByDepartment();
 
+    const handleRequestPress = (request) => {
+        setSelectedRequest(request);
+        setModalVisible(true);
+    };
+
+    const renderRequest = (request) => (
+        <TouchableOpacity key={request.id} style={styles.requestCard} onPress={() => handleRequestPress(request)}>
+            <View style={styles.requestHeader}>
+                <Text style={styles.requestType}>Request:</Text>
+                <Text style={styles.requestNotice}>{request.notice}</Text>
+            </View>
+            <Text style={styles.requestStatus}>Status: {request.status}</Text>
+        </TouchableOpacity>
+    );
+
     return (
         <BackGround>
             {loading &&
@@ -65,18 +82,60 @@ function RequestTracking() {
                             <FontAwesome5 name="tasks" size={24} color="#FF6B3C" />
                             <Text style={styles.departmentTitle}>{department}</Text>
                         </View>
-                        {groupedRequests[department].map((request, index) => (
-                            <View key={index} style={styles.requestCard}>
-                                <View style={styles.requestHeader}>
-                                    <Text style={styles.requestType}>Request:</Text>
-                                    <Text style={styles.requestNotice}>{request.notice}</Text>
-                                </View>
-                                <Text style={styles.requestStatus}>Status: {request.status}</Text>
-                            </View>
-                        ))}
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                            {groupedRequests[department].map(renderRequest)}
+                        </ScrollView>
                     </View>
                 ))}
             </ScrollView>
+
+            {selectedRequest && (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.modalView}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>Request Details</Text>
+                            <Text style={styles.modalText}>Request: {selectedRequest.notice}</Text>
+                            <Text style={styles.modalText}>Status: {selectedRequest.status}</Text>
+                            {selectedRequest.department === 'Dinning' && (
+                                <>
+                                    <Text style={styles.modalText}>Number of diners: {selectedRequest.numberOfDiners}</Text>
+                                    <Text style={styles.modalText}>Arrival time: {selectedRequest.arrivalTime}</Text>
+                                    <Text style={styles.modalText}>Table Number: {selectedRequest.tableId}</Text>
+                                </>
+                            )}
+                            {selectedRequest.department === 'PoolBar' && (
+                                <>
+                                    {selectedRequest.cart.map((item, index) => (
+                                        <Text key={index} style={styles.modalText}>
+                                            {item.productName}: {item.quantity}
+                                        </Text>
+                                    ))}
+                                </>
+                            )}
+                            {selectedRequest.department === 'RoomService' && (
+                                <>
+                                    {selectedRequest.cart.map((item, index) => (
+                                        <Text key={index} style={styles.modalText}>
+                                            {item.productName}: {item.quantity}
+                                        </Text>
+                                    ))}
+                                </>
+                            )}
+                            <TouchableOpacity
+                                style={styles.closeButton}
+                                onPress={() => setModalVisible(false)}>
+                                <Text style={styles.closeButtonText}>Close</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+            )}
         </BackGround>
     );
 }
@@ -116,7 +175,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 15,
         borderRadius: 15,
-        marginBottom: 10,
+        marginRight: 10,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -125,6 +184,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        width: 300,
     },
     requestHeader: {
         flexDirection: 'row',
@@ -154,6 +214,48 @@ const styles = StyleSheet.create({
         zIndex: 1000,
         elevation: 1000,
         backgroundColor: 'rgba(0,0,0,0.8)',
+    },
+    modalView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: '80%',
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 15,
+    },
+    modalText: {
+        fontSize: 18,
+        marginBottom: 10,
+    },
+    closeButton: {
+        backgroundColor: '#FF6B3C',
+        borderRadius: 10,
+        padding: 10,
+        elevation: 2,
+        marginTop: 15,
+    },
+    closeButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
 });
 
