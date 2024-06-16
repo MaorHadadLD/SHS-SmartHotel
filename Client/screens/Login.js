@@ -45,7 +45,7 @@ const Login = () => {
       console.log('Staff login result:', result.success);
       if (result.success) {
         if (result.data.role === 'reception') {
-          navigation.navigate('ReceptionScreen', { staffData: result.data });
+          navigation.navigate('ReceptionMainScreen', { staffData: result.data });
         } else if (result.data.role === 'cleaning') {
           navigation.navigate('CleaningRoomScreen', { staffData: result.data });
         } else if (result.data.role === 'RoomService') {
