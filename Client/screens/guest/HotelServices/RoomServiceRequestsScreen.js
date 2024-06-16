@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, ImageBackground, ScrollView } from 'react-native';
-import { Requests } from "../../../data/ClassDpData";
-import { sendPostRequest } from '../../../API/RequestCalls';
+import { sendPostRequest } from '../../../API/RequestCalls'; // Ensure you have this API function
 import BackGround from '../../../components/BackGround';
 import CategoryListRoomService from '../../../components/CategoryListRoomService';
 import CartScreen from './CartScreen';
@@ -9,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { categoryList, products } from '../../../data/RoomServiceMenu';
 
-function RoomServiceRequestsScreen({ route }) {
+const  RoomServiceRequestsScreen = ({ route }) => {
     const [cart, setCart] = useState([]);
 
     const handleAddToCart = (product, quantity) => {
@@ -27,18 +26,45 @@ function RoomServiceRequestsScreen({ route }) {
         }
     };
 
+    // const handleSendOrder = async () => {
+    //     try {
+    //         if (cart.length > 0) {
+    //             const order = {
+    //                 cart: cart.map(item => ({
+    //                     productId: item.product.id,
+    //                     quantity: item.quantity,
+    //                 })),
+    //                 type: 'RoomService', // Indicates this is a Room Service order
+    //                 roomNumber: route.params.guestData.roomNumber,
+    //                 selectedHotel: route.params.guestData.selectedHotel,
+    //             };
+    //             const response = await sendPostRequest(order); // Replace with your API request function
+    //             if (response.success) {
+    //                 alert('Order submitted successfully');
+    //                 setCart([]);
+    //             }
+    //         } else {
+    //             alert('Please add items to the cart before sending the order');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error sending order:', error.message);
+    //     }
+    // };
+
     const handleSendOrder = async () => {
         try {
             if (cart.length > 0) {
                 const order = {
                     cart: cart.map(item => ({
                         productId: item.product.id,
+                        productName: item.product.name,
                         quantity: item.quantity,
                     })),
-                    type: 'RoomService',
+                    type: 'RoomService', // Indicates this is a Room Service order
                     roomNumber: route.params.guestData.roomNumber,
                     selectedHotel: route.params.guestData.selectedHotel,
                 };
+                console.log("OrderTest: ", order); // Debugging: Log order data
                 const response = await sendPostRequest(order); // Replace with your API request function
                 if (response.success) {
                     alert('Order submitted successfully');
@@ -126,7 +152,7 @@ const styles = StyleSheet.create({
     },
     customRequestContainer: {
         padding: 16,
-        marginTop: Platform.OS === 'ios' ? 40 : 0, // Adjust marginTop for iOS status bar
+        marginTop: Platform.OS === 'ios' ? 40 : 0,
     },
     title: {
         fontSize: 24,
@@ -169,4 +195,5 @@ const styles = StyleSheet.create({
         opacity: 0.9,
     },
 });
+
 export default RoomServiceRequestsScreen;
