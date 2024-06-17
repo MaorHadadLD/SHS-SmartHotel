@@ -18,37 +18,13 @@ export const ClassDpCategories = [
 ];
 
 export const Requests = [
-    // reception 
-    new Request(
-        'r1',
-        ['Reception'], 
-        'Is it possible to check out late?',
-    ),
-    new Request(
-        'r2',
-        ['Reception'],
-        'The room is not as I ordered',
-    ),
-    // Cleening room
-    new Request(
-        'r5',
-        ['CleaningRoom'],
-        'The room is not clean',
-    ),
-    new Request(
-        'r6',
-        ['CleaningRoom'],
-        'No towels in the room.',
-    ),
-    new Request(
-        'r9',
-        ['CleaningRoom'],
-        'There are no toiletries for the shower.',
-    ),
-    new Request(
-        'r10',
-        ['CleaningRoom'],
-        'No toilet paper.',
-    ),
+   
+    new Request('r5', ['CleaningRoom'], 'The room is not clean'),
+    new Request('r6', ['CleaningRoom'], 'No towels in the room.'),
+    new Request('r9', ['CleaningRoom'], 'There are no toiletries for the shower.'),
+    new Request('r10', ['CleaningRoom'], 'No toilet paper.'),
+    new Request('r11', ['CleaningRoom'], 'Extra pillows'),
+    new Request('r12', ['CleaningRoom'], 'A blanket'),
+    new Request('r13', ['CleaningRoom'], 'Room freshener')
     
 ];

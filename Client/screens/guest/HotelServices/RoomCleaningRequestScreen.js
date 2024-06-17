@@ -1,58 +1,27 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import {Requests} from "../../../data/ClassDpData";
-
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, ScrollView, ImageBackground } from 'react-native';
+import { Requests } from "../../../data/ClassDpData";
 import { sendPostRequest } from '../../../API/RequestCalls';
-import BackGround from '../../../components/BackGround';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
-
-
+const backgroundImageUri = require('../../../assets/resort_cleaning.jpg');
 
 function RoomCleaningRequestScreen({ route, navigation }) {
   const departmentId = 'CleaningRoom';
-  console.log('RoomCleaningRequestScreen route TESTINGREPHAL:', route.params);
-  // const database = getDatabase(firebaseApp);
+  const cleaningRoomRequests = Requests.filter((reqItem) => reqItem.departmentId.includes(departmentId));
+  const [customRequest, setCustomRequest] = React.useState('');
 
-  const cleaningRoomRequests = Requests.filter((reqItem) => {
-    return reqItem.departmentId.includes(departmentId);
-  });
-
-  const [customRequest, setCustomRequest] =React.useState('');
-
-  const handleRequestSubmit = async (request)  => {
+  const handleRequestSubmit = async (request) => {
     try {
       const bodyrequest = { request, type: departmentId, roomNumber: route.params.guestData.roomNumber, selectedHotel: route.params.guestData.selectedHotel };
-      console.log('bodyrequest beavilBDIKA:', bodyrequest);
       const response = await sendPostRequest(bodyrequest);
       if (response.success) {
         alert('Request submitted successfully');
-        console.log('RoomCleaningRequestScreen route.params:', route.params);
         navigation.navigate('ClientMainMenu', { selectedHotel: route.params.selectedHotel, guestData: route.params.guestData });
-        
       }
     } catch (error) {
       console.error('Room cleaning request error:', error.message);
     }
-    // const requestId = uuidv4();
-    // const requestsRef = ref(database, 'RoomCleaningRequest');
-
-    // const newRequest = {
-    //   id: requestId,
-    //   departmentId: departmentId,
-    //   requestNotice: request,
-    // };
-
-    // // Using push to generate a new unique child location
-    // const newRequestRef = push(requestsRef);
-    
-    // set(newRequestRef, newRequest)
-    //   .then(() => {
-    //     console.log('Request saved to the database:', newRequest);
-    //     // Additional logic after successfully saving the request
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error saving request to the database:', error);
-    //   });
   };
 
   function renderPredefinedRequestButton(request) {
@@ -62,83 +31,168 @@ function RoomCleaningRequestScreen({ route, navigation }) {
         style={styles.requestButton}
         onPress={() => handleRequestSubmit(request.requestNotice)}
       >
+        <Icon name="broom" size={20} color="#fff" style={styles.buttonIcon} />
         <Text style={styles.buttonText}>{request.requestNotice}</Text>
       </TouchableOpacity>
     );
   }
 
   return (
-    <BackGround>
-    <View style={styles.container}>
-      <Text style={styles.title}>Choose a predefined request:</Text>
-      <View style={styles.buttonContainer}>
-        {cleaningRoomRequests.map((request) =>
-          renderPredefinedRequestButton(request)
-        )}
-      </View>
-
-      <Text style={styles.title}>Or enter your own request:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Type your request here..."
-        color="white"
-        onChangeText={(text) => setCustomRequest(text)}
-        value={customRequest}
-      />
-      {/* <Btn title="Submit Request" onPress={() => handleRequestSubmit(customRequest)} disabled={cleaningRoomRequests.length === 0} /> */}
-      <TouchableOpacity
-        style={styles.submitButton}
-        onPress={() => handleRequestSubmit(customRequest)}
-        disabled={cleaningRoomRequests.length === 0}
-      >
-        <Text style={styles.buttonText}>Submit Request</Text>
-      </TouchableOpacity>
-    </View>
-    </BackGround>
+    <ImageBackground source={backgroundImageUri} style={styles.backgroundImage}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Room Cleaning Requests</Text>
+        </View>
+        <Text style={styles.subtitle}>Choose a predefined request or enter your own:</Text>
+        <View style={styles.scatteredContainer}>
+          {renderPredefinedRequestButton({ id: 1, requestNotice: "The room is not clean" })}
+          {renderPredefinedRequestButton({ id: 2, requestNotice: "No towels in the room." })}
+          {renderPredefinedRequestButton({ id: 3, requestNotice: "There are no toiletries for the shower." })}
+          {renderPredefinedRequestButton({ id: 4, requestNotice: "No toilet paper." })}
+          <View style={styles.inlineContainer}>
+            {renderPredefinedRequestButton({ id: 5, requestNotice: "Extra pillows" })}
+            {renderPredefinedRequestButton({ id: 6, requestNotice: "A blanket" })}
+          </View>
+          {renderPredefinedRequestButton({ id: 7, requestNotice: "Room freshener" })}
+        </View>
+        <Text style={styles.orText}>Or</Text>
+        <View style={styles.customRequestContainer}>
+          <Icon name="pen" size={20} color="#333" style={styles.inputIcon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Type your request here..."
+            placeholderTextColor="#aaa"
+            onChangeText={(text) => setCustomRequest(text)}
+            value={customRequest}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => handleRequestSubmit(customRequest)}
+          disabled={cleaningRoomRequests.length === 0 && !customRequest}
+        >
+          <Icon name="paper-plane" size={20} color="#fff" style={styles.buttonIcon} />
+          <Text style={styles.submitButtonText}>Submit Request</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
+    padding: 20,
+  },
+  backgroundImage: {
     flex: 1,
-    padding: 16,
-    marginTop: Platform.OS === 'ios' ? 40 : 0, // Adjust marginTop for iOS status bar
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
   title: {
-    color: "white",
-    fontSize: 18,
+    color: "#ffffff",
+    fontSize: 28,
     fontWeight: 'bold',
-    marginTop: 10,
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
-  buttonContainer: {
+  subtitle: {
+    color: "#ffffff",
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
+  },
+  scatteredContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  inlineContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 10,
+    justifyContent: 'center',
   },
   requestButton: {
     backgroundColor: '#3498db',
-    borderRadius: 5,
-    padding: 10,
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     margin: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 3,
+    width: 'auto',
   },
   buttonText: {
     color: '#fff',
     textAlign: 'center',
+    fontSize: 14,
+    marginLeft: 10,
+    flexWrap: 'wrap',
+  },
+  buttonIcon: {
+    marginRight: 10,
+  },
+  orText: {
+    color: "#ffffff",
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
+  },
+  customRequestContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 3,
+    marginBottom: 20,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    marginBottom: 10,
-    padding: 8,
+    height: 50,
+    flex: 1,
+    color: '#333',
+    marginLeft: 10,
+  },
+  inputIcon: {
+    marginLeft: 10,
   },
   submitButton: {
-    backgroundColor: '#27ae60',
-    borderRadius: 5,
-    padding: 10,
-    marginTop: 10,
-    opacity: 0.6, // Adjust the opacity to visually indicate that the button is disabled
+    backgroundColor: '#e67e22',
+    borderRadius: 25,
+    padding: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  submitButtonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 16,
+    marginLeft: 10,
   },
 });
 
