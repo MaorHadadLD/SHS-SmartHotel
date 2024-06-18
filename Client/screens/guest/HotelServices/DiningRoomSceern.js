@@ -98,10 +98,10 @@ function DiningRoomScreen({ route }) {
     <ImageBackground source={require('../../../assets/dining_room_back.jpg')} style={styles.background}>
       <View style={styles.container}>
         {availableMeals.length > 0 ? (
-          <>
+          <View style={styles.overlay}>
             <Text style={styles.header}>Meals Menu</Text>
             {availableMeals.map(({ meal, startTime, endTime }) => (
-              <View key={meal}>
+              <View key={meal} style={styles.mealContainer}>
                 <Text style={styles.mealTime}>{`Start Time: ${startTime} | End Time: ${endTime}`}</Text>
                 <Text style={styles.mealHeader}>{meal}</Text>
                 <FlatList
@@ -109,7 +109,7 @@ function DiningRoomScreen({ route }) {
                   renderItem={({ item }) => (
                     <Text style={styles.item}>{item[1]}</Text>
                   )}
-                  ListEmptyComponent={<Text>No dishes available for {meal}</Text>}
+                  ListEmptyComponent={<Text style={styles.noDishesText}>No dishes available for {meal}</Text>}
                 />
                 <TouchableOpacity 
                   style={[styles.orderButton, hasReservation && styles.disabledButton]} 
@@ -120,7 +120,7 @@ function DiningRoomScreen({ route }) {
                 </TouchableOpacity>
               </View>
             ))}
-          </>
+          </View>
         ) : (
           <View style={styles.modalContainer}>
             <Text style={styles.header}>No meals currently available</Text>
@@ -192,6 +192,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 20,
+    borderRadius: 10,
+  },
   header: {
     fontSize: 26,
     fontWeight: 'bold',
@@ -219,6 +224,12 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     textAlign: 'center',
     color: 'white',
+  },
+  noDishesText: {
+    fontSize: 18,
+    marginVertical: 8,
+    textAlign: 'center',
+    color: 'red',
   },
   orderButton: {
     backgroundColor: '#3498db',
