@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import BackGround from '../../components/BackGround';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function SpaMainScreen({ navigation, route }) {
   const selectedHotel = route.params.selectedHotel || {};
@@ -19,7 +19,12 @@ function SpaMainScreen({ navigation, route }) {
   };
 
   return (
-    <BackGround>
+    <ImageBackground source={require('../../assets/Spa-background.jpg')} style={styles.backgroundImage}>
+
+      <LinearGradient
+        colors={['rgba(0,0,0,0.8)', 'transparent']}
+        style={styles.overlay}
+      />
       <View style={styles.container}>
         <Text style={styles.title}>Welcome to {selectedHotel.hotelName} SPA</Text>
         <TouchableOpacity style={styles.button} onPress={handleOrderMassage}>
@@ -32,34 +37,53 @@ function SpaMainScreen({ navigation, route }) {
           <Text style={styles.buttonText}>View Appointments</Text>
         </TouchableOpacity>
       </View>
-    </BackGround>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  overlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: '100%',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   title: {
     color: "white",
-    fontSize: 58,
+    fontSize: 36,
     fontWeight: 'bold',
-    marginBottom: 10,
+    textAlign: 'center',
+    marginBottom: 20,
   },
   button: {
-    borderRadius: 100,
+    borderRadius: 25,
     alignItems: "center",
-    width: 350,
-    paddingVertical: 5,
+    width: '80%',
+    paddingVertical: 15,
     marginVertical: 10,
-    backgroundColor: '#FF6B3C',
+    backgroundColor: 'rgba(255, 107, 60, 0.8)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18,
   },
 });
 
