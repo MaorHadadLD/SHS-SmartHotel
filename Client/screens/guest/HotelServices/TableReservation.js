@@ -1,239 +1,234 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, Modal, TextInput, Alert } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; // Assuming you're using Expo Icons
+import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, Alert, ImageBackground, Dimensions } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
-import { getTablesHotel,updateTables } from '../../../API/RequestCalls';
-
+import { getTablesHotel, updateTables } from '../../../API/RequestCalls';
 import moment from 'moment';
 import { sendPostRequest } from '../../../API/RequestCalls';
 
-// Dummy data for illustration purposes
+const { width, height } = Dimensions.get('window');
 
+const tablePositions = [
+  { top: height * 0.1, left: width * 0.06 },  // Position 10
+  { top: height * 0.15, left: width * 0.6 },  // Position 1
+  { top: height * 0.3, left: width * 0.14 },  // Position 2
+  { top: height * 0.3, left: width * 0.27 },  // Position 3
+  { top: height * 0.36, left: width * 0.63 },  // Position 4
+  { top: height * 0.54, left: width * 0.17 },  // Position 5
+  { top: height * 0.55, left: width * 0.63 },  // Position 6
+  { top: height * 0.65, left: width * 0.15 }, // Position 7
+  { top: height * 0.1, left: width * 0.29 }, // Position 8
+  { top: height * 0.45, left: width * 0.14 }   // Position 9
+];
 
-const TableReservation = (route) => {
+const TableReservation = ({ route }) => {
   const [tables, setTables] = useState([]);
-  const [guestData, setGuestData] = useState([]);
+  const [guestData, setGuestData] = useState(route.params.guestData);
   const [isModalVisible, setModalVisible] = useState(false);
   const [numberOfDiners, setNumberOfDiners] = useState('');
   const [arrivalTime, setArrivalTime] = useState('');
   const [currentTime, setCurrentTime] = useState(moment().format('HH:mm'));
-  const [tableId, setTableId] = useState(''); // Add this state to store the selected table ID
+  const [tableId, setTableId] = useState('');
 
   const navigation = useNavigation();
-  // console.log('TableReservation route', route.route.params.selectedHotel);
-  useEffect(() => {
-    const getTables = async () => {
-      setGuestData(route.route.params.guestData);
-        try {
-          
-            const res = await getTablesHotel(guestData.selectedHotel);
-            if (res.success) {
-                const tablesArray = Object.keys(res.data).map((key) => ({
-                    id: parseInt(key),
-                    status: res.data[key],
-                  }));
-                  setTables(tablesArray);
-                
-            }
-        } catch(error){
-            console.error('AsyncStorage error', error);
-    
-        }
-    }
-    getTables();
-    const timer = setInterval(() => {
-      setCurrentTime(moment().format('HH:mm'));
-    }, 1000); // Update current time every second
+  const pollingInterval = 3000; // Polling interval in milliseconds
 
-    return () => clearInterval(timer); // Cleanup on unmount
-    
-  
-  }, [guestData,tables]);
+  useEffect(() => {
+    fetchTables();
+
+    const intervalId = setInterval(fetchTables, pollingInterval);
+
+    return () => clearInterval(intervalId);
+  }, [guestData]);
+
+  const fetchTables = async () => {
+    try {
+      const res = await getTablesHotel(guestData.selectedHotel);
+      if (res.success) {
+        const tablesArray = Object.keys(res.data).map((key, index) => ({
+          id: parseInt(key),
+          status: res.data[key] || 'available', // Ensure default status is 'available'
+          location: tablePositions[index % tablePositions.length],
+        }));
+        setTables(tablesArray);
+      }
+    } catch (error) {
+      console.error('fetchTables error:', error);
+    }
+  };
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
   const handleCancelReservation = async () => {
-    // Reset the table status to 'available' if the reservation is canceled
-    console.log('tableId befffffoerre:', tableId)
-    setTables((prevTables) =>
-      prevTables.map((item) => (item.id === tableId ? { ...item, status: 'available' } : item))
-    );
-    toggleModal(); // Close the modal
+    try {
+      const res = await updateTables(guestData.selectedHotel, tableId, 'available');
+      if (res.success) {
+        fetchTables(); // Refresh table data after cancellation
+        toggleModal();
+      } else {
+        console.error('Failed to cancel reservation');
+      }
+    } catch (error) {
+      console.error('handleCancelReservation error:', error);
+    }
   };
-  
 
   const handleTableClick = async (tableId) => {
     const table = tables.find((item) => item.id === tableId);
     if (table.status === 'available') {
-      // Show confirmation message using an alert dialog
-      Alert.alert(
-        'Confirm Reservation',
-        `Are you sure you want to reserve Table ${tableId}?`,
-        [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: () => {
-              setTables((prevTables) =>
-                prevTables.map((item) =>
-                  item.id === tableId ? { ...item, status: 'reserved' } : item
-                )
-              );
-              console.log(`Table ${tableId} is available>>>>>>>>>>.`);
-              setTableId(tableId);
-              console.log('Table IDDDDDDDDDDDDD:', tableId);
-              toggleModal(); // Open the reservation modal
-            },
-          },
-        ],
-        { cancelable: false }
-      );
+      setTableId(tableId);
+      toggleModal();
     } else {
-      // Display message for non-available table
       Alert.alert(`Table ${tableId} is not available.`);
     }
   };
-  
-  
+
   const handleReservation = async () => {
-    // Validate the number of diners and arrival time that is not undefined
     if (!numberOfDiners || !arrivalTime) {
       Alert.alert('Please enter the number of diners and arrival time');
       return;
     }
-    //if number of diners is not a number
-    if(isNaN(numberOfDiners)){
+    if (isNaN(numberOfDiners)) {
       Alert.alert('Only numbers are allowed for the number of diners');
       return;
     }
-    if(numberOfDiners <= 0 || numberOfDiners >= 13){
+    if (numberOfDiners <= 0 || numberOfDiners >= 13) {
       Alert.alert('Number of diners should be between 1 and 12');
       return;
     }
-      console.log(`Reservation for ${numberOfDiners} diners at ${arrivalTime}`);
-      toggleModal(); // Close the modal after handling the reservation
-      try {
-        const bodyrequest = {
-          type : 'Dinning',
-          numberOfDiners: numberOfDiners,
-          arrivalTime: arrivalTime,
-          roomNumber: guestData.roomNumber,
-          hotel: guestData.selectedHotel,
-          time: moment().format('YYYY-MM-DD HH:mm:ss'),
-          tableId:tableId,
-        };
-        // Send reservation data to the server
-        console.log('tableId befffffoerre:', tableId)
-        const res = await updateTables(guestData.selectedHotel, tableId, 'reserved');
-        if (res.success) {
-          console.log('Table status updated');
-          await sendPostRequest(bodyrequest);
-          Alert.alert('Reservation successful');
-          navigation.navigate('ClientMainMenu',{selectedHotel: route.route.params.selectedHotel, guestData: guestData});
-        }
-        else {
-          console.log('Table status not updated');
-        }
-        
-      } catch (error) {
-        console.error('handleReservation error', error);
-        Alert.alert('Reservation failed');
-      }
+    try {
+      // Optimistically update the table status locally
+      setTables(prevTables =>
+        prevTables.map(table =>
+          table.id === tableId ? { ...table, status: 'reserved' } : table
+        )
+      );
 
+      const bodyrequest = {
+        type: 'Dinning',
+        numberOfDiners: numberOfDiners,
+        arrivalTime: arrivalTime,
+        roomNumber: guestData.roomNumber,
+        hotel: guestData.selectedHotel,
+        time: moment().format('YYYY-MM-DD HH:mm:ss'),
+        tableId: tableId,
+      };
+
+      const res = await updateTables(guestData.selectedHotel, tableId, 'reserved');
+      if (res.success) {
+        await sendPostRequest(bodyrequest);
+        Alert.alert('Reservation successful');
+        fetchTables(); // Refresh table data after reservation
+        navigation.navigate('ClientMainMenu', { selectedHotel: route.params.selectedHotel, guestData: guestData });
+      } else {
+        // Revert optimistic update if the reservation fails
+        setTables(prevTables =>
+          prevTables.map(table =>
+            table.id === tableId ? { ...table, status: 'available' } : table
+          )
+        );
+        Alert.alert('Reservation failed. The table might have been taken by another user.');
+      }
+    } catch (error) {
+      // Revert optimistic update if there is an error
+      setTables(prevTables =>
+        prevTables.map(table =>
+          table.id === tableId ? { ...table, status: 'available' } : table
+        )
+      );
+      console.error('handleReservation error:', error);
+      Alert.alert('Reservation failed. Please try again.');
+    }
   };
+
   const mealSchedules = [
     { meal: 'Breakfast', startTime: '07:00', endTime: '10:00' },
     { meal: 'Lunch', startTime: '12:00', endTime: '15:00' },
     { meal: 'Dinner', startTime: '18:00', endTime: '21:00' },
   ];
-  
+
   const availableMeals = mealSchedules.filter(
     ({ startTime, endTime }) => currentTime >= startTime && currentTime <= endTime
-   
   );
-
-
-  const renderTableItem = ({ item }) => (
-   <TouchableOpacity
-      style={[styles.tableItem, item.status === 'available' ? styles.availableTable : styles.nonAvailableTable]}
-      onPress={() => handleTableClick(item.id)}
-    >
-      <FontAwesome name="table" size={24} color="white" />
-      <Text style={styles.tableText}>{item.id}</Text>
-    </TouchableOpacity>
-    
-  );
-  
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Table Reservation</Text>
-      <FlatList
-        data={tables}
-        renderItem={renderTableItem}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={3} // Adjust based on your layout
-      />
-       <Modal animationType="slide" transparent={true} visible={isModalVisible}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalHeader}>Make a Reservation</Text>
-
-            <TextInput
-              style={styles.input}
-              placeholder="Number of Diners"
-              keyboardType="numeric"
-              value={numberOfDiners}
-              onChangeText={(text) => setNumberOfDiners(text)} />
-
-            <Picker
-              selectedValue={arrivalTime}
-              style={styles.input}
-              onValueChange={(itemValue) => setArrivalTime(itemValue)}
+    <ImageBackground source={require('../../../assets/dining_room_place.jpg')} style={styles.background}>
+      <View style={styles.container}>
+        <Text style={styles.header}>Table Reservation</Text>
+        <View style={styles.diningRoomLayout}>
+          {tables.map((table) => (
+            <TouchableOpacity
+              key={table.id}
+              style={[styles.tableItem, { top: table.location.top, left: table.location.left }]}
+              onPress={() => handleTableClick(table.id)}
             >
-              <Picker.Item label="Select Arrival Time" value="" />
-              {availableMeals.map(({ meal, startTime, endTime }) => {
-                const startHour = parseInt(startTime.split(':')[0]);
-                const endHour = parseInt(endTime.split(':')[0]);
-                const currentHour = parseInt(currentTime.split(':')[0]);
-                const currentMinute = parseInt(currentTime.split(':')[1]);
-                const arrivalTimes = [];
-                for (let hour = currentHour - 1 + 1; hour <= endHour; hour++) {
-                  const formattedHour = hour < 10 ? `0${hour}` : `${hour}`;
-                  arrivalTimes.push(`${formattedHour}:00`);
-                  if (hour < endHour) {
-                    arrivalTimes.push(`${formattedHour}:15`);
-                    arrivalTimes.push(`${formattedHour}:30`);
-                    arrivalTimes.push(`${formattedHour}:45`);
-                  }
-                }
-
-                return arrivalTimes.map((arrivalTime) => (
-                  <Picker.Item key={`${meal}-${arrivalTime}`} label={arrivalTime} value={arrivalTime} />
-                ));
-              })}
-            </Picker>
-            <TouchableOpacity style={styles.reserveButton} onPress={handleReservation}>
-              <Text style={styles.reserveButtonText}>Reserve</Text>
+              <MaterialIcons
+                name="table-restaurant"
+                size={40}
+                color={table.status === 'available' ? 'green' : 'red'}
+              />
+              <Text style={styles.tableText}>{table.id}</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity style={styles.closeButton} onPress={handleCancelReservation}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
+          ))}
         </View>
-      </Modal>
-    </View>
+        <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalHeader}>Make a Reservation</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Number of Diners"
+                keyboardType="numeric"
+                value={numberOfDiners}
+                onChangeText={(text) => setNumberOfDiners(text)}
+              />
+              <Picker
+                selectedValue={arrivalTime}
+                style={styles.input}
+                onValueChange={(itemValue) => setArrivalTime(itemValue)}
+              >
+                <Picker.Item label="Select Arrival Time" value="" />
+                {availableMeals.map(({ meal, startTime, endTime }) => {
+                  const startHour = parseInt(startTime.split(':')[0]);
+                  const endHour = parseInt(endTime.split(':')[0]);
+                  const currentHour = parseInt(currentTime.split(':')[0]);
+                  const arrivalTimes = [];
+                  for (let hour = currentHour - 1 + 1; hour <= endHour; hour++) {
+                    const formattedHour = hour < 10 ? `0${hour}` : `${hour}`;
+                    arrivalTimes.push(`${formattedHour}:00`);
+                    if (hour < endHour) {
+                      arrivalTimes.push(`${formattedHour}:15`);
+                      arrivalTimes.push(`${formattedHour}:30`);
+                      arrivalTimes.push(`${formattedHour}:45`);
+                    }
+                  }
+                  return arrivalTimes.map((arrivalTime) => (
+                    <Picker.Item key={`${meal}-${arrivalTime}`} label={arrivalTime} value={arrivalTime} />
+                  ));
+                })}
+              </Picker>
+              <TouchableOpacity style={styles.reserveButton} onPress={handleReservation}>
+                <Text style={styles.reserveButtonText}>Reserve</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
   container: {
     flex: 1,
     padding: 16,
@@ -244,30 +239,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
+  diningRoomLayout: {
+    flex: 1,
+    position: 'relative',
+  },
   tableItem: {
-    flexDirection: 'row',
+    position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '30%', // Adjust width as needed for spacing
-    height: 100,
-    margin: 5,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-  },
-  availableTable: {
-    backgroundColor: 'green',
-  },
-  nonAvailableTable: {
-    backgroundColor: 'grey',
   },
   tableText: {
-    marginLeft: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     color: 'white',
     fontWeight: 'bold',
+    marginTop: 5,
+    paddingHorizontal: 5,
+    borderRadius: 3,
   },
-  // Modal styles
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
