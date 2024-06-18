@@ -13,16 +13,12 @@ function DinningRoomStaff({ route }) {
     { meal: 'Lunch', startTime: moment('09:00', 'HH:mm'), endTime: moment('12:00', 'HH:mm') },
     { meal: 'Dinner', startTime: moment('15:00', 'HH:mm'), endTime: moment('18:00', 'HH:mm') },
   ];
+
   const [requests, setRequests] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [breakfast, setBreakfast] = useState([]);
-  const [lunch, setLunch] = useState([]);
-  const [dinner, setDinner] = useState([]);
-  const [newMeal, setNewMeal] = useState([]);
-  const [updatedBreakfast, setUpdatedBreakfast] = useState([]);
-  const [updatedLunch, setUpdatedLunch] = useState([]);
-  const [updatedDinner, setUpdatedDinner] = useState([]);
-  
+  const [meals, setMeals] = useState({ breakfast: [], lunch: [], dinner: [] });
+  const [newMeal, setNewMeal] = useState({ breakfast: [], lunch: [], dinner: [] });
+
   const currentTime = moment();
   const isBreakfastTime = currentTime.isBetween(mealSchedules[0].startTime, mealSchedules[0].endTime);
   const isLunchTime = currentTime.isBetween(mealSchedules[1].startTime, mealSchedules[1].endTime);
@@ -42,10 +38,19 @@ function DinningRoomStaff({ route }) {
       }
     };
 
-    const interval = setInterval(fetchRequests, 5000); // Fetch requests every 5 seconds
-    fetchRequests(); // Initial fetch
+    const fetchMeals = async () => {
+      try {
+        const response = await getMealsHotel(route.params.staffData.hotel);
+        if (response.success) {
+          setMeals(response.data);
+        }
+      } catch (error) {
+        console.error('fetchMeals error:', error);
+      }
+    };
 
-    return () => clearInterval(interval); // Clear interval on component unmount
+    fetchMeals();
+    fetchRequests();
   }, [route.params.staffData.hotel]);
 
   const handleRequestStatusChange = async (req) => {
@@ -70,42 +75,28 @@ function DinningRoomStaff({ route }) {
   };
 
   const handleChangeMealForHotel = () => {
-    setUpdatedBreakfast(breakfast);
-    setUpdatedLunch(lunch);
-    setUpdatedDinner(dinner);
+    setNewMeal(meals);
     setModalVisible(true); // Show the modal for editing the meal
   };
 
   const handleSaveMeal = async () => {
     setModalVisible(false); // Close the modal after saving
     try {
-      const res = await updateMealHotel({ hotel: route.params.staffData.hotel, meals: { breakfast, lunch, dinner } });
-      Alert.alert('Meal Change Success', `Meal changed to ${newMeal} for all guests from this hotel`);
+      const res = await updateMealHotel({ hotel: route.params.staffData.hotel, meals: newMeal });
+      Alert.alert('Meal Change Success', `Meals updated for all guests from this hotel`);
     } catch (error) {
       console.error('Async operation failed:', error);
       Alert.alert('Error', 'An error occurred while saving the meal changes');
     }
   };
 
-  const handleBreakfastChange = (id, text) => {
-    const updatedBreakfast = { ...breakfast, [id]: text };
-    setBreakfast(updatedBreakfast);
-  };
-
-  const handleLunchChange = (id, text) => {
-    const updatedLunch = { ...lunch, [id]: text };
-    setLunch(updatedLunch);
-  };
-
-  const handleDinnerChange = (id, text) => {
-    const updatedDinner = { ...dinner, [id]: text };
-    setDinner(updatedDinner);
+  const handleMealChange = (mealType, id, text) => {
+    const updatedMeal = { ...newMeal[mealType], [id]: text };
+    setNewMeal({ ...newMeal, [mealType]: updatedMeal });
   };
 
   const handleCancelEdit = () => {
-    setBreakfast(updatedBreakfast);
-    setLunch(updatedLunch);
-    setDinner(updatedDinner);
+    setNewMeal(meals);
     setModalVisible(false);
   };
 
@@ -152,9 +143,9 @@ function DinningRoomStaff({ route }) {
           <Text style={styles.detailText}>Name: {route.params.staffData.employeeName}</Text>
           <Text style={styles.detailText}>Role: {route.params.staffData.role}</Text>
           <Text style={styles.detailText}>Hotel: {route.params.staffData.hotel.hotelName} {route.params.staffData.hotel.city}</Text>
-          {isBreakfastTime && <Text style={styles.detailText}>Breakfast: {Object.values(breakfast).join(', ')}</Text>}
-          {isLunchTime && <Text style={styles.detailText}>Lunch: {Object.values(lunch).join(', ')}</Text>}
-          {isDinnerTime && <Text style={styles.detailText}>Dinner: {Object.values(dinner).join(', ')}</Text>}
+          {isBreakfastTime && <Text style={styles.detailText}>Breakfast: {Object.values(meals.breakfast).join(', ')}</Text>}
+          {isLunchTime && <Text style={styles.detailText}>Lunch: {Object.values(meals.lunch).join(', ')}</Text>}
+          {isDinnerTime && <Text style={styles.detailText}>Dinner: {Object.values(meals.dinner).join(', ')}</Text>}
         </View>
 
         <Modal
@@ -170,39 +161,39 @@ function DinningRoomStaff({ route }) {
                 <>
                   {isBreakfastTime && (
                     <FlatList
-                      data={Object.keys(breakfast).map((key) => ({ id: key, name: breakfast[key] }))}
+                      data={Object.keys(newMeal.breakfast).map((key) => ({ id: key, name: newMeal.breakfast[key] }))}
                       keyExtractor={(item) => item.id}
                       renderItem={({ item }) => (
                         <TextInput
                           style={styles.input}
-                          value={breakfast[item.id]}
-                          onChangeText={(text) => handleBreakfastChange(item.id, text)}
+                          value={item.name}
+                          onChangeText={(text) => handleMealChange('breakfast', item.id, text)}
                         />
                       )}
                     />
                   )}
                   {isLunchTime && (
                     <FlatList
-                      data={Object.keys(lunch).map((key) => ({ id: key, name: lunch[key] }))}
+                      data={Object.keys(newMeal.lunch).map((key) => ({ id: key, name: newMeal.lunch[key] }))}
                       keyExtractor={(item) => item.id}
                       renderItem={({ item }) => (
                         <TextInput
                           style={styles.input}
                           value={item.name}
-                          onChangeText={(text) => handleLunchChange(item.id, text)}
+                          onChangeText={(text) => handleMealChange('lunch', item.id, text)}
                         />
                       )}
                     />
                   )}
                   {isDinnerTime && (
                     <FlatList
-                      data={Object.keys(dinner).map((key) => ({ id: key, name: dinner[key] }))}
+                      data={Object.keys(newMeal.dinner).map((key) => ({ id: key, name: newMeal.dinner[key] }))}
                       keyExtractor={(item) => item.id}
                       renderItem={({ item }) => (
                         <TextInput
                           style={styles.input}
-                          value={dinner[item.id]}
-                          onChangeText={(text) => handleDinnerChange(item.id, text)}
+                          value={item.name}
+                          onChangeText={(text) => handleMealChange('dinner', item.id, text)}
                         />
                       )}
                     />
