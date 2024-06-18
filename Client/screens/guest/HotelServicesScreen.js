@@ -1,4 +1,3 @@
-// Import necessary modules from react-native
 import React from 'react';
 import { FlatList, View, StyleSheet, Text, ImageBackground } from 'react-native';
 import { ClassDpCategories } from '../../data/ClassDpData';
@@ -11,6 +10,8 @@ function HotelServicesScreen({ route, navigation }) {
   function renderClassDpCategoryItem(itemData) {
     const pressHandler = async () => {
       if (itemData.item.title === 'Dining Room') {
+        navigation.navigate('DiningRoomScreen', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
+      } else if (itemData.item.title === 'Table Reservation') {
         try {
           const bodyrequest = {
             roomNumber: route.params.guestData.roomNumber,
@@ -19,12 +20,12 @@ function HotelServicesScreen({ route, navigation }) {
           };
           const result = await checkStatusReq(bodyrequest);
           if (result.success) {
-            alert('You have already made a reservation for Dining Room. Please wait to be served before making another request');
+            alert('You have already made a reservation for the Dining Room. You cannot make another reservation.');
           } else {
-            navigation.navigate('DiningRoomScreen', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
+            navigation.navigate('TableReservation', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
           }
         } catch (error) {
-          console.error('DiningRoom error: ', error);
+          console.error('TableReservation error: ', error);
         }
       } else if (itemData.item.title === 'Cleaning Room') {
         try {
@@ -48,8 +49,7 @@ function HotelServicesScreen({ route, navigation }) {
         navigation.navigate('PoolBarRequestScreen', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
       } else if (itemData.item.title === 'Reception') {
         navigation.navigate('GuestChatScreen', { guestData: route.params.guestData, selectedHotel: route.params.selectedHotel });
-      }
-       else {
+      } else {
         alert('This service is not available');
       }
     };
