@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, Modal, TextInput, ImageBackground } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet, Modal, TextInput, ImageBackground, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
-import { sendPostRequest } from '../../../API/RequestCalls';
+import { sendPostRequest, checkStatusReq } from '../../../API/RequestCalls';
 import { getMealsHotel } from '../../../API/StaffCalls';
 import { useNavigation } from '@react-navigation/native';
 
@@ -84,6 +84,25 @@ function DiningRoomScreen({ route }) {
     }
   };
 
+  const navigateToTableReservation = async () => {
+    try {
+      const bodyrequest = {
+        roomNumber: guestData.roomNumber,
+        type: 'Dinning',
+        hotel: guestData.selectedHotel
+      };
+      const result = await checkStatusReq(bodyrequest);
+      if (result.success) {
+        Alert.alert('Alert', 'You have already made a reservation for the Dining Room. You cannot make another reservation.');
+      } else {
+        navigation.navigate('TableReservation', { selectedHotel: route.params.selectedHotel, guestData: guestData });
+      }
+    } catch (error) {
+      console.error('navigateToTableReservation error:', error);
+      Alert.alert('Error', 'An error occurred while checking reservation status.');
+    }
+  };
+
   const mealSchedules = [
     { meal: 'Breakfast', startTime: '07:00', endTime: '10:00' },
     { meal: 'Lunch', startTime: '12:00', endTime: '15:00' },
@@ -98,7 +117,7 @@ function DiningRoomScreen({ route }) {
     <ImageBackground source={require('../../../assets/dining_room_back.jpg')} style={styles.background}>
       <View style={styles.container}>
         {availableMeals.length > 0 ? (
-          <View style={styles.overlay}>
+          <>
             <Text style={styles.header}>Meals Menu</Text>
             {availableMeals.map(({ meal, startTime, endTime }) => (
               <View key={meal} style={styles.mealContainer}>
@@ -113,18 +132,18 @@ function DiningRoomScreen({ route }) {
                 />
                 <TouchableOpacity 
                   style={[styles.orderButton, hasReservation && styles.disabledButton]} 
-                  onPress={() => hasReservation ? null : navigation.navigate('TableReservation', { selectedHotel: route.params.selectedHotel, guestData: guestData })}
+                  onPress={navigateToTableReservation}
                   disabled={hasReservation}
                 >
                   <Text style={styles.orderButtonText}>{hasReservation ? 'Reservation Exists' : 'Reserve a Table'}</Text>
                 </TouchableOpacity>
               </View>
             ))}
-          </View>
+          </>
         ) : (
           <View style={styles.modalContainer}>
             <Text style={styles.header}>No meals currently available</Text>
-            <Text style={styles.header}>Please come back during meal hours:</Text>
+            <Text style={styles.subHeader}>Please come back during meal hours:</Text>
             <FlatList
               data={mealSchedules}
               renderItem={({ item }) => (
@@ -192,11 +211,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    padding: 20,
-    borderRadius: 10,
-  },
   header: {
     fontSize: 26,
     fontWeight: 'bold',
@@ -205,11 +219,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'gold',
   },
+  subHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    color: '#ddd',
+  },
+  mealContainer: {
+    marginBottom: 20,
+  },
   mealHeader: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 5,
-    marginTop: 25,
     textAlign: 'center',
     color: 'white',
   },
