@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     selectedCategoryButton: {
-        backgroundColor: '#28a745',
-        borderColor: '#28a745',
+        backgroundColor: '#FF6B3C',
+        borderColor: '#FF6B3C',
     },
     categoryButtonText: {
         fontSize: 14,
@@ -142,8 +142,8 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     selectedSubcategoryButton: {
-        backgroundColor: '#28a745',
-        borderColor: '#28a745',
+        backgroundColor: '#FF6B3C',
+        borderColor: '#FF6B3C',
     },
     subcategoryButtonText: {
         fontSize: 14,
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     addToBasketButton: {
-        backgroundColor: '#28a745',
+        backgroundColor: '#FF6B3C',
         padding: 10,
         borderRadius: 5,
         shadowColor: '#000',

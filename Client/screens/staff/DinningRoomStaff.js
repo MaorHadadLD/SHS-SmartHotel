@@ -313,9 +313,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   changeMealButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#FF6B3C',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 50,
     marginTop: 10,
     alignItems: 'center',
   },

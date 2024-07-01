@@ -186,10 +186,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
     startButton: {
-        backgroundColor: '#28a745',
+        backgroundColor: '#FF6B3C',
     },
     completeButton: {
-        backgroundColor: '#dc3545',
+        backgroundColor: '#28a745',
     },
     buttonText: {
         color: 'white',

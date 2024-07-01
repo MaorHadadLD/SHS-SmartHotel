@@ -255,9 +255,9 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   orderButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#FF6B3C',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 50,
     marginTop: 20,
     alignItems: 'center',
   },

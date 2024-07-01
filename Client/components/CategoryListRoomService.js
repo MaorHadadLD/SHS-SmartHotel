@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     selectedCategoryButton: {
-        backgroundColor: '#28a745',
-        borderColor: '#28a745',
+        backgroundColor: '#FF6b3c',
+        borderColor: '#FF6b3c',
     },
     categoryButtonText: {
         fontSize: 16,
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     addToBasketButton: {
-        backgroundColor: '#27ae60',
+        backgroundColor: '#FF6b3c',
         padding: 10,
         borderRadius: 5,
         flexDirection: 'row',

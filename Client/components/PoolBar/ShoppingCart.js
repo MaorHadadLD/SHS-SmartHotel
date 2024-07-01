@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     submitButton: {
-        backgroundColor: '#27ae60',
+        borderBlockColor: '#FF6B3C',
         borderRadius: 5,
         padding: 10,
         alignItems: 'center',

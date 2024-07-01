@@ -92,9 +92,9 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     sendOrderButton: {
-        backgroundColor: '#28a745',
+        backgroundColor: '#FF6B3C',
         padding: 15,
-        borderRadius: 8,
+        borderRadius: 50,
         alignItems: 'center',
         margin: 10,
     },
