@@ -156,4 +156,6 @@ export const updateGuestOPT = async (guestEmail) => {
         return false;
     }
 }
-export const deleteGuest = async (guest) => {}
+export const deleteGuest = async (guest) => {
+    
+}

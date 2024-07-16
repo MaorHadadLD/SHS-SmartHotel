@@ -36,6 +36,7 @@ import GuestChatScreen from '../screens/guest/HotelServices/GuestChatScreen';
 import ReceptionMainScreen from '../screens/staff/ReceptionMainScreen';
 import ReceptionChatScreen from '../screens/staff/ReceptionChatScreen';
 import GuestAppointmentsScreen from '../screens/guest/GuestAppointmentsScreen';
+import ManagerScreen from '../screens/staff/ManagerScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +79,7 @@ const MainStack = () => (
     <Stack.Screen name="PoolBarScreen" component={PoolBarScreen} />
     <Stack.Screen name="DinningRoomStaff" component={DinningRoomStaff} />
     <Stack.Screen name="SpaStaffScreen" component={SpaStaffScreen} />
+    <Stack.Screen name="ManagerScreen" component={ManagerScreen} />
     <Stack.Screen name="GuestChatScreen" component={GuestChatScreen} />
     <Stack.Screen name="ReceptionMainScreen" component={ReceptionMainScreen} /> 
     <Stack.Screen name="ReceptionChatScreen" component={ReceptionChatScreen} />

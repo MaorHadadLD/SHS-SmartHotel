@@ -49,11 +49,16 @@ const VerificationScreen = (route) => {
         return;
       }
       const resutt = await resendOTP(email);
+      if (resutt.success) {
+        Alert.alert(resutt.data);
+      } else {
+        Alert.alert(resutt.data);
+      }
 
     }catch (error) {
       console.error('Resend OTP error:', error.message);
     }
-    Alert.alert('Resend OTP', 'OTP resent successfully!');
+    // Alert.alert('Resend OTP', 'OTP resent successfully!');
   };
 
   return (

@@ -40,12 +40,12 @@ function ClientMainMenu({ route }) {
 
   const menuItems = [
     { id: '1', title: "Hotel Information", screen: "HotelInfoScreen", icon: 'info-circle' },
-    { id: '2', title: "Room Key", screen: "RoomKeyScreen", icon: 'key' },
-    { id: '3', title: "Hotel Services", screen: "HotelServicesScreen", icon: 'concierge-bell' },
-    { id: '4', title: "Request Tracking", screen: "RequestTrackingScreen", icon: 'clipboard-list' },
-    { id: '5', title: "Nearby Activities", screen: "NearbyActivitiesScreen", icon: 'map-marker-alt' },
-    { id: '6', title: "Spa", screen: "SpaMainScreen", icon: 'spa' },
-    { id: '7', title: "Check Out", screen: "CheckOutScreen", icon: 'sign-out-alt' },
+    // { id: '2', title: "Room Key", screen: "RoomKeyScreen", icon: 'key' },
+    { id: '2', title: "Hotel Services", screen: "HotelServicesScreen", icon: 'concierge-bell' },
+    { id: '3', title: "Request Tracking", screen: "RequestTrackingScreen", icon: 'clipboard-list' },
+    { id: '4', title: "Nearby Activities", screen: "NearbyActivitiesScreen", icon: 'map-marker-alt' },
+    { id: '5', title: "Spa", screen: "SpaMainScreen", icon: 'spa' },
+    { id: '6', title: "Check Out", screen: "CheckOutScreen", icon: 'sign-out-alt' },
   ];
 
   const renderItem = ({ item }) => {
