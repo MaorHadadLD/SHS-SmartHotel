@@ -1,5 +1,6 @@
 import firebaseApp from '../firebaseConfig.js';
 import { getDatabase, ref, get, query, orderByChild, equalTo ,update} from 'firebase/database';
+import { sendEmail } from '../routes/MailRoute.js';
 
 const db = getDatabase(firebaseApp);
 
@@ -126,5 +127,33 @@ export const updateGuestRoomNumber = async (guestEmail, roomNumber) => {
     }
 }
 
+export const updateGuestOPT = async (guestEmail) => {
+    try {
+        const result = await getGuestByEmail(guestEmail);
+        const guestData = Object.values(result)[0];
+        const guestKey = Object.keys(result)[0]; 
+        if (!guestData) {
+            return false;
+        }
 
+        // Generate a random 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        // Update the guest data with the generated OTP
+        const updatedGuestData = {
+            ...guestData,
+            otp: otp
+        };
+        const guestRef = ref(db, `guests/${guestKey}`);
+        // Use update to set the new guest data
+        await update(guestRef, updatedGuestData);
+
+        // Send the email with the updated OTP
+        await sendEmail(guestEmail, otp);
+
+        return true;
+    } catch (error) {
+        console.error("updateGuestOPT", error);
+        return false;
+    }
+}
 export const deleteGuest = async (guest) => {}

@@ -8,6 +8,7 @@ import { sendRoomRequest } from '../../API/RequestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackGround from '../../components/BackGround';
 import Btn from '../../components/Btn';
+import { resendOTP } from '../../API/GuestCalls';
 
 const VerificationScreen = (route) => {
   const [email, setEmail] = useState('');
@@ -41,9 +42,17 @@ const VerificationScreen = (route) => {
 
 
   const handleResendOTP = async () => {
-    // Implement the logic to resend OTP
-    // You can generate a new OTP and send it to the user's email
-    // For simplicity, let's just display an alert here
+    try{
+      console.log("handleResendOTP", email);
+      if (email === '') {
+        Alert.alert('Resend OTP', 'Please enter your email address!');
+        return;
+      }
+      const resutt = await resendOTP(email);
+
+    }catch (error) {
+      console.error('Resend OTP error:', error.message);
+    }
     Alert.alert('Resend OTP', 'OTP resent successfully!');
   };
 
