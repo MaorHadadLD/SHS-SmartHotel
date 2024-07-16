@@ -38,7 +38,7 @@ export default function CategoryListRoomService({ categoryList, products, onAddT
             <ScrollView>
                 {filteredProducts.map((product) => (
                     <View key={product.id} style={styles.productContainer}>
-                        <Image source={{ uri: `https://via.placeholder.com/100?text=${product.name}` }} style={styles.productImage} />
+                        <Image source={product.img } style={styles.productImage} />
                         <Text style={styles.productName}>{product.name}</Text>
                         <Text style={styles.productPrice}>Price: ${product.price}</Text>
                         <View style={styles.quantityContainer}>
