@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BaseURL = 'http://192.168.1.124:3002/';
-// const BaseURL = 'http://192.168.1.196:3002/';
+// const BaseURL = 'http://192.168.1.124:3002/';
+const BaseURL = 'http://192.168.1.162:3002/';
 
 export const sendLoginGuest = async (email, password, selectedHotel) => {
   try {
@@ -28,5 +28,14 @@ export const getGuestDetails = async (email) => {
     return response.data;
   } catch (error) {
     console.error("getGuestDetails", error);
+  }
+}
+
+export const resendOTP = async (email) => {
+  try {
+    const response = await axios.post(`${BaseURL}resendOTP`, { email });
+    return response.data;
+  } catch (error) {
+    console.error("resendOTP", error);
   }
 }

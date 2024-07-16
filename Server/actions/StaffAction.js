@@ -1,5 +1,6 @@
+import e from 'express';
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, get, orderByChild, equalTo, query, update,push } from 'firebase/database';
+import { getDatabase, ref, get, orderByChild, equalTo, query, update,push, set, remove } from 'firebase/database';
 
 const db = getDatabase(firebaseApp);
 export const StaffLogin = async (employeeNumber, password) => {
@@ -191,3 +192,38 @@ export const updateMealByHotel = async (hotel, meals) => {
         return { success: false, data: error.message };
     }
 }
+
+
+export const addEmployee = async (employeeData) => {
+  try {
+    const employeeRef = ref(db, `staff/${employeeData.employeeNumber}`);
+    const employeeSnapshot = await get(employeeRef);
+    console.log("employeeSnapshot", employeeSnapshot.exists());
+    if (employeeSnapshot.exists()) {
+      return { success: false, message: 'Employee already exists' };
+    }
+    await set(employeeRef, employeeData);
+    return { success: true, message: 'Employee added successfully' };
+  } catch (error) {
+    console.error('Error adding employee:', error);
+    return { success: false, message: error.message };
+  }
+};
+
+export const deleteEmployee = async (employeeNumber) => {
+    if (employeeNumber === '' || employeeNumber === null) {
+      return { success: false, message: 'Employee number is required' };
+    }
+  try {
+    const employeeRef = ref(db, `staff/${employeeNumber}`);
+    const employeeSnapshot = await get(employeeRef);
+    if (!employeeSnapshot.exists()) {
+      return { success: false, message: 'Employee not found' };
+    }
+    await remove(employeeRef);
+    return { success: true, message: 'Employee deleted successfully' };
+  } catch (error) {
+    console.error('Error deleting employee:', error);
+    return { success: false, message: error.message };
+  }
+};

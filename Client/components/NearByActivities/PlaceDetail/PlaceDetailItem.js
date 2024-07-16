@@ -88,7 +88,7 @@ export default function PlaceDetailItem({ place, onDirectionClick }) {
             justifyContent:'center'
           }}
         >
-         <Ionicons name="md-share-outline" size={24} color="black" />
+         <Ionicons name="share-outline" size={24} color="black" />
           <Text style={{  fontSize: 16 }}>Share</Text>
         </TouchableOpacity>
     </View>

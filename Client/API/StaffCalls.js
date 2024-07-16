@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const BaseURL = 'http://192.168.1.124:3002/';
-// const BaseURL = 'http://192.168.1.196:3002/';
-
+// const BaseURL = 'http://192.168.1.124:3002/';
+const BaseURL = 'http://192.168.1.162:3002/';
 export const sendLoginStaff = async (employeeNumber, password) => {
     console.log("sendLoginStaff", employeeNumber, password);
   try {
@@ -51,5 +50,26 @@ export const updateMealHotel = async (hotel, meal) => {
     return response.data;
   } catch (error) {
     console.error("updateMealHotel", error);
+  }
+
+}
+
+export const addEmployee = async (employeeData) => {
+  console.log("addEmployee", employeeData);
+  try {
+    const response = await axios.post(`${BaseURL}addEmployee`, employeeData);
+    return response.data;
+  } catch (error) {
+    console.error("addEmployee", error);
+  }
+}
+
+export const deleteEmployee = async (employeeNumber) => {
+  console.log("deleteEmployee", employeeNumber);
+  try {
+    const response = await axios.post(`${BaseURL}deleteEmployee`,  {employeeNumber});
+    return response.data;
+  } catch (error) {
+    console.error("deleteEmployee", error);
   }
 }

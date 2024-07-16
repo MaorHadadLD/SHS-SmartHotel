@@ -1,4 +1,4 @@
-import {getGuestByEmail, updateGuestSelectedHotel} from '../actions/GuestAction.js';    
+import {getGuestByEmail, updateGuestOPT, updateGuestSelectedHotel} from '../actions/GuestAction.js';    
 
 export const requestSuccess = (data) => ({success: true, data})
 export const requestFailure = (data) => ({ success: false, data });
@@ -39,6 +39,15 @@ export const getGuestDetailsController = async (body) => {
     const guestData = Object.values(result)[0];
     if (guestData) {
         return requestSuccess(guestData);
+    } else {
+        return requestFailure("Email not found");
+    }
+}
+
+export const requestOTP = async (body) => {
+    const result = await updateGuestOPT(body.email);
+    if (result) {
+        return requestSuccess("OTP resent successfully!");
     } else {
         return requestFailure("Email not found");
     }

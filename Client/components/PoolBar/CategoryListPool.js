@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet, TextInput, ScrollView, Image } from 'react-native';
 
 export default function CategoryListPool({ categoryList, products, onAddToCart }) {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -74,6 +74,7 @@ export default function CategoryListPool({ categoryList, products, onAddToCart }
             <View style={styles.productListContainer}>
                 {filteredProducts.map((product) => (
                     <View key={product.id} style={styles.productContainer}>
+                        <Image source={product.image} style={styles.productImage} />
                         <Text style={styles.productName}>{product.name}</Text>
                         <Text style={styles.productPrice}>${product.price}</Text>
                         <View style={styles.quantityContainer}>
@@ -208,6 +209,14 @@ const styles = StyleSheet.create({
     productListContainer: {
         flex: 1,
         marginTop: 10,
-        paddingHorizontal: 10, // Added to ensure products are not too far from categories
+        paddingHorizontal: 10, 
+        
+    },
+    productImage: {
+        width: 150,
+        height: 150,
+        borderRadius: 10,
+        marginBottom: 10,
+
     },
 });
