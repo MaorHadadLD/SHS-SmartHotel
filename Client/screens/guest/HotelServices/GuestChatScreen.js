@@ -1,38 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
-import { getDatabase, ref, onValue, push } from 'firebase/database';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, Alert } from 'react-native';
+import { getDatabase, ref, onValue } from 'firebase/database';
+import { getChatMessages, sendChatMessage } from '../../../API/chatCalls';
 
 const GuestChatScreen = ({ route }) => {
-  const { roomNumber } = route.params;
+  const { roomNumber } = route.params.guestData || {};
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
+  const [messagesArray, setMessagesArray] = useState([]);
+  const database = getDatabase();
 
   useEffect(() => {
-    const db = getDatabase();
-    const chatRef = ref(db, `chats/${roomNumber}`);
+    if (!roomNumber) {
+      alert('You do not have an assigned room.');
+      return;
+    }
+
+    const fetchMessages = async () => {
+      try {
+        const messages = await getChatMessages(roomNumber);
+        const messagesArray = messages ? Object.entries(messages).map(([key, value]) => ({ id: key, ...value })) : [];
+        setChatMessages(messagesArray);
+        console.log("Fetched messages:", messagesArray);
+      } catch (error) {
+        console.error("Error fetching messages:", error.message);
+      }
+    };
+
+    fetchMessages();
     
+    const chatRef = ref(database, `chats/${roomNumber}`);
     const unsubscribe = onValue(chatRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const messages = Object.values(data);
-        setChatMessages(messages);
+      if (snapshot.exists()) {
+        const messages = snapshot.val();
+        setMessagesArray(Object.entries(messages).map(([key, value]) => ({ id: key, ...value })));
+        setChatMessages(messagesArray);
       }
     });
 
     return () => {
       unsubscribe();
     };
-  }, [roomNumber]);
+  }, [roomNumber, messagesArray]);
 
-  const sendMessage = async () => {
-    const db = getDatabase();
-    const chatRef = ref(db, `chats/${roomNumber}`);
-    await push(chatRef, {
-      sender: 'guest',
-      message,
-      timestamp: Date.now()
-    });
-    setMessage('');
+  const sendMessageHandler = async () => {
+    if (!roomNumber) return;
+
+    const msg = { room: roomNumber, sender: 'guest', message };
+    try {
+      await sendChatMessage(roomNumber, 'guest', message);
+      setMessage('');
+    } catch (error) {
+      console.error("Error sending message:", error.message);
+    }
   };
 
   const renderMessageItem = ({ item }) => (
@@ -43,18 +63,24 @@ const GuestChatScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={chatMessages}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderMessageItem}
-      />
-      <TextInput
-        style={styles.input}
-        value={message}
-        onChangeText={setMessage}
-        placeholder="Type your message"
-      />
-      <Button title="Send" onPress={sendMessage} />
+      {roomNumber ? (
+        <>
+          <FlatList
+            data={chatMessages}
+            keyExtractor={(item) => item.id}
+            renderItem={renderMessageItem}
+          />
+          <TextInput
+            style={styles.input}
+            value={message}
+            onChangeText={setMessage}
+            placeholder="Type your message"
+          />
+          <Button title="Send" onPress={sendMessageHandler} />
+        </>
+      ) : (
+        <Text style={styles.errorText}>You do not have an assigned room.</Text>
+      )}
     </View>
   );
 };
@@ -83,6 +109,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     borderRadius: 10,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+    marginVertical: 20,
   },
 });
 
