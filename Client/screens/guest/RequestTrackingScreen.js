@@ -59,9 +59,25 @@ function RequestTracking() {
         <TouchableOpacity key={request.id} style={styles.requestCard} onPress={() => handleRequestPress(request)}>
             <View style={styles.requestHeader}>
                 <Text style={styles.requestType}>Request:</Text>
-                <Text style={styles.requestNotice}>{request.notice}</Text>
+                {request.department === 'CleaningRoom' && (
+                    <Text style={styles.requestNotice}>{request.notice}</Text>
+                )}
+                {(request.department === 'RoomService' || request.department === 'PoolBar') && request.cart && (
+                    <>
+                        {request.cart.map((item, index) => (
+                            <Text key={index} style={styles.requestNotice}>
+                                {item.productName}: {item.quantity}
+                            </Text>
+                        ))}
+                    </>
+                )}
+                {request.department === 'Dinning' && (
+                    <Text style={styles.requestNotice}>Table {request.tableId}: {request.notice}</Text>
+                )}
             </View>
-            <Text style={styles.requestStatus}>Status: {request.status}</Text>
+            {(request.department === 'CleaningRoom' || request.department === 'RoomService' || request.department === 'PoolBar') && (
+                <Text style={styles.requestStatus}>Status: {request.status}</Text>
+            )}
         </TouchableOpacity>
     );
 
@@ -101,30 +117,24 @@ function RequestTracking() {
                         <View style={styles.modalContent}>
                             <Text style={styles.modalTitle}>Request Details</Text>
                             <Text style={styles.modalText}>Request: {selectedRequest.notice}</Text>
-                            <Text style={styles.modalText}>Status: {selectedRequest.status}</Text>
+                            {selectedRequest.department === 'CleaningRoom' && (
+                                <Text style={styles.modalText}>Status: {selectedRequest.status}</Text>
+                            )}
+                            {(selectedRequest.department === 'RoomService' || selectedRequest.department === 'PoolBar') && selectedRequest.cart && (
+                                <>
+                                    {selectedRequest.cart.map((item, index) => (
+                                        <Text key={index} style={styles.modalText}>
+                                            {item.productName}: {item.quantity}
+                                        </Text>
+                                    ))}
+                                    <Text style={styles.modalText}>Status: {selectedRequest.status}</Text>
+                                </>
+                            )}
                             {selectedRequest.department === 'Dinning' && (
                                 <>
                                     <Text style={styles.modalText}>Number of diners: {selectedRequest.numberOfDiners}</Text>
                                     <Text style={styles.modalText}>Arrival time: {selectedRequest.arrivalTime}</Text>
                                     <Text style={styles.modalText}>Table Number: {selectedRequest.tableId}</Text>
-                                </>
-                            )}
-                            {selectedRequest.department === 'PoolBar' && (
-                                <>
-                                    {selectedRequest.cart.map((item, index) => (
-                                        <Text key={index} style={styles.modalText}>
-                                            {item.productName}: {item.quantity}
-                                        </Text>
-                                    ))}
-                                </>
-                            )}
-                            {selectedRequest.department === 'RoomService' && (
-                                <>
-                                    {selectedRequest.cart.map((item, index) => (
-                                        <Text key={index} style={styles.modalText}>
-                                            {item.productName}: {item.quantity}
-                                        </Text>
-                                    ))}
                                 </>
                             )}
                             <TouchableOpacity
