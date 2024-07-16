@@ -1,9 +1,8 @@
 // HotelInfoScreen.js
-import React from "react";
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 import BackGround from "../../components/BackGround";
 import Btn from "../../components/Btn";
-import { useState } from "react";
 
 const HotelInfoScreen = ({ route }) => {
   const {
@@ -21,17 +20,7 @@ const HotelInfoScreen = ({ route }) => {
     KeyOnSaturday,
     checkOutInfo,
   } = route.params.selectedHotel || {};
-  console.log("HotelInfoScreen route.params", route.params);
-  // Check if selectedHotel is defined before accessing its properties
-  if (!route.params.selectedHotel) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>Hotel information not available.</Text>
-      </View>
-    );
-  }
-  
-  
+
   const [showwifiInfo, setShowwifiInfo] = useState(false);
   const [showCheckOutInfo, setShowCheckOutInfo] = useState(false);
   const [showHotelResturantInfo, setShowHotelResturantInfo] = useState(false);
@@ -39,241 +28,170 @@ const HotelInfoScreen = ({ route }) => {
   const [showSnacksduringthedayInfo, setShowSnacksduringthedayInfo] = useState(false);
   const [showSabbathInfo, setShowSabbathInfo] = useState(false);
 
-
   return (
-    <BackGround>
-      <ScrollView style={styles.container}>
-        <Text style={{ color: "white", fontSize: 58, fontWeight: 'bold', marginBottom: 10 }}>Hotel Information </Text>
-        {/*Button to show hotel resturant category */}
+    <ImageBackground source={require("../../assets/mod1.jpg")} style={styles.background}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.header}>Hotel Information</Text>
+
         {!showHotelResturantInfo && (
-          <Btn
-            bgColor="#FF6B3C"
-            btnLabel="Hotel Resturant Info"
-            textColor="white"
-            Press={() => setShowHotelResturantInfo(true)}
-          />
+          <TouchableOpacity style={styles.btn} onPress={() => setShowHotelResturantInfo(true)}>
+            <Text style={styles.btnText}>Hotel Restaurant Info</Text>
+          </TouchableOpacity>
         )}
-        
-        {/* Show hotel resturant info if the button is pressed */}
         {showHotelResturantInfo && (
-          <View style={styles.infoContainer}>
-          <View style={styles.infoContent}>
+          <View style={styles.infoSection}>
             <Text style={styles.infoTitle}>Breakfasts</Text>
             <Text style={styles.infoText}>{breakfastInfo}</Text>
-              <Text style={styles.infoTitle}>Dinners</Text>
-              <Text style={styles.infoText}>{dinnerInfo}</Text>
-            <View style={styles.buttonContainer}>
-              <Btn
-                bgColor="#FF6B3C"
-                btnLabel="Hide resturant Info"
-                textColor="white"
-                Press={() => setShowHotelResturantInfo(false)}
-              />
-            </View>
+            <Text style={styles.infoTitle}>Dinners</Text>
+            <Text style={styles.infoText}>{dinnerInfo}</Text>
+            <TouchableOpacity style={styles.btnClose} onPress={() => setShowHotelResturantInfo(false)}>
+              <Text style={styles.btnText}>Hide Restaurant Info</Text>
+            </TouchableOpacity>
           </View>
-        </View>
         )}
 
-         {/*Button to show hotel activity category */}
-         {!showHotelActivityInfo && (
-          <Btn
-            bgColor="#FF6B3C"
-            btnLabel="Hotel activity Info"
-            textColor="white"
-            Press={() => setShowHotelActivityInfo(true)}
-          />
+        {!showHotelActivityInfo && (
+          <TouchableOpacity style={styles.btn} onPress={() => setShowHotelActivityInfo(true)}>
+            <Text style={styles.btnText}>Hotel Activity Info</Text>
+          </TouchableOpacity>
         )}
-        
-        {/* Show hotel activity info if the button is pressed */}
         {showHotelActivityInfo && (
-          <View style={styles.infoContainer}>
-          <View style={styles.infoContent}>
-          <Text style={styles.infoTitle}>Pool</Text>
-              <Text style={styles.infoText}>{poolInfo}</Text>
+          <View style={styles.infoSection}>
+            <Text style={styles.infoTitle}>Pool</Text>
+            <Text style={styles.infoText}>{poolInfo}</Text>
             <Text style={styles.infoTitle}>Spa</Text>
             <Text style={styles.infoText}>{spaInfo}</Text>
             <Text style={styles.infoTitle}>Gym</Text>
-              <Text style={styles.infoText}>{gymInfo}</Text>
-              <Text style={styles.infoTitle}>Entertainment</Text>
-              <Text style={styles.infoText}>{entertainmentInfo}</Text>
-            <View style={styles.buttonContainer}>
-              <Btn
-                bgColor="#FF6B3C"
-                btnLabel="Hide hotel activity Info"
-                textColor="white"
-                Press={() => setShowHotelActivityInfo(false)}
-              />
-            </View>
+            <Text style={styles.infoText}>{gymInfo}</Text>
+            <Text style={styles.infoTitle}>Entertainment</Text>
+            <Text style={styles.infoText}>{entertainmentInfo}</Text>
+            <TouchableOpacity style={styles.btnClose} onPress={() => setShowHotelActivityInfo(false)}>
+              <Text style={styles.btnText}>Hide Activity Info</Text>
+            </TouchableOpacity>
           </View>
-        </View>
         )}
 
-        {/*Button to show hotel activity category */}
         {!showSnacksduringthedayInfo && (
-          <Btn
-            bgColor="#FF6B3C"
-            btnLabel="Snacks during the day Info"
-            textColor="white"
-            Press={() => setShowSnacksduringthedayInfo(true)}
-          />
+          <TouchableOpacity style={styles.btn} onPress={() => setShowSnacksduringthedayInfo(true)}>
+            <Text style={styles.btnText}>Snacks During the Day Info</Text>
+          </TouchableOpacity>
         )}
-        
-        {/* Show Snacks during the day info if the button is pressed */}
         {showSnacksduringthedayInfo && (
-          <View style={styles.infoContainer}>
-          <View style={styles.infoContent}>
-          <Text style={styles.infoTitle}>Lobby Bar</Text>
-              <Text style={styles.infoText}>{lobbyBarInfo}</Text>
-              <Text style={styles.infoTitle}>Pool Bar</Text>
-              <Text style={styles.infoText}>{PoolBarInfo}</Text>
-            <View style={styles.buttonContainer}>
-              <Btn
-                bgColor="#FF6B3C"
-                btnLabel="Hide Snacks during the day Info"
-                textColor="white"
-                Press={() => setShowSnacksduringthedayInfo(false)}
-              />
-            </View>
+          <View style={styles.infoSection}>
+            <Text style={styles.infoTitle}>Lobby Bar</Text>
+            <Text style={styles.infoText}>{lobbyBarInfo}</Text>
+            <Text style={styles.infoTitle}>Pool Bar</Text>
+            <Text style={styles.infoText}>{PoolBarInfo}</Text>
+            <TouchableOpacity style={styles.btnClose} onPress={() => setShowSnacksduringthedayInfo(false)}>
+              <Text style={styles.btnText}>Hide Snacks Info</Text>
+            </TouchableOpacity>
           </View>
-        </View>
         )}
 
-        {/*Button to show Sabbath category */}
         {!showSabbathInfo && (
-          <Btn
-            bgColor="#FF6B3C"
-            btnLabel="Shabbat Info"
-            textColor="white"
-            Press={() => setShowSabbathInfo(true)}
-          />
+          <TouchableOpacity style={styles.btn} onPress={() => setShowSabbathInfo(true)}>
+            <Text style={styles.btnText}>Shabbat Info</Text>
+          </TouchableOpacity>
         )}
-        
-        {/* Show Sabbath info if the button is pressed */}
         {showSabbathInfo && (
-          <View style={styles.infoContainer}>
-          <View style={styles.infoContent}>
-          <Text style={styles.infoTitle}>Synagogue</Text>
-              <Text style={styles.infoText}>{SynagogueInfo}</Text>
-              <Text style={styles.infoTitle}>Key On Saturday</Text>
-              <Text style={styles.infoText}>{KeyOnSaturday}</Text>
-            <View style={styles.buttonContainer}>
-              <Btn
-                bgColor="#FF6B3C"
-                btnLabel="Hide Sabbath Info"
-                textColor="white"
-                Press={() => setShowSabbathInfo(false)}
-              />
-            </View>
+          <View style={styles.infoSection}>
+            <Text style={styles.infoTitle}>Synagogue</Text>
+            <Text style={styles.infoText}>{SynagogueInfo}</Text>
+            <Text style={styles.infoTitle}>Key On Saturday</Text>
+            <Text style={styles.infoText}>{KeyOnSaturday}</Text>
+            <TouchableOpacity style={styles.btnClose} onPress={() => setShowSabbathInfo(false)}>
+              <Text style={styles.btnText}>Hide Shabbat Info</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-        )}
-        
-       {/* Button to show wifi info */}
-       {!showwifiInfo && (
-          <Btn
-            bgColor="#FF6B3C"
-            btnLabel="wifi Info"
-            textColor="white"
-            Press={() => setShowwifiInfo(true)}
-          />
         )}
 
-        {/* Show wifi info if the button is pressed */}
+        {!showwifiInfo && (
+          <TouchableOpacity style={styles.btn} onPress={() => setShowwifiInfo(true)}>
+            <Text style={styles.btnText}>WiFi Info</Text>
+          </TouchableOpacity>
+        )}
         {showwifiInfo && (
-          <View style={styles.infoContainer}>
-            <View style={styles.infoContent}>
-              <Text style={styles.infoTitle}>wifi</Text>
-              <Text style={styles.infoText}>{wifiInfo}</Text>
-              <View style={styles.buttonContainer}>
-                <Btn
-                  bgColor="#FF6B3C"
-                  btnLabel="wifi Info"
-                  textColor="white"
-                  Press={() => setShowwifiInfo(false)}
-                />
-              </View>
-            </View>
+          <View style={styles.infoSection}>
+            <Text style={styles.infoTitle}>WiFi</Text>
+            <Text style={styles.infoText}>{wifiInfo}</Text>
+            <TouchableOpacity style={styles.btnClose} onPress={() => setShowwifiInfo(false)}>
+              <Text style={styles.btnText}>Hide WiFi Info</Text>
+            </TouchableOpacity>
           </View>
         )}
-        
-       
-       {/* Button to show Check Out info */}
-       {!showCheckOutInfo && (
-          <Btn
-            bgColor="#FF6B3C"
-            btnLabel="Check Out Info"
-            textColor="white"
-            Press={() => setShowCheckOutInfo(true)}
-          />
-        )}
 
-        {/* Show Check Out info if the button is pressed */}
+        {!showCheckOutInfo && (
+          <TouchableOpacity style={styles.btn} onPress={() => setShowCheckOutInfo(true)}>
+            <Text style={styles.btnText}>Check Out Info</Text>
+          </TouchableOpacity>
+        )}
         {showCheckOutInfo && (
-          <View style={styles.infoContainer}>
-            <View style={styles.infoContent}>
-              <Text style={styles.infoTitle}>Check Out</Text>
-              <Text style={styles.infoText}>{checkOutInfo}</Text>
-              <View style={styles.buttonContainer}>
-                <Btn
-                  bgColor="#FF6B3C"
-                  btnLabel="Check Out Info"
-                  textColor="white"
-                  Press={() => setShowCheckOutInfo(false)}
-                />
-              </View>
-            </View>
+          <View style={styles.infoSection}>
+            <Text style={styles.infoTitle}>Check Out</Text>
+            <Text style={styles.infoText}>{checkOutInfo}</Text>
+            <TouchableOpacity style={styles.btnClose} onPress={() => setShowCheckOutInfo(false)}>
+              <Text style={styles.btnText}>Hide Check Out Info</Text>
+            </TouchableOpacity>
           </View>
         )}
-
-
-
       </ScrollView>
-    </BackGround>
+    </ImageBackground>
   );
 };
 
-
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    padding: 16,
-    // backgroundColor: "#fff",
   },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
+  container: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  header: {
+    fontSize: 36,
+    color: "#fff",
+    fontWeight: 'bold',
     marginBottom: 20,
-    color: "white",
+    textAlign: 'center',
   },
-  infoContainer: {
+  btn: {
+    backgroundColor: "#FF6B3C",
+    padding: 15,
+    borderRadius: 30,
     marginBottom: 20,
-    alignItems: "center",
+    width: '80%',
+    alignItems: 'center',
   },
-  infoContent: {
-    backgroundColor: "white",
-    height: 800,
-    width: 460,
-    borderTopLeftRadius: 280,
-    paddingTop: 100,
-    alignItems: "center",
+  btnText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  btnClose: {
+    backgroundColor: "#FF6B3C",
+    padding: 10,
+    borderRadius: 20,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  infoSection: {
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 20,
+    width: '90%',
+    alignItems: 'center',
   },
   infoTitle: {
-    fontSize: 40,
-    color: "black",
-    fontWeight: "bold",
+    fontSize: 24,
+    color: "#333",
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   infoText: {
-    color: "black",
-    fontSize: 19,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
-    width: '75%', // Adjusts the width to match the container
-  },
-  buttonContainer: {
-    marginTop: 20,
-    marginBottom: 20,
+    fontSize: 16,
+    color: "#333",
+    textAlign: 'center',
   },
 });
 

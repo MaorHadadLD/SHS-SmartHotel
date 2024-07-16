@@ -8,7 +8,7 @@ import GoogleMapViewFull from '../Search/GoogleMapViewFull'
 
 export default function PlaceDetail() {
   const param = useRoute().params;
-  const [place,setPlace]=useState([])
+  const [place,setPlace]=useState('cafe')
 
   useEffect(() => {
     setPlace(param.place);

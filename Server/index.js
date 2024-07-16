@@ -1,34 +1,35 @@
-import cors from 'cors';
 import express from 'express';
-import StaffRoutes from './routes/StaffRoute.js';
+import cors from 'cors';
 import bodyParser from 'body-parser';
+import staffRouter from './routes/StaffRoute.js';
 import guestRouter from './routes/GuestRoute.js';
 import requestRouter from './routes/RequestRoute.js';
+import chatRouter from './routes/ChatRoute.js';
 
 const app = express();
 
 const configureApp = () => {
-    app.use(cors());
-    app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(bodyParser.json());
+  app.use(cors());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
 };
+
 const addRouters = () => {
-    app.use('/', StaffRoutes);
-    app.use('/', guestRouter);
-    app.use('/', requestRouter);
+  app.use('/', staffRouter);
+  app.use('/', guestRouter);
+  app.use('/', requestRouter);
+  app.use('/chats', chatRouter);
 };
 
-
-app.get('*', async (req, res) => {
-    console.log('GET request');
-    res.send('SHS server');
-});
 const startServer = async () => {
-    configureApp();
-    addRouters();
-    const port = process.env.PORT || 3002;
-    app.listen(port, () => {
-      console.log(`Server is running at port: ${port}`);
-    });
-  };
-  await startServer();
+  configureApp();
+  addRouters();
+  const port = process.env.PORT || 3002;
+  app.listen(port, () => {
+    console.log(`Express server is running at port: ${port}`);
+  });
+};
+
+startServer();
+
+export { app };

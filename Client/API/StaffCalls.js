@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BaseURL = 'http://192.168.1.188:3002/';
+const BaseURL = 'http://192.168.1.124:3002/';
 // const BaseURL = 'http://192.168.1.196:3002/';
 
 export const sendLoginStaff = async (employeeNumber, password) => {
