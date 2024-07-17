@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, View, Text, StyleSheet, Image, Dimensions } from "react-native";
 
-function DpClassCategoryGridTil({ title, color, onPress, image }) {
+function DpClassCategoryGridTil({ title, color, onPress, image, badgeCount }) {
   const [showBubble, setShowBubble] = useState(false);
 
   return (
@@ -20,6 +20,11 @@ function DpClassCategoryGridTil({ title, color, onPress, image }) {
         {showBubble && (
           <View style={styles.bubble}>
             <Text style={styles.bubbleText}>{title}</Text>
+          </View>
+        )}
+        {badgeCount > 0 && (
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{badgeCount}</Text>
           </View>
         )}
       </Pressable>
@@ -67,5 +72,21 @@ const styles = StyleSheet.create({
     height: "100%",
     position: "absolute",
     resizeMode: "cover",
+  },
+  badge: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    backgroundColor: 'red',
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });
