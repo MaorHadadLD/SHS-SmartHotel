@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Modal, StyleSheet, Button } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Modal, StyleSheet, Alert } from 'react-native';
 import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
 import { onValue, ref, getDatabase } from 'firebase/database';
 import { Picker } from '@react-native-picker/picker';
 import { getAvailableRooms, updateRoomStatusAndGuestRoom } from '../../API/StaffCalls';
+import { Banner } from 'react-native-paper';
+
+
 
 const ReceptionMainScreen = ({ route, navigation }) => {
   const [requests, setRequests] = useState([]);
@@ -11,6 +14,7 @@ const ReceptionMainScreen = ({ route, navigation }) => {
   const [availableRooms, setAvailableRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [bannerVisible, setBannerVisible] = useState(false);
   const staffData = route.params.staffData || {};
 
   useEffect(() => {
@@ -35,8 +39,19 @@ const ReceptionMainScreen = ({ route, navigation }) => {
       }
     });
 
+    const chatRef = ref(db, 'chats');
+    const unsubscribeChats = onValue(chatRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const messages = snapshot.val();
+        if (Object.values(messages).some(message => message.sender === 'guest')) {
+          setBannerVisible(true);
+        }
+      }
+    });
+
     return () => {
       unsubscribe();
+      unsubscribeChats();
     };
   }, [staffData.hotel.hotelName, staffData.hotel.city]);
 
@@ -115,7 +130,18 @@ const ReceptionMainScreen = ({ route, navigation }) => {
         <Text style={staffHomeStyles.detailText}>Receptionist: {staffData.employeeName}</Text>
         <Text style={staffHomeStyles.detailText}>&emsp;&emsp;{staffData.hotel.hotelName} {staffData.hotel.city}</Text>
       </View>
-      <Button title="Go to Chat Screen" onPress={() => navigation.navigate('ReceptionChatScreen')} />
+      <Banner
+        visible={bannerVisible}
+        actions={[
+          {
+            label: 'Dismiss',
+            onPress: () => setBannerVisible(false),
+          },
+        ]}
+        icon="message"
+      >
+        You have received new messages.
+      </Banner>
       
       <Modal
         animationType="slide"
