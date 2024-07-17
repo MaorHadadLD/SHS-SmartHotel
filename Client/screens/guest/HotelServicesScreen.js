@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, View, StyleSheet, Text, ImageBackground } from 'react-native';
 import { ClassDpCategories } from '../../data/ClassDpData';
 import DpClassCategoryGridTil from '../../components/DpClassCategoryGridTil';
 import { checkStatusReq } from '../../API/RequestCalls';
 import { LinearGradient } from 'expo-linear-gradient';
 import BackGround from '../../components/BackGround';
+import { getDatabase, ref, onValue } from 'firebase/database';
 
-function HotelServicesScreen({ route, navigation }) {
+const HotelServicesScreen = ({ route, navigation }) => {
+  const [newMessagesCount, setNewMessagesCount] = useState(0);
+  const { roomNumber } = route.params.guestData || {};
+  const database = getDatabase();
+
+  useEffect(() => {
+    if (!roomNumber) return;
+
+    const chatRef = ref(database, `chats/${roomNumber}`);
+    const unsubscribe = onValue(chatRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const messages = snapshot.val();
+        const newMessages = Object.values(messages).filter(
+          (message) => message.sender === 'reception' && !message.read
+        ).length;
+        setNewMessagesCount(newMessages);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [roomNumber]);
+
   function renderClassDpCategoryItem(itemData) {
     const pressHandler = async () => {
       if (itemData.item.title === 'Dining Room') {
@@ -32,7 +56,7 @@ function HotelServicesScreen({ route, navigation }) {
           const bodyrequest = {
             roomNumber: route.params.guestData.roomNumber,
             type: 'CleaningRoom',
-            hotel: route.params.guestData.selectedHotel
+            hotel: route.params.selectedHotel
           };
           const result = await checkStatusReq(bodyrequest);
           if (result.success) {
@@ -60,16 +84,17 @@ function HotelServicesScreen({ route, navigation }) {
         color={itemData.item.color}
         onPress={pressHandler}
         image={itemData.item.image}
+        badgeCount={itemData.item.title === 'Reception' ? newMessagesCount : 0}
       />
     );
   }
 
   return (
     <BackGround>
-      <ImageBackground
+      {/* <ImageBackground
         source={{ uri: 'https://example.com/your-background-image.jpg' }} // Add your background image URL here
         style={styles.backgroundImage}
-      >
+      > */}
         <LinearGradient
           colors={['rgba(0,0,0,0.8)', 'transparent']}
           style={styles.headerGradient}
@@ -83,33 +108,33 @@ function HotelServicesScreen({ route, navigation }) {
           keyExtractor={(item) => item.id}
           renderItem={renderClassDpCategoryItem}
           numColumns={2}
-          contentContainerStyle={styles.list}
+          contentContainerStyle={styles.grid}
         />
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </BackGround>
   );
-}
+};
 
 const styles = StyleSheet.create({
+  grid: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingBottom: 50,
+  },
   backgroundImage: {
     flex: 1,
+    resizeMode: 'cover',
   },
   headerGradient: {
-    width: '100%',
     paddingVertical: 20,
   },
   headerContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
   },
   headerText: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 24,
     color: 'white',
-  },
-  list: {
-    paddingHorizontal: 10,
-    paddingBottom: 20,
+    fontWeight: 'bold',
   },
 });
 
