@@ -1,4 +1,3 @@
-// AppNavigator.js
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -20,7 +19,6 @@ import CodeQRScreen from '../screens/guest/CodeQRScreen';
 import VerificationScreen from '../screens/guest/VerificationScreen';
 import RoomKeyScreen from '../screens/guest/RoomKeyScreen';
 import CleaningRoomScreen from '../screens/staff/CleaningRoomScreen';
-// import ActivitiesHome from '../screens/guest/ActivityNearBy/ActivitiesHome';
 import HomeNavigation from './HomeNavigation';
 import Search from '../screens/guest/ActivityNearBy/Search';
 import PlaceDetail from '../components/NearByActivities/PlaceDetail/PlaceDetail';
@@ -33,11 +31,11 @@ import SpaStaffScreen from '../screens/staff/SpaStaffScreen';
 import SpaMainScreen from '../screens/guest/SpaMainScreen';
 import Home from '../screens/Home';
 import GuestChatScreen from '../screens/guest/HotelServices/GuestChatScreen';
-import ReceptionMainScreen from '../screens/staff/ReceptionMainScreen';
-import ReceptionChatScreen from '../screens/staff/ReceptionChatScreen';
 import GuestAppointmentsScreen from '../screens/guest/GuestAppointmentsScreen';
 import ManagerScreen from '../screens/staff/ManagerScreen';
-
+import ReceptionTabNavigator from './ReceptionTabNavigator';
+import ReceptionMainScreen from '../screens/staff/ReceptionMainScreen';
+import ReceptionChatScreen from '../screens/staff/ReceptionChatScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -70,21 +68,21 @@ const MainStack = () => (
     <Stack.Screen name="PoolBarRequestScreen" component={PoolBarRequestScreen} />
     <Stack.Screen name="NearbyActivitiesScreen" component={NearbyActivitiesScreen} />
     <Stack.Screen name="RequestTrackingScreen" component={RequestTrackingScreen} />
-    <Stack.Screen name="ActivitiesHome" component={HomeNavigation } />
-    <Stack.Screen name="Search" component={ Search } />
-    <Stack.Screen name="PlaceDetail" component={ PlaceDetail } />
+    <Stack.Screen name="ActivitiesHome" component={HomeNavigation} />
+    <Stack.Screen name="Search" component={Search} />
+    <Stack.Screen name="PlaceDetail" component={PlaceDetail} />
     <Stack.Screen name="CheckOutScreen" component={CheckOutScreen} />
-    {/* <Stack.Screen name="ReceptionScreen" component={ReceptionScreen} /> */}
     <Stack.Screen name="CleaningRoomScreen" component={CleaningRoomScreen} />
     <Stack.Screen name="RoomServiceScreen" component={RoomServiceScreen} />
     <Stack.Screen name="PoolBarScreen" component={PoolBarScreen} />
     <Stack.Screen name="DinningRoomStaff" component={DinningRoomStaff} />
     <Stack.Screen name="SpaStaffScreen" component={SpaStaffScreen} />
     <Stack.Screen name="ManagerScreen" component={ManagerScreen} />
-    <Stack.Screen name="GuestChatScreen" component={GuestChatScreen} />
+    <Stack.Screen name="GuestChatScreen" component={GuestChatScreen} options={{title: "Chat"}} />
     <Stack.Screen name="ReceptionMainScreen" component={ReceptionMainScreen} /> 
     <Stack.Screen name="ReceptionChatScreen" component={ReceptionChatScreen} />
     <Stack.Screen name="GuestAppointmentsScreen" component={GuestAppointmentsScreen} />
+    <Stack.Screen name="ReceptionTabNavigator" component={ReceptionTabNavigator} />
   </Stack.Navigator>
 );
 
