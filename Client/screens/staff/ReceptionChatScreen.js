@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, Alert, SafeAreaView, StatusBar } from 'react-native';
+import { Appbar, Banner } from 'react-native-paper';
 import io from 'socket.io-client';
 import { getChatMessages, sendChatMessage, getActiveChats } from '../../API/chatCalls';
-import { getDatabase, ref, onValue } from 'firebase/database'; // Import Firebase database methods
+import { getDatabase, ref, onValue } from 'firebase/database';
 
-const socket = io('http://192.168.1.124:3002');
+const socket = io('http://10.200.202.103:3002/');
 
 const ReceptionChatScreen = () => {
   const [activeChats, setActiveChats] = useState([]);
@@ -12,7 +13,9 @@ const ReceptionChatScreen = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [messagesArray, setMessagesArray] = useState([]);
   const [message, setMessage] = useState('');
-  const database = getDatabase(); // Initialize Firebase database
+  const [bannerVisible, setBannerVisible] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState({});
+  const database = getDatabase();
 
   useEffect(() => {
     const fetchActiveChats = async () => {
@@ -31,6 +34,11 @@ const ReceptionChatScreen = () => {
       if (msg.room === selectedRoom) {
         setChatMessages((prevMessages) => [...prevMessages, { id: Date.now().toString(), ...msg }]);
       } else {
+        setUnreadMessages((prevUnread) => ({
+          ...prevUnread,
+          [msg.room]: (prevUnread[msg.room] || 0) + 1,
+        }));
+        setBannerVisible(true);
         Alert.alert("New message", `New message in room ${msg.room}`);
       }
     });
@@ -47,7 +55,7 @@ const ReceptionChatScreen = () => {
           const messages = await getChatMessages(selectedRoom);
           setMessagesArray(messages ? Object.entries(messages).map(([key, value]) => ({ id: key, ...value })) : []);
           setChatMessages(messagesArray);
-          console.log("Fetched messages:", messagesArray);
+          // console.log("Fetched messages:", messagesArray);
         } catch (error) {
           console.error("Error fetching messages:", error.message);
         }
@@ -62,11 +70,15 @@ const ReceptionChatScreen = () => {
           const messages = snapshot.val();
           const messagesArray = Object.entries(messages).map(([key, value]) => ({ id: key, ...value }));
           setChatMessages(messagesArray);
+          setUnreadMessages((prevUnread) => ({
+            ...prevUnread,
+            [selectedRoom]: 0,
+          }));
         }
       });
 
       return () => {
-        unsubscribe(); // Clean up the listener on component unmount
+        unsubscribe();
       };
     }
   }, [selectedRoom, messagesArray]);
@@ -87,52 +99,71 @@ const ReceptionChatScreen = () => {
   const renderChatItem = ({ item }) => (
     <TouchableOpacity onPress={() => setSelectedRoom(item.roomNumber)}>
       <View style={styles.chatItem}>
-        <Text>Room {item.roomNumber}</Text>
-        <Text>{item.lastMessage}</Text>
+        <Text style={styles.chatItemText}>Room {item.roomNumber}</Text>
+        <Text style={styles.chatItemLastMessage}>{item.lastMessage}</Text>
+        {unreadMessages[item.roomNumber] > 0 && (
+          <View style={styles.unreadBadge}>
+            <Text style={styles.unreadBadgeText}>{unreadMessages[item.roomNumber]}</Text>
+          </View>
+        )}
+        {bannerVisible && <Banner visible={bannerVisible} icon="message" actions={[{ label: 'Dismiss', onPress: () => setBannerVisible(false) }]}>New message in this room</Banner>}
       </View>
     </TouchableOpacity>
   );
 
   const renderMessageItem = ({ item }) => (
     <View style={item.sender === 'guest' ? styles.guestMessage : styles.receptionMessage}>
-      <Text>{item.message}</Text>
+      <Text style={styles.messageText}>{item.message}</Text>
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.chatListContainer}>
-        <FlatList
-          data={activeChats}
-          keyExtractor={(item) => item.roomNumber}
-          renderItem={renderChatItem}
-        />
+    <SafeAreaView style={styles.safeContainer}>
+      <StatusBar barStyle="dark-content" />
+      <Appbar.Header>
+        <Appbar.Content title="Reception Chat"/>
+      </Appbar.Header>
+      <View style={styles.container}>
+        <View style={styles.chatListContainer}>
+          <FlatList
+            data={activeChats}
+            keyExtractor={(item) => item.roomNumber}
+            renderItem={renderChatItem}
+          />
+        </View>
+        <View style={styles.chatContainer}>
+          {selectedRoom ? (
+            <>
+              <FlatList
+                data={chatMessages}
+                keyExtractor={(item) => item.id}
+                renderItem={renderMessageItem}
+                style={styles.messagesList}
+              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  value={message}
+                  onChangeText={setMessage}
+                  placeholder="Type your message"
+                />
+                <Button title="Send" onPress={sendMessageHandler} />
+              </View>
+            </>
+          ) : (
+            <Text style={styles.infoText}>Select a chat to start messaging.</Text>
+          )}
+        </View>
       </View>
-      <View style={styles.chatContainer}>
-        {selectedRoom ? (
-          <>
-            <FlatList
-              data={chatMessages}
-              keyExtractor={(item) => item.id}
-              renderItem={renderMessageItem}
-            />
-            <TextInput
-              style={styles.input}
-              value={message}
-              onChangeText={setMessage}
-              placeholder="Type your message"
-            />
-            <Button title="Send" onPress={sendMessageHandler} />
-          </>
-        ) : (
-          <Text style={styles.infoText}>Select a chat to start messaging.</Text>
-        )}
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    backgroundColor: '#f8f9fa',
+  },
   container: {
     flex: 1,
     flexDirection: 'row',
@@ -142,21 +173,45 @@ const styles = StyleSheet.create({
     width: '30%',
     borderRightWidth: 1,
     borderRightColor: '#ccc',
+    backgroundColor: '#fff',
   },
   chatContainer: {
     width: '70%',
     paddingLeft: 10,
   },
   chatItem: {
-    padding: 10,
+    padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
+  chatItemText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  chatItemLastMessage: {
+    color: '#888',
+    marginTop: 5,
+  },
+  messagesList: {
+    flex: 1,
+    marginBottom: 10,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    backgroundColor: '#fff',
+  },
   input: {
+    flex: 1,
     borderWidth: 1,
     borderColor: '#ccc',
+    borderRadius: 20,
     padding: 10,
-    marginBottom: 10,
+    marginRight: 10,
+    backgroundColor: '#f1f1f1',
   },
   guestMessage: {
     alignSelf: 'flex-end',
@@ -164,6 +219,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     borderRadius: 10,
+    maxWidth: '80%',
   },
   receptionMessage: {
     alignSelf: 'flex-start',
@@ -171,11 +227,27 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     borderRadius: 10,
+    maxWidth: '80%',
+  },
+  messageText: {
+    fontSize: 16,
   },
   infoText: {
     textAlign: 'center',
     fontSize: 16,
     marginVertical: 20,
+  },
+  unreadBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'red',
+    borderRadius: 12,
+    padding: 5,
+  },
+  unreadBadgeText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 
