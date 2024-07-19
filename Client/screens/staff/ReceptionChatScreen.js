@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, Alert, SafeAreaView, StatusBar } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar
+} from 'react-native';
 import { Appbar, Banner } from 'react-native-paper';
 import io from 'socket.io-client';
 import { getChatMessages, sendChatMessage, getActiveChats } from '../../API/chatCalls';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
-const socket = io('http://10.200.202.103:3002/');
+const socket = io('https://shs-smarthotel.onrender.com/');
 
 const ReceptionChatScreen = () => {
   const [activeChats, setActiveChats] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
-  const [messagesArray, setMessagesArray] = useState([]);
   const [message, setMessage] = useState('');
   const [bannerVisible, setBannerVisible] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState({});
@@ -39,7 +47,6 @@ const ReceptionChatScreen = () => {
           [msg.room]: (prevUnread[msg.room] || 0) + 1,
         }));
         setBannerVisible(true);
-        Alert.alert("New message", `New message in room ${msg.room}`);
       }
     });
 
@@ -53,9 +60,12 @@ const ReceptionChatScreen = () => {
       const fetchMessages = async () => {
         try {
           const messages = await getChatMessages(selectedRoom);
-          setMessagesArray(messages ? Object.entries(messages).map(([key, value]) => ({ id: key, ...value })) : []);
+          const messagesArray = messages ? Object.entries(messages).map(([key, value]) => ({ id: key, ...value })) : [];
           setChatMessages(messagesArray);
-          // console.log("Fetched messages:", messagesArray);
+          setUnreadMessages((prevUnread) => ({
+            ...prevUnread,
+            [selectedRoom]: 0,
+          }));
         } catch (error) {
           console.error("Error fetching messages:", error.message);
         }
@@ -70,10 +80,6 @@ const ReceptionChatScreen = () => {
           const messages = snapshot.val();
           const messagesArray = Object.entries(messages).map(([key, value]) => ({ id: key, ...value }));
           setChatMessages(messagesArray);
-          setUnreadMessages((prevUnread) => ({
-            ...prevUnread,
-            [selectedRoom]: 0,
-          }));
         }
       });
 
@@ -81,7 +87,7 @@ const ReceptionChatScreen = () => {
         unsubscribe();
       };
     }
-  }, [selectedRoom, messagesArray]);
+  }, [selectedRoom]);
 
   const sendMessageHandler = async () => {
     if (!selectedRoom) return;
@@ -121,7 +127,7 @@ const ReceptionChatScreen = () => {
     <SafeAreaView style={styles.safeContainer}>
       <StatusBar barStyle="dark-content" />
       <Appbar.Header>
-        <Appbar.Content title="Reception Chat"/>
+        <Appbar.Content title="Reception Chat" />
       </Appbar.Header>
       <View style={styles.container}>
         <View style={styles.chatListContainer}>
@@ -147,11 +153,15 @@ const ReceptionChatScreen = () => {
                   onChangeText={setMessage}
                   placeholder="Type your message"
                 />
-                <Button title="Send" onPress={sendMessageHandler} />
+                <TouchableOpacity onPress={sendMessageHandler} style={styles.sendButton}>
+                  <Text style={styles.sendButtonText}>Send</Text>
+                </TouchableOpacity>
               </View>
             </>
           ) : (
-            <Text style={styles.infoText}>Select a chat to start messaging.</Text>
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>Select a chat to start messaging</Text>
+            </View>
           )}
         </View>
       </View>
@@ -183,6 +193,9 @@ const styles = StyleSheet.create({
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginBottom: 10,
   },
   chatItemText: {
     fontWeight: 'bold',
@@ -203,6 +216,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#ccc',
     backgroundColor: '#fff',
+    borderRadius: 10,
   },
   input: {
     flex: 1,
@@ -212,6 +226,16 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     backgroundColor: '#f1f1f1',
+  },
+  sendButton: {
+    backgroundColor: '#007bff',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  sendButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   guestMessage: {
     alignSelf: 'flex-end',
@@ -232,10 +256,14 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 16,
   },
-  infoText: {
-    textAlign: 'center',
-    fontSize: 16,
-    marginVertical: 20,
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    fontSize: 18,
+    color: '#888',
   },
   unreadBadge: {
     position: 'absolute',
