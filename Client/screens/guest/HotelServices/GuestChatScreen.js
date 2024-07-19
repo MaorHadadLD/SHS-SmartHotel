@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
-import { Appbar } from 'react-native-paper';
+import { View, Text, TextInput, FlatList, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { Appbar, Badge, IconButton } from 'react-native-paper';
 import io from 'socket.io-client';
 import { getChatMessages, sendChatMessage } from '../../../API/chatCalls';
 import { getDatabase, ref, onValue } from 'firebase/database';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const socket = io('http://10.200.202.103:3002/');
+const socket = io('https://shs-smarthotel.onrender.com/');
 
 const GuestChatScreen = ({ route, navigation }) => {
   const { guestData } = route.params;
@@ -82,25 +83,34 @@ const GuestChatScreen = ({ route, navigation }) => {
     <SafeAreaView style={styles.safeContainer}>
       <StatusBar barStyle="dark-content" />
       <Appbar.Header>
-        <Appbar.Content title={`Room ${roomNumber}`} />
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title={`Room ${roomNumber}`} style={{ alignItems: 'center' }} />
+        <Badge size={24} visible={unreadCount > 0}>{unreadCount}</Badge>
       </Appbar.Header>
-      <View style={styles.container}>
-        <FlatList
-          data={chatMessages}
-          keyExtractor={(item) => item.id}
-          renderItem={renderMessageItem}
-          style={styles.messagesList}
-        />
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            value={message}
-            onChangeText={setMessage}
-            placeholder="Type your message"
+      <LinearGradient colors={['#e0f7fa', '#80deea', '#00acc1']} style={styles.gradient}>
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+          <FlatList
+            data={chatMessages}
+            keyExtractor={(item) => item.id}
+            renderItem={renderMessageItem}
+            style={styles.messagesList}
           />
-          <Button title="Send" onPress={sendMessageHandler} />
-        </View>
-      </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={message}
+              onChangeText={setMessage}
+              placeholder="Type your message"
+            />
+            <IconButton
+              icon="send"
+              size={24}
+              onPress={sendMessageHandler}
+              color="#00acc1"
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </LinearGradient>
     </SafeAreaView>
   );
 };
@@ -108,7 +118,9 @@ const GuestChatScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+  },
+  gradient: {
+    flex: 1,
   },
   container: {
     flex: 1,
@@ -125,6 +137,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#ccc',
     backgroundColor: '#fff',
+    borderRadius: 20,
+    marginHorizontal: 10,
+    marginBottom: 10,
   },
   input: {
     flex: 1,
