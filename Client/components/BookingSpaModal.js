@@ -4,22 +4,27 @@ import { Modal, Text, View, TextInput, TouchableOpacity, StyleSheet, Alert } fro
 import { useNavigation } from "@react-navigation/native";
 import { getDatabase, ref, push, update, query, orderByChild, equalTo, get } from 'firebase/database';
 import firebaseApp from '../firebaseConfig';
+import { spaTreatments } from '../data/spaTreatments';
+
+const treatmentOptions = spaTreatments.map(treatment => ({
+    label: treatment.type,
+    value: treatment.type,
+}));
 
 function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
     const [massageType, setMassageType] = useState('');
     const [therapistGender, setTherapistGender] = useState('');
     const [secondTherapistGender, setSecondTherapistGender] = useState('');
     const [additionalComments, setAdditionalComments] = useState('');
+    const [selectedTreatment, setSelectedTreatment] = useState('');
     const navigation = useNavigation();
     const selectedTime = time;
-    console.log('BookingSpaModal route:', route);
 
     const handleBookingConfirmation = () => {
         const db = getDatabase(firebaseApp);
         const appointmentsRef = ref(db, 'appointments');
         const selectedDate = date.dateString;
 
-        // Fetch existing appointments for the guest on the selected date
         const guestAppointmentsQuery = query(appointmentsRef, orderByChild('guest'), equalTo(route.guestData.email));
         get(guestAppointmentsQuery).then((snapshot) => {
             const appointments = snapshot.val();
@@ -30,8 +35,8 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
                 return;
             }
 
-            if (massageType === '' || therapistGender === '') {
-                Alert.alert('Attention!', 'Please select a massage type and therapist before confirming the booking.');
+            if (massageType === '' || therapistGender === '' || selectedTreatment === '') {
+                Alert.alert('Attention!', 'Please select a massage type, therapist, and treatment before confirming the booking.');
                 return;
             }
             if (massageType === 'double' && secondTherapistGender === '') {
@@ -41,8 +46,8 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
 
             if (massageType === 'single') {
                 setSecondTherapistGender('none');
-                console.log('secondTherapistGender:', secondTherapistGender);
             }
+
             const appointmentData = {
                 id: '',
                 guest: route.guestData.email,
@@ -54,15 +59,25 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
                 therapistGender: therapistGender,
                 secondTherapistGender: secondTherapistGender,
                 additionalComments: additionalComments,
+                treatmentType: selectedTreatment,  // Add the selected treatment type
             };
 
             const newAppointmentRef = push(appointmentsRef);
             const appointmentId = newAppointmentRef.key;
             appointmentData.id = appointmentId;
 
-            update(newAppointmentRef, appointmentData);
-            closeModal();
-            navigation.navigate('ClientMainMenu', { selectedHotel: route.selectedHotel, guestData: route.guestData });
+            update(newAppointmentRef, appointmentData)
+                .then(() => {
+                    closeModal();
+                    navigation.navigate('ClientMainMenu', { selectedHotel: route.selectedHotel, guestData: route.guestData });
+                })
+                .catch(error => {
+                    Alert.alert('Error', 'There was an error making the appointment. Please try again.');
+                    console.error('Error updating appointment:', error);
+                });
+        }).catch(error => {
+            Alert.alert('Error', 'There was an error retrieving appointments. Please try again.');
+            console.error('Error retrieving appointments:', error);
         });
     };
 
@@ -76,6 +91,18 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                     <Text style={styles.modalHeader}>Massage Options</Text>
+
+                    <RNPickerSelect
+                        placeholder={{
+                            label: 'Select Type of Treatment',
+                            value: '',
+                            color: '#9EA0A4',
+                        }}
+                        items={treatmentOptions}
+                        value={selectedTreatment}
+                        onValueChange={(value) => setSelectedTreatment(value)}
+                        style={pickerSelectStyles}
+                    />
 
                     <RNPickerSelect
                         placeholder={{
