@@ -30,7 +30,8 @@
       },
       "permissions": [
         "android.permission.NFC"
-      ]
+      ],
+      "package": "com.shs.smarthotel"
     },
     "web": {
       "favicon": "./assets/favicon.png"
