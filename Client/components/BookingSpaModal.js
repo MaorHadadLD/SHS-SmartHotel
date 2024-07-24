@@ -18,7 +18,8 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
     const [additionalComments, setAdditionalComments] = useState('');
     const [selectedTreatment, setSelectedTreatment] = useState('');
     const navigation = useNavigation();
-    const selectedTime = time;
+    const selectedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    console.log("Selected time: ", selectedTime);
 
     const handleBookingConfirmation = () => {
         const db = getDatabase(firebaseApp);
@@ -47,7 +48,7 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
             if (massageType === 'single') {
                 setSecondTherapistGender('none');
             }
-
+            console.log("Selected time: ", selectedTime);
             const appointmentData = {
                 id: '',
                 guest: route.guestData.email,

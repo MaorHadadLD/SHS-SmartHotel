@@ -20,11 +20,14 @@ function CalendarModal({ route, onSelectDate, availableTimeSlots, spaClosed }) {
     };
 
     const handleTimeSelect = time => {
+        // console.log('Selected time:', ); // Debug log
         setSelectedDateTime(prevState => ({ ...prevState, time }));
+        // console.log('Selected date and time:', selectedDateTime); // Debug log
         setIsModalVisible(true);
     };
 
     const renderTimeSlot = ({ item }) => (
+        // console.log('Time slot:', item), // Debug log
         <TouchableOpacity
             style={styles.timeSlotButton}
             onPress={() => handleTimeSelect(item.time)}
@@ -37,40 +40,41 @@ function CalendarModal({ route, onSelectDate, availableTimeSlots, spaClosed }) {
     maxDate.setMonth(maxDate.getMonth() + 1);
 
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-                <Text style={styles.title}>Spa Booking</Text>
+        <View style={styles.container}>
+            <Text style={styles.title}>Spa Booking</Text>
+            <View style={styles.calendarContainer}>
                 <Calendar
-                    style={{ borderRadius: 10, elevation: 4, marginBottom: 20 }}
+                    style={styles.calendar}
                     minDate={new Date().toISOString().split('T')[0]}
                     maxDate={maxDate.toISOString().split('T')[0]}
                     onDayPress={handleDateSelect}
                     markedDates={markedDates}
                 />
-                {selectedDateTime && selectedDateTime.date && !spaClosed && (
-                    availableTimeSlots.length > 0 ? (
-                        <FlatList
-                            data={availableTimeSlots}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={renderTimeSlot}
-                        />
-                    ) : (
-                        <Text style={styles.noSlotsText}>No available time slots for the selected date.</Text>
-                    )
-                )}
-                {spaClosed && (
-                    <Text style={styles.closedText}>The spa's operating hours are over for today.</Text>
-                )}
-                {isModalVisible && (
-                    <BookingSpaModal
-                        route={route}
-                        date={selectedDateTime.date}
-                        time={selectedDateTime.time}
-                        closeModal={() => setIsModalVisible(false)}
-                    />
-                )}
             </View>
-        </SafeAreaView>
+            {selectedDateTime && selectedDateTime.date && !spaClosed && (
+                availableTimeSlots.length > 0 ? (
+                    <FlatList
+                        data={availableTimeSlots}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={renderTimeSlot}
+                        style={styles.timeSlotList}
+                    />
+                ) : (
+                    <Text style={styles.noSlotsText}>No available time slots for the selected date.</Text>
+                )
+            )}
+            {spaClosed && (
+                <Text style={styles.closedText}>The spa's operating hours are over for today.</Text>
+            )}
+            {isModalVisible && (
+                <BookingSpaModal
+                    route={route}
+                    date={selectedDateTime.date}
+                    time={selectedDateTime.time}
+                    closeModal={() => setIsModalVisible(false)}
+                />
+            )}
+        </View>
     );
 }
 
@@ -80,18 +84,34 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        padding: 20,
+        padding: 30,
+    },
+    calendarContainer: {
+        height: 350, 
+        width: 350,
+        borderRadius: 10,
+        elevation: 4,
+        marginBottom: 20,
+        backgroundColor: 'white', // Background color for better visibility
+        justifyContent: 'center',
+        padding: 50,
+    },
+    calendar: {
+        // width: 250,
+        
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 20,
-        color: 'black',
+        color: 'white',
+    },
+    timeSlotList: {
+        paddingLeft: 20,
     },
     timeSlotButton: {
         borderRadius: 100,
-        alignItems: "center",
         width: 310,
         paddingVertical: 5,
         marginVertical: 10,

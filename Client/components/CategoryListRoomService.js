@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet, TextInput, Image, ScrollView, Modal } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function CategoryListRoomService({ categoryList, products, onAddToCart }) {
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState('Food');
     const [quantities, setQuantities] = useState({});
+    const [message, setMessage] = useState(null);
+    const [messageError, setMessageError] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(selectedCategory === category.name ? null : category.name);
@@ -15,30 +19,79 @@ export default function CategoryListRoomService({ categoryList, products, onAddT
             [productId]: quantity,
         }));
     };
+    const handleAddToBasket = (product, quantity) => {
+        const result = onAddToCart(product, quantity);
+        if(result) {
+            setMessage(`${quantity} ${product.name} is added to your cart ✔`);
+        } else {
+            setMessageError(`Please enter a valid quantity before adding to cart, maximum quantity is 10.`);
+        }
+
+        setModalVisible(true);
+
+        // Reset the quantity for the specific product
+        setQuantities((prevQuantities) => ({
+            ...prevQuantities,
+            [product.id]: '',
+        }));
+
+        setTimeout(() => {
+            setModalVisible(false);
+            setMessage(null);
+            setMessageError(null);
+        }, 2000);
+    };
 
     const filteredProducts = selectedCategory
         ? products.filter(product => product.category === selectedCategory)
         : [];
 
     return (
-        <View>
-            <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                data={categoryList}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        onPress={() => handleCategorySelect(item)}
-                        style={[styles.categoryButton, selectedCategory === item.name && styles.selectedCategoryButton]}>
-                        <Text style={styles.categoryButtonText}>{item.name}</Text>
-                    </TouchableOpacity>
-                )}
-            />
-            <ScrollView>
+        <View style={{ flex: 1 }}>
+            <Modal
+                transparent={true}
+                animationType="fade"
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(false);
+                }}>
+                <View style={styles.modalOverlay}>
+                {messageError && (
+                        <View style={styles.modalContentError}>
+                            <Text style={styles.messageText}>{messageError}</Text>
+                        </View>
+                    )}
+                    {message && (
+                        <View style={styles.modalContent}>
+                            <Text style={styles.messageText}>{message}</Text>
+                        </View>
+                    )}
+                </View>
+            </Modal>
+            <View style={styles.flatListContainer}>
+                <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={categoryList}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            onPress={() => handleCategorySelect(item)}
+                            style={[
+                                styles.categoryButton,
+                                selectedCategory === item.name && styles.selectedCategoryButton
+                            ]}>
+                            <Text style={styles.categoryButtonText}>{item.name}</Text>
+                        </TouchableOpacity>
+                    )}
+                    contentContainerStyle={styles.categoryList}
+                />
+                <Ionicons name="arrow-forward-circle" size={24} color="#FF6b3c" style={styles.arrowIcon} />
+            </View>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {filteredProducts.map((product) => (
                     <View key={product.id} style={styles.productContainer}>
-                        <Image source={product.img } style={styles.productImage} />
+                        <Image source={product.img} style={styles.productImage} />
                         <Text style={styles.productName}>{product.name}</Text>
                         <Text style={styles.productPrice}>Price: ${product.price}</Text>
                         <View style={styles.quantityContainer}>
@@ -50,7 +103,7 @@ export default function CategoryListRoomService({ categoryList, products, onAddT
                             />
                             <TouchableOpacity
                                 style={styles.addToBasketButton}
-                                onPress={() => onAddToCart(product, quantities[product.id] ? quantities[product.id] : 1)}>
+                                onPress={() => handleAddToBasket(product, quantities[product.id] ? quantities[product.id] : 1)}>
                                 <Text style={styles.addToBasketButtonText}>Add to Basket</Text>
                             </TouchableOpacity>
                         </View>
@@ -62,25 +115,64 @@ export default function CategoryListRoomService({ categoryList, products, onAddT
 }
 
 const styles = StyleSheet.create({
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#4CAF50',
+        padding: 20,
+        borderRadius: 10,
+    },
+    modalContentError: {
+        backgroundColor: '#F44336',
+        padding: 20,
+        borderRadius: 10,
+    },
+    messageText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 16,
+    },
+    flatListContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    categoryList: {
+        paddingVertical: 10,
+    },
+    arrowIcon: {
+        position: 'absolute',
+        right: 0,
+        opacity: 0.5, // Make the icon semi-transparent
+    },
     categoryButton: {
         backgroundColor: '#f9f9f9',
-        padding: 10,
-        marginTop: 10,
-        marginHorizontal: 10,
-        borderRadius: 20,
+        padding: 8, // Reduced padding
+        marginHorizontal: 8, // Reduced margin
+        borderRadius: 15, // Adjusted border radius
         borderColor: '#333',
         borderWidth: 1,
-        borderStyle: 'solid',
-        minWidth: 100,
+        minWidth: 100, // Reduced minimum width
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
     },
     selectedCategoryButton: {
         backgroundColor: '#FF6b3c',
         borderColor: '#FF6b3c',
     },
     categoryButtonText: {
-        fontSize: 16,
+        fontSize: 14, // Reduced font size
         fontWeight: 'bold',
+    },
+    scrollContainer: {
+        paddingBottom: 20,
     },
     productContainer: {
         padding: 10,

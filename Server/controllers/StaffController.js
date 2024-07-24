@@ -1,6 +1,7 @@
 import  { StaffLogin, getAvailableRooms, updateRoomStatus, getMealByHotel, updateMealByHotel,addEmployee, deleteEmployee } from '../actions/StaffAction.js';
 import { updateGuestRoomNumber } from '../actions/GuestAction.js';
 import { deleteRoomRequest } from '../actions/RequestAction.js';
+import { sendEmailRoom } from '../routes/MailRoute.js';
 
 export const requestSuccess = (data) => ({success: true, data})
 export const requestFailure = (data) => ({ success: false, data });
@@ -42,6 +43,7 @@ export const updateRoomController = async (req, res) => {
     const updateRoom = await updateRoomStatus(hotel, selectedRoom, status);
     const updateGuest = await updateGuestRoomNumber(guestEmail, selectedRoom);
     if (updateReq.success && updateRoom.success && updateGuest) {
+        await sendEmailRoom(guestEmail, selectedRoom);
         return requestSuccess(updateReq.data, updateRoom.data);
     }
     else {

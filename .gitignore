@@ -37,3 +37,6 @@ yarn-error.*
 # Android & iOS
 android/
 ios/
+
+# config
+config.js

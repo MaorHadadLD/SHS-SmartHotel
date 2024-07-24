@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, ImageBackground } from "react-native";
 import CalendarModal from "../../components/CalendarModal";
-import { getDatabase, ref, get } from "firebase/database";
-import firebaseApp from "../../firebaseConfig";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function SpaScreen({ navigation, route }) {
     const spaOperatingHours = { start: 10, end: 18 }; // Spa operating hours in local time
@@ -19,7 +17,6 @@ function SpaScreen({ navigation, route }) {
         const currentDateTime = new Date();
         const selectedDateTime = new Date(date);
 
-        // Clear minutes and seconds for date comparison
         const today = new Date(currentDateTime.getFullYear(), currentDateTime.getMonth(), currentDateTime.getDate());
         const selectedDateOnly = new Date(selectedDateTime.getFullYear(), selectedDateTime.getMonth(), selectedDateTime.getDate());
 
@@ -69,7 +66,11 @@ function SpaScreen({ navigation, route }) {
     }, [selectedDate]); // Update useEffect dependency
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <ImageBackground source={require('../../assets/Spa-background.jpg')} style={styles.backgroundImage}>
+            <LinearGradient
+                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                style={styles.overlay}
+            />
             <View style={styles.container}>
                 <CalendarModal 
                     route={route.params} 
@@ -81,18 +82,25 @@ function SpaScreen({ navigation, route }) {
                     <Text style={styles.closedText}>The spa's operating hours are over for today.</Text>
                 )}
             </View>
-        </SafeAreaView>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+    backgroundImage: {
         flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+    },
+    overlay: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
     },
     container: {
         flex: 1,
-        padding: 16,
-        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     closedText: {
         textAlign: 'center',

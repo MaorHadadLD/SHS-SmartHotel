@@ -58,7 +58,7 @@ function GuestAppointmentsScreen({ route }) {
                 />
                 <View style={styles.appointmentContent}>
                     <Text style={styles.appointmentDate}>{item.date}</Text>
-                    <Text style={styles.appointmentTime}>Time: {appointmentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+                    <Text style={styles.appointmentTime}>Time: {item.time}</Text>
                     <Text style={styles.appointmentStatus}>Status: <Text style={styles.statusText(item.status)}>{item.status}</Text></Text>
                     <Text style={styles.appointmentMasseuse}>Masseuse: {item.therapistGender} {item.massageType === 'double' ? `and ${item.secondTherapistGender}` : ''}</Text>
                     <Text style={styles.appointmentTreatment}>Treatment Type: {item.treatmentType}</Text>

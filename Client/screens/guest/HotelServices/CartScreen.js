@@ -18,13 +18,15 @@ const CartScreen = ({ cart, handleRemoveFromCart, handleUpdateQuantity, handleSe
         }
     };
 
+    const totalPrice = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+
     return (
         <ScrollView style={styles.cartContainer}>
             {cart.map(item => (
                 <View key={item.product.id} style={styles.cartItem}>
                     {/* <Image style={styles.productImage} source={require(`../../../assets/${item.product.image}`)} /> */}
                     <Text style={styles.productName}>{item.product.name}</Text>
-                    <Text style={styles.productPrice}>${item.product.price.toFixed(2)}</Text>
+                    <Text style={styles.productPrice}>${(item.product.price * item.quantity).toFixed(2)}</Text>
                     <View style={styles.quantityContainer}>
                         <TouchableOpacity onPress={() => decreaseQuantity(item.product.id)}>
                             <Ionicons name="remove-circle" size={24} color="red" />
@@ -39,6 +41,9 @@ const CartScreen = ({ cart, handleRemoveFromCart, handleUpdateQuantity, handleSe
                     </TouchableOpacity>
                 </View>
             ))}
+            <View style={styles.totalContainer}>
+                <Text style={styles.totalText}>Total: ${totalPrice.toFixed(2)}</Text>
+            </View>
             <TouchableOpacity style={styles.sendOrderButton} onPress={handleSendOrder}>
                 <Text style={styles.sendOrderButtonText}>Send Order</Text>
             </TouchableOpacity>
@@ -90,6 +95,22 @@ const styles = StyleSheet.create({
     },
     deleteButton: {
         marginLeft: 10,
+    },
+    totalContainer: {
+        padding: 15,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        margin: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 5,
+        alignItems: 'center',
+    },
+    totalText: {
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     sendOrderButton: {
         backgroundColor: '#FF6B3C',

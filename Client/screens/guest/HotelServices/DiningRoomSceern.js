@@ -67,7 +67,7 @@ function DiningRoomScreen({ route }) {
     toggleModal();
     try {
       const bodyrequest = {
-        type: 'Dinning',
+        type: 'dining',
         numberOfDiners: numberOfDiners,
         arrivalTime: arrivalTime,
         roomNumber: guestData.roomNumber,
@@ -88,7 +88,7 @@ function DiningRoomScreen({ route }) {
     try {
       const bodyrequest = {
         roomNumber: guestData.roomNumber,
-        type: 'Dinning',
+        type: 'dining',
         hotel: guestData.selectedHotel
       };
       const result = await checkStatusReq(bodyrequest);

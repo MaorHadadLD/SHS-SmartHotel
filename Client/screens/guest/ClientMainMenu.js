@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity, I18nManager } from "react-native";
+import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity, I18nManager, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { getGuestDetails } from '../../API/GuestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,7 +16,20 @@ function ClientMainMenu({ route }) {
       try {
         const storedGuestData = await AsyncStorage.getItem('guestData');
         if (storedGuestData) {
-          setGuestData(JSON.parse(storedGuestData));
+          const updatedGuestData = await getGuestDetails(guestEmail);
+          if (updatedGuestData.success) {
+            // console.log('updatedGuestData:', updatedGuestData.data);
+           // compare if guest data array is the same as the stored data array
+            if (JSON.stringify(updatedGuestData.data) !== storedGuestData) {
+              setGuestData(updatedGuestData.data);
+              await AsyncStorage.setItem('guestData', JSON.stringify(updatedGuestData.data));
+            } else {
+              setGuestData(JSON.parse(storedGuestData));
+            }
+          } else{
+            await AsyncStorage.removeItem('guestData');
+            navigation.navigate('Login');
+          }
         } else {
           const results = await getGuestDetails(guestEmail);
           if (results.success) {
@@ -29,9 +42,15 @@ function ClientMainMenu({ route }) {
       }
     };
     getGuestData();
-  }, [guestEmail]);
+  }, [guestData]);
 
   const handleNavigate = (screen) => {
+    if (screen === 'HotelServicesScreen') {
+      if(guestData.roomNumber === 'waiting for room assignment' || guestData.roomNumber === 'Your request for your room has been sent to the hotel reception'){
+        Alert.alert('Room Assignment', 'Please wait for your room to be assigned before accessing hotel services');
+        return;
+      }
+    }
     navigation.navigate(screen, {
       selectedHotel: route.params.selectedHotel,
       guestData: guestData,

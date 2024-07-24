@@ -1,24 +1,24 @@
 import axios from "axios";
+import { GOOGLE_MAP_API_KEY } from "../config";
 
-const BASE_URL = "https://maps.googleapis.com/maps/api/place";
-const API_KEY = "AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0";  // Make sure to keep this secure
+const GOOGLE_MAP_BASE_URL = "https://maps.googleapis.com/maps/api/place";
 
 const nearByPlace = (lat, lng, type) => {
-  return axios.get(`${BASE_URL}/nearbysearch/json`, {
+  return axios.get(`${GOOGLE_MAP_BASE_URL}/nearbysearch/json`, {
     params: {
       location: `${lat},${lng}`,
       radius: 1500,
       type: type,
-      key: API_KEY,
+      key: GOOGLE_MAP_API_KEY,
     },
   });
 };
 
 const searchByText = (searchText) => {
-  return axios.get(`${BASE_URL}/textsearch/json`, {
+  return axios.get(`${GOOGLE_MAP_BASE_URL}/textsearch/json`, {
     params: {
       query: searchText,
-      key: API_KEY,
+      key: GOOGLE_MAP_API_KEY,
     },
   });
 };

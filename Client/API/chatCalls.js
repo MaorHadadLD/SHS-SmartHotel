@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const BaseURL = 'https://shs-smarthotel.onrender.com/';
-// const BaseURL = 'http://192.168.183.198:3002/';
+import { BaseURL } from '../config';
 
 export const getChatMessages = async (roomNumber) => {
   try {

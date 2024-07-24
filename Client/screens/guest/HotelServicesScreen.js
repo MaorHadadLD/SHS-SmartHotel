@@ -39,7 +39,7 @@ const HotelServicesScreen = ({ route, navigation }) => {
         try {
           const bodyrequest = {
             roomNumber: route.params.guestData.roomNumber,
-            type: 'Dinning',
+            type: 'dining',
             hotel: route.params.guestData.selectedHotel
           };
           const result = await checkStatusReq(bodyrequest);

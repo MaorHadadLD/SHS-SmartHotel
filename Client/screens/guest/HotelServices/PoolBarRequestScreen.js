@@ -12,44 +12,21 @@ const PoolBarRequestScreen = ({ route }) => {
     const [cart, setCart] = useState([]);
 
     const handleAddToCart = (product, quantity) => {
-        if (quantity > 0) {
+        if (quantity > 0 && quantity <= 10) {
             const existingProductIndex = cart.findIndex(item => item.product.id === product.id);
             if (existingProductIndex > -1) {
                 const newCart = [...cart];
                 newCart[existingProductIndex].quantity += quantity;
                 setCart(newCart);
+                return true;
             } else {
                 setCart([...cart, { product, quantity }]);
+                return true;
             }
-        } else {
-            alert('Please enter a valid quantity before adding to cart');
+        }else {
+            return false;
         }
     };
-
-    // const handleSendOrder = async () => {
-    //     try {
-    //         if (cart.length > 0) {
-    //             const order = {
-    //                 cart: cart.map(item => ({
-    //                     productId: item.product.id,
-    //                     quantity: item.quantity,
-    //                 })),
-    //                 type: 'PoolBar', // Indicates this is a Pool Bar order
-    //                 roomNumber: route.params.guestData.roomNumber,
-    //                 selectedHotel: route.params.guestData.selectedHotel,
-    //             };
-    //             const response = await sendPostRequest(order); // Replace with your API request function
-    //             if (response.success) {
-    //                 alert('Order submitted successfully');
-    //                 setCart([]);
-    //             }
-    //         } else {
-    //             alert('Please add items to the cart before sending the order');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error sending order:', error.message);
-    //     }
-    // };
 
     const handleSendOrder = async () => {
         try {
@@ -64,7 +41,7 @@ const PoolBarRequestScreen = ({ route }) => {
                     roomNumber: route.params.guestData.roomNumber,
                     selectedHotel: route.params.guestData.selectedHotel,
                 };
-                const response = await sendPostRequest(order); // Replace with your API request function
+                const response = await sendPostRequest(order); 
                 if (response.success) {
                     alert('Order submitted successfully');
                     setCart([]);
@@ -90,13 +67,32 @@ const PoolBarRequestScreen = ({ route }) => {
     const Tab = createBottomTabNavigator();
 
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            screenOptions={{
+                tabBarActiveTintColor: '#FF6B3C',
+                tabBarInactiveTintColor: '#777',
+                tabBarStyle: {
+                    backgroundColor: '#fff',
+                    borderTopWidth: 0,
+                    elevation: 5,
+                    paddingVertical: 5,
+                },
+                headerStyle: {
+                    backgroundColor: '#FF6B3C',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}
+        >
             <Tab.Screen
                 name="Menu"
                 options={{
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="restaurant" color={color} size={size} />
                     ),
+                    title: 'Pool Bar Menu',
                 }}
             >
                 {() => (
@@ -126,6 +122,7 @@ const PoolBarRequestScreen = ({ route }) => {
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="cart" color={color} size={size} />
                     ),
+                    title: 'My Basket',
                 }}
             >
                 {() => (

@@ -108,7 +108,7 @@ const TableReservation = ({ route }) => {
       );
 
       const bodyrequest = {
-        type: 'Dinning',
+        type: 'dining',
         numberOfDiners: numberOfDiners,
         arrivalTime: arrivalTime,
         roomNumber: guestData.roomNumber,

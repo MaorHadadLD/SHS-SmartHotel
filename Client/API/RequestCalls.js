@@ -1,8 +1,5 @@
 import axios from "axios";
-
-const BaseURL = 'https://shs-smarthotel.onrender.com/';
-// const BaseURL = 'http://192.168.183.198:3002/';
-// const BaseURL = 'http://192.168.1.162:3002/';
+import { BaseURL } from "../config";
 
 export const sendRoomRequest = async (guest, hotel) => {
     try {
@@ -35,7 +32,6 @@ export const sendRoomRequest = async (guest, hotel) => {
 
 export const getAllRequstsByRoomNumberGuest = async (roomNumber) => {
     try {
-      console.log("getAllRequstsByRoomNumberGuest", roomNumber);
       const response = await axios.post(`${BaseURL}request/getallbyroomnumber`, { roomNumber });
       return response.data.data;
     } catch (error) {

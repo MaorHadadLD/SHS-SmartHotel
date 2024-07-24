@@ -27,7 +27,7 @@ function DinningRoomStaff({ route }) {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const response = await getRequests(route.params.staffData.hotel, 'Dinning');
+        const response = await getRequests(route.params.staffData.hotel, 'dining');
         if (response.success) {
           setRequests(response.data);
         } else {
@@ -59,7 +59,7 @@ function DinningRoomStaff({ route }) {
         id: req.id,
         tableId: req.tableId,
         hotel: req.hotel,
-        type: 'Dinning'
+        type: 'dining'
       };
       const response = await deleteDiningTableRequest(body);
       if (response.success) {
