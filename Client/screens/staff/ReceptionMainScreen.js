@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Modal, StyleSheet, Alert } from 'react-native';
-import { globalStyles, staffHomeStyles } from '../../styles/globalStyle';
+import { View, Text, FlatList, TouchableOpacity, Modal, StyleSheet, ImageBackground } from 'react-native';
 import { onValue, ref, getDatabase } from 'firebase/database';
 import { Picker } from '@react-native-picker/picker';
 import { getAvailableRooms, updateRoomStatusAndGuestRoom } from '../../API/StaffCalls';
 import { Banner } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
 import LogoutButton from '../../components/LogoutButton';
-
-
 
 const ReceptionMainScreen = ({ route, navigation }) => {
   const [requests, setRequests] = useState([]);
@@ -57,7 +55,6 @@ const ReceptionMainScreen = ({ route, navigation }) => {
   }, [staffData.hotel.hotelName, staffData.hotel.city]);
 
   const fetchAvailableRooms = async (hotel) => {
-    console.log('fetchAvailableRooms', hotel);
     try {
       const response = await getAvailableRooms(hotel);
       if (response.success && response.data !== 'No rooms available') {
@@ -73,7 +70,6 @@ const ReceptionMainScreen = ({ route, navigation }) => {
   };
 
   const handleRoomAssignment = async (guestEmail, selectedRoom) => {
-    console.log(`Assign room ${selectedRoom} for guest ${guestEmail}`);
     try {
       const result = await updateRoomStatusAndGuestRoom(guestEmail, selectedRoom, staffData.hotel, 'occupied');
       if (result.success) {
@@ -86,30 +82,25 @@ const ReceptionMainScreen = ({ route, navigation }) => {
   };
 
   const renderRequestItem = ({ item }) => (
-    <View style={staffHomeStyles.requestItem}>
-      <Text style={staffHomeStyles.requestItemText}>Guest: {item.guestName}</Text>
-      <Text style={staffHomeStyles.requestItemText}>Check-in: {item.checkInDate}</Text>
-      <Text style={staffHomeStyles.requestItemText}>Check-out: {item.checkOutDate}</Text>
-      <Text style={staffHomeStyles.requestItemText}>Status: {item.status}</Text>
-      <Text style={staffHomeStyles.requestItemText}>Hotel: {item.hotel.hotelName} {item.hotel.city}</Text>
-      <TouchableOpacity
-        style={staffHomeStyles.startCompleteButton}
-        onPress={() => {
-          setSelectedRequest(item);
-          fetchAvailableRooms(item.hotel);
-          setModalVisible(true);
-        }}
-      >
-        <Text style={staffHomeStyles.startCompleteButtonText}>Room assignment</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={staffHomeStyles.startCompleteButton}
-        onPress={() => {
-          navigation.navigate('ReceptionChatScreen', { roomNumber: item.roomNumber });
-        }}
-      >
-        <Text style={staffHomeStyles.startCompleteButtonText}>Chat</Text>
-      </TouchableOpacity>
+    <View style={styles.requestCard}>
+      <Text style={styles.requestHeader}>Guest: {item.guestName}</Text>
+      <Text style={styles.requestStatus}>Check-in: {item.checkInDate}</Text>
+      <Text style={styles.requestStatus}>Check-out: {item.checkOutDate}</Text>
+      <Text style={styles.requestStatus}>Status: {item.status}</Text>
+      <Text style={styles.requestStatus}>Hotel: {item.hotel.hotelName} {item.hotel.city}</Text>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[styles.button, styles.startButton]}
+          onPress={() => {
+            setSelectedRequest(item);
+            fetchAvailableRooms(item.hotel);
+            setModalVisible(true);
+          }}
+        >
+          <Ionicons name="play-circle" size={24} color="white" />
+          <Text style={styles.buttonText}>Assign Room</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -120,113 +111,187 @@ const ReceptionMainScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.header}>Reception Screen</Text>
-      <LogoutButton/>
-      <FlatList
-        data={requests}
-        keyExtractor={(item) => item.guestEmail}
-        renderItem={renderRequestItem}
-      />
-      <View style={staffHomeStyles.staffDetailsContainer}>
-        <Text style={staffHomeStyles.detailText}>Receptionist: {staffData.employeeName}</Text>
-        <Text style={staffHomeStyles.detailText}>&emsp;&emsp;{staffData.hotel.hotelName} {staffData.hotel.city}</Text>
-      
-      </View>
-      <Banner
-        visible={bannerVisible}
-        actions={[
-          {
-            label: 'Dismiss',
-            onPress: () => setBannerVisible(false),
-          },
-        ]}
-        icon="message"
-      >
-        You have received new messages.
-      </Banner>
-      
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-          setSelectedRoom('');
-          setSelectedRequest(null);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalHeader}>Assign Room</Text>
-            <Picker
-              selectedValue={selectedRoom}
-              onValueChange={(itemValue) => setSelectedRoom(itemValue)}
-              style={styles.picker}
-            >
-              {renderRoomPickerItems()}
-            </Picker>
-            <TouchableOpacity
-              style={styles.assignButton}
-              onPress={() => {
-                handleRoomAssignment(selectedRequest.guestEmail, selectedRoom);
-                setModalVisible(false);
-                setSelectedRoom('');
-                setSelectedRequest(null);
-              }}
-            >
-              <Text style={styles.buttonText}>Assign Room</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.cancelButton}
-              onPress={() => {
-                setModalVisible(false);
-                setSelectedRoom('');
-                setSelectedRequest(null);
-              }}
-            >
-              <Text style={styles.buttonText}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
+    <ImageBackground source={require('../../assets/reception.jpg')} style={styles.backgroundImage}>
+      <View style={styles.container}>
+        <Text style={styles.header}>Reception Screen</Text>
+       
+        <FlatList
+          data={requests}
+          keyExtractor={(item) => item.guestEmail}
+          renderItem={renderRequestItem}
+        />
+        <View style={styles.staffDetailsContainer}>
+          <Text style={styles.staffDetailsText}>Receptionist: {staffData.employeeName}</Text>
+          <Text style={styles.staffDetailsText}>{staffData.hotel.hotelName} {staffData.hotel.city}</Text>
+          <LogoutButton />
         </View>
-      </Modal>
-    </View>
+        <Banner
+          visible={bannerVisible}
+          actions={[
+            {
+              label: 'Dismiss',
+              onPress: () => setBannerVisible(false),
+            },
+          ]}
+          icon="message"
+        >
+          You have received new messages.
+        </Banner>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(false);
+            setSelectedRoom('');
+            setSelectedRequest(null);
+          }}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalHeader}>Assign Room</Text>
+              <Picker
+                selectedValue={selectedRoom}
+                onValueChange={(itemValue) => setSelectedRoom(itemValue)}
+                style={styles.picker}
+              >
+                {renderRoomPickerItems()}
+              </Picker>
+              <TouchableOpacity
+                style={styles.modalAssignButton}
+                onPress={() => {
+                  handleRoomAssignment(selectedRequest.guestEmail, selectedRoom);
+                  setModalVisible(false);
+                  setSelectedRoom('');
+                  setSelectedRequest(null);
+                }}
+              >
+                <Text style={styles.buttonText}>Assign Room</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalCancelButton}
+                onPress={() => {
+                  setModalVisible(false);
+                  setSelectedRoom('');
+                  setSelectedRequest(null);
+                }}
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  header: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#FFF',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  requestCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    padding: 15,
+    borderRadius: 15,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  requestHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  requestStatus: {
+    fontSize: 16,
+    color: '#555',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 10,
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  startButton: {
+    backgroundColor: '#28a745',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    marginLeft: 5,
+  },
+  staffDetailsContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 20,
+    alignItems: 'center', // Center align the text
+  },
+  staffDetailsText: {
+    color: 'white',
+    fontSize: 16,
+    marginBottom: 5,
+    textAlign: 'center', // Center align the text
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    padding: 2,
-    borderRadius: 10,
-    elevation: 5,
+    backgroundColor: '#fff',
+    padding: 24,
+    borderRadius: 8,
+    elevation: 4,
     width: 300,
   },
   modalHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 16,
     textAlign: 'center',
   },
   picker: {
-    borderRadius: 9,
+    marginBottom: 16,
   },
-  assignButton: {
+  modalAssignButton: {
     backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 5,
+    padding: 12,
+    borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 8,
   },
-  cancelButton: {
+  modalCancelButton: {
     backgroundColor: '#f44336',
-    padding: 10,
-    borderRadius: 5,
+    padding: 12,
+    borderRadius: 8,
     alignItems: 'center',
   },
   buttonText: {
