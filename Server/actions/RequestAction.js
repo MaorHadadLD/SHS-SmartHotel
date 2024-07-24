@@ -76,7 +76,7 @@ export const getRequestByDepartment = async (reqBody) => {
     const snapshot = await get(requestsRef);
     const data = snapshot.val();
     if (data) {
-        if(reqBody.type === "Dinning"){
+        if(reqBody.type === "dining"){
             const requestList = Object.values(data)
             .filter(request => request.hotel.hotelName === reqBody.hotel.hotelName && request.hotel.city === reqBody.hotel.city)
             .map(request => ({
@@ -131,7 +131,7 @@ export const getRequestByDepartment = async (reqBody) => {
             const requestList = [];
             
             // Call getRequestByDepartment for each department type
-            const departmentTypes = ["CleaningRoom", "PoolBar", "RoomService", "Dinning"]; // Add more department types if needed
+            const departmentTypes = ["CleaningRoom", "PoolBar", "RoomService", "dining"]; // Add more department types if needed
             for (const type of departmentTypes) {
                 const res = await getRequestByDepartment({ type, hotel: guestData.selectedHotel });
                 if (res.success) {
@@ -161,7 +161,7 @@ export const postRequest = async (body) => {
         const requestRef = ref(db, `requests/${body.bodyrequest.type}/`);
         console.log("postRequestAction", body.bodyrequest);
         const newRef = push(requestRef);
-        if(body.bodyrequest.type === "Dinning"){
+        if(body.bodyrequest.type === "dining"){
             set(newRef,{
                 id: newRef.key,
                 numberOfDiners: body.bodyrequest.numberOfDiners,

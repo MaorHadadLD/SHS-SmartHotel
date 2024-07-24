@@ -1,8 +1,6 @@
 import axios from 'axios';
+import { BaseURL } from '../config';
 
-// const BaseURL = 'https://shs-smarthotel.onrender.com/';
-const BaseURL = 'http://192.168.1.250:3002/';
-// const BaseURL = 'http://192.168.1.162:3002/';
 export const sendLoginStaff = async (employeeNumber, password) => {
     console.log("sendLoginStaff", employeeNumber, password);
   try {

@@ -4,6 +4,7 @@ import { getAllRequstsByRoomNumberGuest } from '../../API/RequestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackGround from '../../components/BackGround';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { set } from 'firebase/database';
 
 function RequestTracking() {
     const [requests, setRequests] = useState([]);
@@ -22,6 +23,8 @@ function RequestTracking() {
                 if (res.success) {
                     if (Array.isArray(res.data)) {
                         setRequests(res.data);
+                        setLoading(false);
+                        // console.log("RequestTracking: Requests fetched successfully.");
                     } else {
                         console.error("RequestTracking: Data received is not an array.");
                     }
@@ -35,7 +38,7 @@ function RequestTracking() {
             }
         };
         getRequests();
-    }, []);
+    }, [requests]);
 
     const groupRequestsByDepartment = () => {
         const groupedRequests = {};
@@ -71,7 +74,7 @@ function RequestTracking() {
                         ))}
                     </>
                 )}
-                {request.department === 'Dinning' && (
+                {request.department === 'dining' && (
                     <Text style={styles.requestNotice}>Table {request.tableId}: {request.notice}</Text>
                 )}
             </View>
@@ -92,6 +95,9 @@ function RequestTracking() {
                 <View style={styles.titleContainer}>
                     <Text style={styles.heading}>Request Tracking</Text>
                 </View>
+                {Object.keys(groupedRequests).length === 0 && !loading && (
+                    <Text style={{ color: "#FF6B3C", fontSize: 20, textAlign: 'center', fontWeight:"bold"  }}>No requests found.</Text>
+                )}
                 {Object.keys(groupedRequests).map((department, index) => (
                     <View key={index} style={styles.departmentContainer}>
                         <View style={styles.departmentHeader}>
@@ -130,7 +136,7 @@ function RequestTracking() {
                                     <Text style={styles.modalText}>Status: {selectedRequest.status}</Text>
                                 </>
                             )}
-                            {selectedRequest.department === 'Dinning' && (
+                            {selectedRequest.department === 'dining' && (
                                 <>
                                     <Text style={styles.modalText}>Number of diners: {selectedRequest.numberOfDiners}</Text>
                                     <Text style={styles.modalText}>Arrival time: {selectedRequest.arrivalTime}</Text>

@@ -37,6 +37,11 @@ const ManagerScreen = ({ route }) => {
         Alert.alert('Error', 'Please select role');
         return;
       }
+      //check if the employee number if is a number
+      if (isNaN(newEmployeeData.employeeNumber)) {
+        Alert.alert('Error', 'Employee number should be a number');
+        return;
+      }
 
       const result = await addEmployee(newEmployeeData);
       if (result.success) {

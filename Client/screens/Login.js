@@ -52,7 +52,7 @@ const Login = () => {
           navigation.navigate('RoomServiceScreen', { staffData: result.data });
         } else if (result.data.role === 'PoolBar') {
           navigation.navigate('PoolBarScreen', { staffData: result.data });
-        } else if (result.data.role === 'Dinning') {
+        } else if (result.data.role === 'dining') {
           navigation.navigate('DinningRoomStaff', { staffData: result.data });
         } else if (result.data.role === 'spa') {
           navigation.navigate('SpaStaffScreen', { staffData: result.data });

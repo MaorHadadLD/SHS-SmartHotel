@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, TextInput, ScrollView, Image } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet, TextInput, ScrollView, Image, Modal } from 'react-native';
 
 export default function CategoryListPool({ categoryList, products, onAddToCart }) {
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState("Meals");
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
     const [quantities, setQuantities] = useState({});
+    const [message, setMessage] = useState(null);
+    const [messageError, setMessageError] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const handleCategorySelect = (category) => {
         if (selectedCategory === category.name) {
@@ -31,6 +34,29 @@ export default function CategoryListPool({ categoryList, products, onAddToCart }
         }));
     };
 
+    const handleAddToBasket = (product, quantity) => {
+        const result = onAddToCart(product, quantity);
+        if(result) {
+            setMessage(`${quantity} ${product.name} is added to your cart ✔`);
+        } else {
+            setMessageError(`Please enter a valid quantity before adding to cart, maximum quantity is 10.`);
+        }
+
+        setModalVisible(true);
+
+        // Reset the quantity for the specific product
+        setQuantities((prevQuantities) => ({
+            ...prevQuantities,
+            [product.id]: '',
+        }));
+
+        setTimeout(() => {
+            setModalVisible(false);
+            setMessage(null);
+            setMessageError(null);
+        }, 2000);
+    };
+
     const filteredProducts = selectedSubcategory
         ? products.filter(product => product.subcategories === selectedSubcategory)
         : selectedCategory && selectedCategory !== 'Alcohol'
@@ -39,6 +65,27 @@ export default function CategoryListPool({ categoryList, products, onAddToCart }
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            <Modal
+                transparent={true}
+                animationType="fade"
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(false);
+                }}>
+                <View style={styles.modalOverlay}>
+                    {messageError && (
+                        <View style={styles.modalContentError}>
+                            <Text style={styles.messageText}>{messageError}</Text>
+                        </View>
+                    )}
+                    {message && (
+                        <View style={styles.modalContent}>
+                            <Text style={styles.messageText}>{message}</Text>
+                        </View>
+                    )}
+                    
+                </View>
+            </Modal>
             <View>
                 <FlatList
                     horizontal
@@ -86,7 +133,7 @@ export default function CategoryListPool({ categoryList, products, onAddToCart }
                             />
                             <TouchableOpacity
                                 style={styles.addToBasketButton}
-                                onPress={() => onAddToCart(product, quantities[product.id] ? quantities[product.id] : 1)}>
+                                onPress={() => handleAddToBasket(product, quantities[product.id] ? quantities[product.id] : 1)}>
                                 <Text style={styles.addToBasketButtonText}>Add to Basket</Text>
                             </TouchableOpacity>
                         </View>
@@ -218,5 +265,26 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 10,
 
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#4CAF50',
+        padding: 20,
+        borderRadius: 10,
+    },
+    modalContentError: {
+        backgroundColor: '#F44336',
+        padding: 20,
+        borderRadius: 10,
+    },
+    messageText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 16,
     },
 });
