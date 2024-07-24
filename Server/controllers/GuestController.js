@@ -1,4 +1,5 @@
 import {getGuestByEmail, updateGuestOPT, updateGuestSelectedHotel} from '../actions/GuestAction.js';    
+import { deleteChat } from './ChatController.js';
 
 export const requestSuccess = (data) => ({success: true, data})
 export const requestFailure = (data) => ({ success: false, data });
@@ -50,3 +51,13 @@ export const requestOTP = async (body) => {
         return requestFailure("Email not found");
     }
 }
+
+export const CheckOutGuestController = async (body) => {
+    console.log("deleteGuestController", body);
+    try {
+       const deleteGuestChats = await deleteChat(hotel, roomNumber);
+    }catch (error) {
+        console.error("deleteGuestController", error);
+        return false;
+    }
+};

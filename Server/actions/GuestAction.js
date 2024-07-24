@@ -157,5 +157,19 @@ export const updateGuestOPT = async (guestEmail) => {
     }
 }
 export const deleteGuest = async (guest) => {
+    try {
+        const result = await getGuestByEmail(guest.email);
+        const guestData = Object.values(result)[0];
+        const guestKey = Object.keys(result)[0]; 
+        if (!guestData) {
+            return false;
+        }
+        const guestRef = ref(db, `guests/${guestKey}`);
+        await update(guestRef, null);
+        return true;
+    } catch (error) {
+        console.error("deleteGuest", error);
+        return false;
+    }
     
 }

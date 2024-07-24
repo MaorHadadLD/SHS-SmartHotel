@@ -38,3 +38,12 @@ export const resendOTP = async (email) => {
     console.error("resendOTP", error);
   }
 }
+
+export const sendCheckOutRequest = async (guest) => {
+  try {
+    const response = await axios.post(`${BaseURL}checkout`, guest);
+    return response.data;
+  } catch (error) {
+    console.error("sendCheckOut", error);
+  }
+}

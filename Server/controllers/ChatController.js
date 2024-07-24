@@ -56,3 +56,20 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const deleteChat = async (hotel, roomNumber) => {
+  const hotelref = toString(hotel.hotelName + '_'+ hotel.city);
+  console.log(`Deleting chat for hotel: ${hotelref}, room: ${roomNumber}`);
+  try {
+    const chatRef = ref(database, `chats/${hotelref}/${roomNumber}`);
+    await update(chatRef, null);
+
+    const activeChatsRef = ref(database, `activeChats/${hotel}/${roomNumber}`);
+    await update(activeChatsRef, null);
+
+    res.status(200).json({ message: 'Chat deleted' });
+  } catch (error) {
+    console.error(`Error deleting chat for hotel ${hotel}, room ${roomNumber}:`, error.message);
+    res.status(500).json({ error: error.message });
+  }
+}
