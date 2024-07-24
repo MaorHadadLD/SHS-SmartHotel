@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const BaseURL = 'https://shs-smarthotel.onrender.com/';
-// const BaseURL = 'http://192.168.183.198:3002/';
+// const BaseURL = 'https://shs-smarthotel.onrender.com/';
+const BaseURL = 'http://192.168.1.250:3002/';
 
-export const getChatMessages = async (roomNumber) => {
+export const getChatMessages = async (hotel, roomNumber) => {
   try {
-    const response = await axios.get(`${BaseURL}chats/${roomNumber}`);
+    const response = await axios.get(`${BaseURL}chats/${hotel}/${roomNumber}`);
     return response.data;
   } catch (error) {
     console.error("getChatMessages", error.message);
@@ -13,9 +13,9 @@ export const getChatMessages = async (roomNumber) => {
   }
 };
 
-export const sendChatMessage = async (roomNumber, sender, message) => {
+export const sendChatMessage = async (hotel, roomNumber, sender, message) => {
   try {
-    const response = await axios.post(`${BaseURL}chats/${roomNumber}`, { sender, message });
+    const response = await axios.post(`${BaseURL}chats/${hotel}/${roomNumber}`, { sender, message });
     return response.data;
   } catch (error) {
     console.error("sendChatMessage", error.message);
@@ -32,5 +32,3 @@ export const getActiveChats = async () => {
     throw error;
   }
 };
-
-

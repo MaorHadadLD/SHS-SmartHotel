@@ -14,9 +14,11 @@ import io from 'socket.io-client';
 import { getChatMessages, sendChatMessage, getActiveChats } from '../../API/chatCalls';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
-const socket = io('https://shs-smarthotel.onrender.com/');
+const socket = io('http://192.168.1.250:3002/');
 
-const ReceptionChatScreen = () => {
+const ReceptionChatScreen = ({ route }) => {
+  const { staffData } = route.params;
+  const hotel = `${staffData.hotel.hotelName}_${staffData.hotel.city}`;
   const [activeChats, setActiveChats] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
@@ -29,7 +31,7 @@ const ReceptionChatScreen = () => {
     const fetchActiveChats = async () => {
       try {
         const chats = await getActiveChats();
-        const chatList = chats ? Object.entries(chats).map(([roomNumber, value]) => ({ roomNumber, ...value })) : [];
+        const chatList = chats ? Object.entries(chats[hotel]).map(([roomNumber, value]) => ({ roomNumber, ...value })) : [];
         setActiveChats(chatList);
       } catch (error) {
         console.error("Error fetching active chats:", error.message);
@@ -39,27 +41,38 @@ const ReceptionChatScreen = () => {
     fetchActiveChats();
 
     socket.on('message', (msg) => {
-      if (msg.room === selectedRoom) {
-        setChatMessages((prevMessages) => [...prevMessages, { id: Date.now().toString(), ...msg }]);
-      } else {
-        setUnreadMessages((prevUnread) => ({
-          ...prevUnread,
-          [msg.room]: (prevUnread[msg.room] || 0) + 1,
-        }));
-        setBannerVisible(true);
+      if (msg.hotel === hotel) {
+        setActiveChats((prevChats) => {
+          const chatExists = prevChats.some(chat => chat.roomNumber === msg.room);
+          if (!chatExists) {
+            return [...prevChats, { roomNumber: msg.room, lastMessage: msg.message }];
+          }
+          return prevChats.map(chat => 
+            chat.roomNumber === msg.room ? { ...chat, lastMessage: msg.message } : chat
+          );
+        });
+        if (msg.room === selectedRoom) {
+          setChatMessages((prevMessages) => [...prevMessages, { id: Date.now().toString(), ...msg }]);
+        } else {
+          setUnreadMessages((prevUnread) => ({
+            ...prevUnread,
+            [msg.room]: (prevUnread[msg.room] || 0) + 1,
+          }));
+          setBannerVisible(true);
+        }
       }
     });
 
     return () => {
       socket.off('message');
     };
-  }, [selectedRoom]);
+  }, [selectedRoom, hotel]);
 
   useEffect(() => {
     if (selectedRoom) {
       const fetchMessages = async () => {
         try {
-          const messages = await getChatMessages(selectedRoom);
+          const messages = await getChatMessages(hotel, selectedRoom);
           const messagesArray = messages ? Object.entries(messages).map(([key, value]) => ({ id: key, ...value })) : [];
           setChatMessages(messagesArray);
           setUnreadMessages((prevUnread) => ({
@@ -72,9 +85,9 @@ const ReceptionChatScreen = () => {
       };
 
       fetchMessages();
-      socket.emit('joinRoom', selectedRoom);
+      socket.emit('joinRoom', hotel, selectedRoom);
 
-      const chatRef = ref(database, `chats/${selectedRoom}`);
+      const chatRef = ref(database, `chats/${hotel}/${selectedRoom}`);
       const unsubscribe = onValue(chatRef, (snapshot) => {
         if (snapshot.exists()) {
           const messages = snapshot.val();
@@ -87,14 +100,14 @@ const ReceptionChatScreen = () => {
         unsubscribe();
       };
     }
-  }, [selectedRoom]);
+  }, [selectedRoom, hotel]);
 
   const sendMessageHandler = async () => {
     if (!selectedRoom) return;
 
-    const msg = { room: selectedRoom, sender: 'reception', message };
+    const msg = { room: selectedRoom, sender: 'reception', message, hotel, timestamp: new Date().toISOString() };
     try {
-      await sendChatMessage(selectedRoom, 'reception', message);
+      await sendChatMessage(hotel, selectedRoom, 'reception', message);
       socket.emit('chatMessage', msg);
       setMessage('');
     } catch (error) {
@@ -112,7 +125,6 @@ const ReceptionChatScreen = () => {
             <Text style={styles.unreadBadgeText}>{unreadMessages[item.roomNumber]}</Text>
           </View>
         )}
-        {bannerVisible && <Banner visible={bannerVisible} icon="message" actions={[{ label: 'Dismiss', onPress: () => setBannerVisible(false) }]}>New message in this room</Banner>}
       </View>
     </TouchableOpacity>
   );
@@ -120,6 +132,7 @@ const ReceptionChatScreen = () => {
   const renderMessageItem = ({ item }) => (
     <View style={item.sender === 'guest' ? styles.guestMessage : styles.receptionMessage}>
       <Text style={styles.messageText}>{item.message}</Text>
+      <Text style={styles.timestampText}>{new Date(item.timestamp).toLocaleString()}</Text>
     </View>
   );
 
@@ -255,6 +268,12 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
+  },
+  timestampText: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 5,
+    alignSelf: 'flex-end',
   },
   emptyState: {
     flex: 1,

@@ -6,11 +6,12 @@ import { getChatMessages, sendChatMessage } from '../../../API/chatCalls';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const socket = io('https://shs-smarthotel.onrender.com/');
+const socket = io('http://192.168.1.250:3002/');
 
 const GuestChatScreen = ({ route, navigation }) => {
   const { guestData } = route.params;
   const roomNumber = guestData.roomNumber;
+  const hotel = `${guestData.selectedHotel.hotelName}_${guestData.selectedHotel.city}`;
   const [chatMessages, setChatMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [unreadCount, setUnreadCount] = useState(0);
@@ -19,7 +20,7 @@ const GuestChatScreen = ({ route, navigation }) => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const messages = await getChatMessages(roomNumber);
+        const messages = await getChatMessages(hotel, roomNumber);
         const messagesArray = messages ? Object.entries(messages).map(([key, value]) => ({ id: key, ...value })) : [];
         setChatMessages(messagesArray);
       } catch (error) {
@@ -28,9 +29,9 @@ const GuestChatScreen = ({ route, navigation }) => {
     };
 
     fetchMessages();
-    socket.emit('joinRoom', roomNumber);
+    socket.emit('joinRoom', hotel, roomNumber);
 
-    const chatRef = ref(database, `chats/${roomNumber}`);
+    const chatRef = ref(database, `chats/${hotel}/${roomNumber}`);
     const unsubscribe = onValue(chatRef, (snapshot) => {
       if (snapshot.exists()) {
         const messages = snapshot.val();
@@ -40,7 +41,7 @@ const GuestChatScreen = ({ route, navigation }) => {
     });
 
     socket.on('message', (msg) => {
-      if (msg.room === roomNumber) {
+      if (msg.room === roomNumber && msg.hotel === hotel) {
         setChatMessages((prevMessages) => [...prevMessages, { id: Date.now().toString(), ...msg }]);
         setUnreadCount((prevCount) => prevCount + 1);
       }
@@ -50,7 +51,7 @@ const GuestChatScreen = ({ route, navigation }) => {
       unsubscribe();
       socket.off('message');
     };
-  }, [roomNumber]);
+  }, [roomNumber, hotel]);
 
   useEffect(() => {
     const unsubscribeFocus = navigation.addListener('focus', () => {
@@ -61,11 +62,11 @@ const GuestChatScreen = ({ route, navigation }) => {
   }, [navigation]);
 
   const sendMessageHandler = async () => {
-    if (!roomNumber) return;
+    if (!roomNumber || !hotel) return;
 
-    const msg = { room: roomNumber, sender: 'guest', message };
+    const msg = { room: roomNumber, sender: 'guest', message, hotel, timestamp: new Date().toISOString() };
     try {
-      await sendChatMessage(roomNumber, 'guest', message);
+      await sendChatMessage(hotel, roomNumber, 'guest', message);
       socket.emit('chatMessage', msg);
       setMessage('');
     } catch (error) {
@@ -76,6 +77,7 @@ const GuestChatScreen = ({ route, navigation }) => {
   const renderMessageItem = ({ item }) => (
     <View style={item.sender === 'guest' ? styles.guestMessage : styles.receptionMessage}>
       <Text style={styles.messageText}>{item.message}</Text>
+      <Text style={styles.timestampText}>{new Date(item.timestamp).toLocaleString()}</Text>
     </View>
   );
 
@@ -168,6 +170,12 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
+  },
+  timestampText: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 5,
+    alignSelf: 'flex-end',
   },
 });
 

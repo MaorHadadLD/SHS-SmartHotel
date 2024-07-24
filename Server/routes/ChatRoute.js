@@ -4,8 +4,7 @@ import { getMessages, sendMessage, getActiveChats } from '../controllers/ChatCon
 const router = express.Router();
 
 router.get('/active', getActiveChats);
-router.get('/:roomNumber', getMessages);
-router.post('/:roomNumber', sendMessage);
-
+router.get('/:hotel/:roomNumber', getMessages);
+router.post('/:hotel/:roomNumber', sendMessage);
 
 export default router;

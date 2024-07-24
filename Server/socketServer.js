@@ -18,13 +18,13 @@ app.use('/chats', chatRouter);
 io.on('connection', (socket) => {
   console.log('a user connected:', socket.id);
 
-  socket.on('joinRoom', (room) => {
-    socket.join(room);
+  socket.on('joinRoom', (hotel, room) => {
+    socket.join(hotel, room);
     console.log(`User joined room: ${room}`);
   });
 
   socket.on('chatMessage', (msg) => {
-    io.to(msg.room).emit('message', msg);
+    io.to(msg.room, msg.hotel).emit('message', msg);
     console.log('message:', msg);
   });
 
