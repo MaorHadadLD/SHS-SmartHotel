@@ -14,6 +14,7 @@ import io from 'socket.io-client';
 import { getChatMessages, sendChatMessage, getActiveChats } from '../../API/chatCalls';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
+
 const socket = io('http://192.168.1.250:3002/');
 
 const ReceptionChatScreen = ({ route }) => {
