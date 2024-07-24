@@ -1,5 +1,5 @@
 import app from '../firebaseConfig.js';
-import { getDatabase, ref, get, push, update } from 'firebase/database';
+import { getDatabase, ref, get, push, update, remove } from 'firebase/database';
 
 const database = getDatabase(app);
 
@@ -58,18 +58,19 @@ export const sendMessage = async (req, res) => {
 };
 
 export const deleteChat = async (hotel, roomNumber) => {
-  const hotelref = toString(hotel.hotelName + '_'+ hotel.city);
+  console.log(`Deleting chat for hotel: ${hotel.hotelName}`);
+  const hotelref = hotel.hotelName + '_'+ hotel.city;
   console.log(`Deleting chat for hotel: ${hotelref}, room: ${roomNumber}`);
   try {
     const chatRef = ref(database, `chats/${hotelref}/${roomNumber}`);
-    await update(chatRef, null);
+    await remove(chatRef);
 
-    const activeChatsRef = ref(database, `activeChats/${hotel}/${roomNumber}`);
-    await update(activeChatsRef, null);
+    const activeChatsRef = ref(database, `activeChats/${hotelref}/${roomNumber}`);
+    await remove(activeChatsRef);
 
-    res.status(200).json({ message: 'Chat deleted' });
+    return true;
   } catch (error) {
-    console.error(`Error deleting chat for hotel ${hotel}, room ${roomNumber}:`, error.message);
-    res.status(500).json({ error: error.message });
+    console.error(`Error deleting chat for hotel ${hotelref}, room ${roomNumber}:`, error.message);
+    return false;
   }
 }

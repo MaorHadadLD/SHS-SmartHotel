@@ -1,5 +1,5 @@
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, get, query, orderByChild, equalTo ,update} from 'firebase/database';
+import { getDatabase, ref, get, query, orderByChild, equalTo ,update, remove} from 'firebase/database';
 import { sendEmail } from '../routes/MailRoute.js';
 
 const db = getDatabase(firebaseApp);
@@ -156,16 +156,17 @@ export const updateGuestOPT = async (guestEmail) => {
         return false;
     }
 }
-export const deleteGuest = async (guest) => {
+export const deleteGuest = async (email) => {
+    console.log("deleteGuest", email);
     try {
-        const result = await getGuestByEmail(guest.email);
+        const result = await getGuestByEmail(email);
         const guestData = Object.values(result)[0];
         const guestKey = Object.keys(result)[0]; 
         if (!guestData) {
             return false;
         }
         const guestRef = ref(db, `guests/${guestKey}`);
-        await update(guestRef, null);
+        await remove(guestRef);
         return true;
     } catch (error) {
         console.error("deleteGuest", error);

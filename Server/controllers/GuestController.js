@@ -1,5 +1,6 @@
-import {getGuestByEmail, updateGuestOPT, updateGuestSelectedHotel} from '../actions/GuestAction.js';    
+import {deleteGuest, getGuestByEmail, updateGuestOPT, updateGuestSelectedHotel} from '../actions/GuestAction.js';    
 import { deleteChat } from './ChatController.js';
+import { updateRoomStatus } from '../actions/StaffAction.js';
 
 export const requestSuccess = (data) => ({success: true, data})
 export const requestFailure = (data) => ({ success: false, data });
@@ -55,7 +56,14 @@ export const requestOTP = async (body) => {
 export const CheckOutGuestController = async (body) => {
     console.log("deleteGuestController", body);
     try {
-       const deleteGuestChats = await deleteChat(hotel, roomNumber);
+       const deleteGuestChats = await deleteChat(body.selectedHotel, body.roomNumber);
+       const updateRoom = await updateRoomStatus(body.selectedHotel, body.roomNumber, 'available');
+       const checkOutGuest = await deleteGuest(body.email);
+       if (deleteGuestChats && updateRoom.success && checkOutGuest) {
+           return requestSuccess("Guest checked out successfully!");
+       } else {
+           return requestFailure("Error checking out guest");
+       }
     }catch (error) {
         console.error("deleteGuestController", error);
         return false;
