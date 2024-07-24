@@ -118,27 +118,29 @@ function DiningRoomScreen({ route }) {
       <View style={styles.container}>
         {availableMeals.length > 0 ? (
           <>
-            <Text style={styles.header}>Meals Menu</Text>
-            {availableMeals.map(({ meal, startTime, endTime }) => (
-              <View key={meal} style={styles.mealContainer}>
-                <Text style={styles.mealTime}>{`Start Time: ${startTime} | End Time: ${endTime}`}</Text>
-                <Text style={styles.mealHeader}>{meal}</Text>
-                <FlatList
-                  data={Object.entries(meals[meal.toLowerCase()] || {})}
-                  renderItem={({ item }) => (
-                    <Text style={styles.item}>{item[1]}</Text>
-                  )}
-                  ListEmptyComponent={<Text style={styles.noDishesText}>No dishes available for {meal}</Text>}
-                />
-                <TouchableOpacity 
-                  style={[styles.orderButton, hasReservation && styles.disabledButton]} 
-                  onPress={navigateToTableReservation}
-                  disabled={hasReservation}
-                >
-                  <Text style={styles.orderButtonText}>{hasReservation ? 'Reservation Exists' : 'Reserve a Table'}</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
+            <View style={styles.captionContainer}>
+              <Text style={styles.header}>Meals Menu</Text>
+              {availableMeals.map(({ meal, startTime, endTime }) => (
+                <View key={meal} style={styles.mealContainer}>
+                  <Text style={styles.mealTime}>{`Start Time: ${startTime} | End Time: ${endTime}`}</Text>
+                  <Text style={styles.mealHeader}>{meal}</Text>
+                  <FlatList
+                    data={Object.entries(meals[meal.toLowerCase()] || {})}
+                    renderItem={({ item }) => (
+                      <Text style={styles.item}>{item[1]}</Text>
+                    )}
+                    ListEmptyComponent={<Text style={styles.noDishesText}>No dishes available for {meal}</Text>}
+                  />
+                  <TouchableOpacity 
+                    style={[styles.orderButton, hasReservation && styles.disabledButton]} 
+                    onPress={navigateToTableReservation}
+                    disabled={hasReservation}
+                  >
+                    <Text style={styles.orderButtonText}>{hasReservation ? 'Reservation Exists' : 'Reserve a Table'}</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
           </>
         ) : (
           <View style={styles.modalContainer}>
@@ -210,12 +212,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    marginTop: 100,
+  },
+  captionContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // semi-transparent background
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 20,
   },
   header: {
     fontSize: 26,
     fontWeight: 'bold',
-    marginTop: 5,
-    marginBottom: 20,
+    marginBottom: 30,
+    marginTop: 20,
     textAlign: 'center',
     color: 'gold',
   },
@@ -227,24 +236,25 @@ const styles = StyleSheet.create({
     color: '#ddd',
   },
   mealContainer: {
-    marginBottom: 20,
+    marginBottom: 5,
   },
   mealHeader: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 10,
     textAlign: 'center',
     color: 'white',
   },
   mealTime: {
     fontSize: 18,
-    marginBottom: 5,
+    marginBottom: 50,
     color: '#ddd',
     textAlign: 'center',
   },
   item: {
     fontSize: 18,
     marginVertical: 8,
+    marginBottom: 20,
     textAlign: 'center',
     color: 'white',
   },
@@ -258,7 +268,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF6B3C',
     padding: 10,
     borderRadius: 50,
-    marginTop: 20,
+    marginTop: 100,
     alignItems: 'center',
   },
   disabledButton: {
