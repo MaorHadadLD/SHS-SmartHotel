@@ -44,7 +44,6 @@ export const postRoomRequest = async (request) => {
             status: "waiting",
         });
         const res = await updateGuestRoomNumber(request.guest.email, "Your request for your room has been sent to the hotel reception");
-        console.log("postRoomRequestreslut", res);
         return {succees: true, guestEmail: request.guest.email};
     }
     catch (error) {
@@ -52,9 +51,6 @@ export const postRoomRequest = async (request) => {
         return {succees: false};
     }
 }
-
-
-
 
 export const deleteRoomRequest = async (guestEmail, type) => {
     try {
@@ -71,7 +67,6 @@ export const deleteRoomRequest = async (guestEmail, type) => {
 
 // get the request by department and by hotel 
 export const getRequestByDepartment = async (reqBody) => {
-    // console.log("getRequestByDpartment", reqBody);
     const requestsRef = ref(db, `requests/${reqBody.type}`);
     const snapshot = await get(requestsRef);
     const data = snapshot.val();
@@ -89,7 +84,6 @@ export const getRequestByDepartment = async (reqBody) => {
                 reservedTime: request.timestamp,
                 department: reqBody.type,
             }));
-            // console.log("getRequestByDpartment159",  requestList);
             return {success: true, data: requestList};
         }else if (reqBody.type === "PoolBar" || reqBody.type === "RoomService") {
             const requestList = Object.values(data)
@@ -102,7 +96,6 @@ export const getRequestByDepartment = async (reqBody) => {
                 roomNumber: request.roomNumber,
                 department: reqBody.type,
             }));
-            // console.log("getRequestByDpartment159",  requestList);
             return {success: true, data: requestList};
         }
         else {
@@ -116,7 +109,6 @@ export const getRequestByDepartment = async (reqBody) => {
             status: request.status,
             department: reqBody.type,
           }));
-        //   console.log("getRequestByDpartment159",  requestList);
           return {success: true, data: requestList};
         }
     }
@@ -126,7 +118,6 @@ export const getRequestByDepartment = async (reqBody) => {
     }
 
     export const getAllRequstsByRoomNumber = async (guestData) => {
-        console.log("getAllRequstsByRoomNumber", guestData.roomNumber);
         try {
             const requestList = [];
             
@@ -142,11 +133,9 @@ export const getRequestByDepartment = async (reqBody) => {
             }
             
             // Now requestList contains requests from all departments
-            console.log("All requests:", requestList);
             
             // Filter requestList by room number
             const filteredRequests = requestList.filter(request => request.roomNumber === guestData.roomNumber);
-            console.log("Filtered requests:", filteredRequests);
             
             return { success: true, data: filteredRequests };
         } catch (error) {
@@ -201,7 +190,6 @@ export const postRequest = async (body) => {
 }
 
 export const updateRequest = async (body) => {
-    console.log("updateRequest", body);
     try {
         const requestRef = ref(db, `requests/${body.type}/${body.id}`);
         update(requestRef, {
@@ -213,7 +201,6 @@ export const updateRequest = async (body) => {
         console.error("updateRequest", error);
         return {success: false};
     }
-
 
 }
 
@@ -238,7 +225,6 @@ export const checkStatusbyRoomNumberAndHotel = async (body) => {
         const requestsRef = ref(db, `requests/${body.type}`);
         const snapshot = await get(requestsRef);
         const data = snapshot.val();
-        console.log("checkStatusbyRoomNumberAndHoteldddddd", data);
         if (data) {
             const requestList = Object.values(data)
                 .filter(request => request.roomNumber === body.roomNumber && request.hotel.hotelName === body.hotel.hotelName && request.hotel.city === body.hotel.city)
@@ -246,7 +232,6 @@ export const checkStatusbyRoomNumberAndHotel = async (body) => {
                     id: request.id,
                     status: request.status,
                 }));
-            // console.log("checkStatusbyRoomNumberAndHotel?????", requestList);
             if (requestList.length > 0) {
                 return {success: true, data: requestList};
             } else {
@@ -263,11 +248,9 @@ export const checkStatusbyRoomNumberAndHotel = async (body) => {
 }
 
 export const getTablesByHotel = async (hotel) => {
-    // console.log("getTablesByHotel", hotel); 
 
     try {
         const hotelref = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
-        // console.log("getTablesByHotellllll", hotelref);
         if (hotelref) {
             const tables = hotelref.hotel.tables;
             return {success: true, data: tables};

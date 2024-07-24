@@ -88,9 +88,7 @@ export const addEmployeeController = async (req, res) => {
 
 export const deleteEmployeeController = async (req, res) => {
     const employeeNumber  = req.employeeNumber;
-    console.log("deleteEmployeeController", employeeNumber);
     const result = await deleteEmployee(employeeNumber);
-    console.log("deleteEmployeeController", result);
     if (result.success) {
         return requestSuccess(result);
     }

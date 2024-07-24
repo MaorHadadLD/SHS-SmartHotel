@@ -161,10 +161,8 @@ export const updateMealByHotel = async (hotel, meals) => {
     console.log("updateMealHotel", hotel, meals);
     try {
         const hotelRefold = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
-        console.log("hotelref", hotelRefold);
         if (hotelRefold && hotelRefold.hotel.meals) {
             const updatedMeals = { meals };
-            console.log("updatedMealssssssss", updatedMeals);
             //get ref hotel acording to hotel name and city
             // const hotelsRef = ref(db, 'Hotels');
             // const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotel.hotelName));
@@ -180,7 +178,6 @@ export const updateMealByHotel = async (hotel, meals) => {
             // );
             // if (hotelKey) {
                 const hotelRef = ref(db, `Hotels/${hotelRefold.hotelKey}`);
-                console.log("hotelRefaaaaaaaa", hotelRefold.hotelKey);
                 await update(hotelRef, {meals: updatedMeals.meals});
                 return { success: true, data: 'Meals updated successfully' };
                 
@@ -198,7 +195,6 @@ export const addEmployee = async (employeeData) => {
   try {
     const employeeRef = ref(db, `staff/${employeeData.employeeNumber}`);
     const employeeSnapshot = await get(employeeRef);
-    console.log("employeeSnapshot", employeeSnapshot.exists());
     if (employeeSnapshot.exists()) {
       return { success: false, message: 'Employee already exists' };
     }

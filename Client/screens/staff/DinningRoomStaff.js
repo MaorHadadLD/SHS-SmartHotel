@@ -52,7 +52,7 @@ function DinningRoomStaff({ route }) {
 
     fetchMeals();
     fetchRequests();
-  }, [route.params.staffData.hotel]);
+  }, [route.params.staffData.hotel,requests]);
 
   const handleRequestStatusChange = async (req) => {
     try {

@@ -22,7 +22,6 @@ staffRouter.post('/getMealsHotel', async (req, res) => {
 });
 
 staffRouter.put('/updateMealHotel', async (req, res) => {
-    // console.log("updateMealHotel", req.body);
     respond(await updateMealHotelController(req.body), res);
 });
 
@@ -31,7 +30,6 @@ staffRouter.post('/addEmployee', async (req, res) => {
 }
 );
 staffRouter.post('/deleteEmployee', async (req, res) => {
-    console.log("deleteEmployee", req.body);
     respond(await deleteEmployeeController(req.body), res);
 }
 );

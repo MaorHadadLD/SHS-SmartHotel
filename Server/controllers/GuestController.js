@@ -5,17 +5,11 @@ export const requestFailure = (data) => ({ success: false, data });
 
 export const LogInGuestController = async (body) => {
     const result = await getGuestByEmail(body.email);
-    console.log("LogInGuestController result", result);
     if (result) {
         const guestData = Object.values(result)[0];
         if (guestData.otp === body.password){
             const resultupdate = await updateGuestSelectedHotel(guestData.email, body.selectedHotel.selectedHotel.hotelName, body.selectedHotel.selectedHotel.city);
             return requestSuccess(resultupdate);
-            // guestData.otp = null;
-            // guestData.password = body.password;
-            // console.log("LogInGuestController guestData", guestData);
-            // updateGuest(guestData);
-            // return requestSuccess(guestData);
         }
         else
             return requestFailure("Incorrect Password");
@@ -26,7 +20,6 @@ export const LogInGuestController = async (body) => {
 
 export const RoomStatusController = async (body) => {
     const result = await getGuestByEmail(body.email);
-    // console.log("RoomStatusController result", result);
     if (result) {
         const guestData = Object.values(result)[0];
         if (guestData) {
