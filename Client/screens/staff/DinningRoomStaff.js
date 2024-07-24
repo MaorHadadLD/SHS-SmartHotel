@@ -4,6 +4,7 @@ import { getRequests, deleteDiningTableRequest } from '../../API/RequestCalls';
 import { getMealsHotel, updateMealHotel } from '../../API/StaffCalls';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import moment from 'moment';
+import LogoutButton from '../../components/LogoutButton';
 
 const backgroundImageUri = require('../../assets/dining_room_back.jpg');
 
@@ -140,6 +141,7 @@ function DinningRoomStaff({ route }) {
         </TouchableOpacity>
 
         <View style={styles.staffDetailsContainer}>
+          <LogoutButton />
           <Text style={styles.detailText}>Name: {route.params.staffData.employeeName}</Text>
           <Text style={styles.detailText}>Role: {route.params.staffData.role}</Text>
           <Text style={styles.detailText}>Hotel: {route.params.staffData.hotel.hotelName} {route.params.staffData.hotel.city}</Text>

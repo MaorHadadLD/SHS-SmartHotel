@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Platform, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, TextInput, Platform, KeyboardAvoidingView, ScrollView, Button, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderHome from '../components/HeaderHome';
@@ -19,11 +19,15 @@ const Login = () => {
       try {
         const storedGuestData = await AsyncStorage.getItem('guestData');
         const storedHotelData = await AsyncStorage.getItem('selectedHotel');
+        const storedStaffData = await AsyncStorage.getItem('staffData');
         if (storedGuestData) {
           navigation.replace('ClientMainMenu', { guestData: JSON.parse(storedGuestData), selectedHotel: JSON.parse(storedHotelData) });
+        } else if (storedStaffData) {
+          const staffData = JSON.parse(storedStaffData);
+          navigateToStaffScreen(staffData);
         }
       } catch (error) {
-        console.error('Error retrieving guest data:', error.message);
+        console.error('Error retrieving data:', error.message);
       }
     };
     getGuestData();
@@ -37,30 +41,12 @@ const Login = () => {
     setShowStaffLogin(true);
   };
 
-
-
   const handleStaffSubmit = async () => {
     try {
       const result = await sendLoginStaff(employeeNumber, password);
-      console.log('Staff login result:', result.success);
       if (result.success) {
-        if (result.data.role === 'reception') {
-          navigation.navigate('ReceptionTabNavigator', { staffData: result.data });
-        } else if (result.data.role === 'cleaning') {
-          navigation.navigate('CleaningRoomScreen', { staffData: result.data });
-        } else if (result.data.role === 'RoomService') {
-          navigation.navigate('RoomServiceScreen', { staffData: result.data });
-        } else if (result.data.role === 'PoolBar') {
-          navigation.navigate('PoolBarScreen', { staffData: result.data });
-        } else if (result.data.role === 'dining') {
-          navigation.navigate('DinningRoomStaff', { staffData: result.data });
-        } else if (result.data.role === 'spa') {
-          navigation.navigate('SpaStaffScreen', { staffData: result.data });
-        } else if (result.data.role === 'manager') {
-          navigation.navigate('ManagerScreen', { staffData: result.data });
-        } else {
-          alert('Invalid employee number or password. Please try again.');
-        }
+        await AsyncStorage.setItem('staffData', JSON.stringify(result.data));
+        navigateToStaffScreen(result.data);
       } else {
         alert('Invalid employee number or password. Please try again.');
       }
@@ -68,6 +54,28 @@ const Login = () => {
       console.error('Staff login error:', error.message);
     }
   };
+
+  const navigateToStaffScreen = (staffData) => {
+    if (staffData.role === 'reception') {
+      navigation.replace('ReceptionTabNavigator', { staffData });
+    } else if (staffData.role === 'cleaning') {
+      navigation.replace('CleaningRoomScreen', { staffData });
+    } else if (staffData.role === 'RoomService') {
+      navigation.replace('RoomServiceScreen', { staffData });
+    } else if (staffData.role === 'PoolBar') {
+      navigation.replace('PoolBarScreen', { staffData });
+    } else if (staffData.role === 'dining') {
+      navigation.replace('DinningRoomStaff', { staffData });
+    } else if (staffData.role === 'spa') {
+      navigation.replace('SpaStaffScreen', { staffData });
+    } else if (staffData.role === 'manager') {
+      navigation.replace('ManagerScreen', { staffData });
+    } else {
+      alert('Invalid employee number or password. Please try again.');
+    }
+  };
+
+ 
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : null}>
@@ -98,6 +106,7 @@ const Login = () => {
               </View>
             )}
           </View>
+         
         </ScrollView>
       </BackGround>
       <StatusBar style="auto" />

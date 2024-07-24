@@ -1,5 +1,6 @@
 import axios from "axios";
-import { BaseURL } from "../config";
+
+const BaseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export const sendRoomRequest = async (guest, hotel) => {
     try {

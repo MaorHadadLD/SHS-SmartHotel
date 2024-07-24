@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { BaseURL } from '../config';
+// import { BaseURL } from '../config';
+const BaseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export const sendLoginStaff = async (employeeNumber, password) => {
+  
     console.log("sendLoginStaff", employeeNumber, password);
   try {
     const response = await axios.post(`${BaseURL}staff`, { employeeNumber, password }); 

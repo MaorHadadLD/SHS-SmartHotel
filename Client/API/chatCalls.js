@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-import { BaseURL } from '../config';
-
+const BaseURL = process.env.EXPO_PUBLIC_BASE_URL;
 export const getChatMessages = async (hotel, roomNumber) => {
   try {
     const response = await axios.get(`${BaseURL}chats/${hotel}/${roomNumber}`);

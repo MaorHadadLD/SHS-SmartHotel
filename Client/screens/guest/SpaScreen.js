@@ -12,7 +12,6 @@ function SpaScreen({ navigation, route }) {
     const [spaClosed, setSpaClosed] = useState(false);
 
     const generateAvailableTimeSlots = (date) => {
-        console.log('Generating time slots for date:', date);
         const slots = [];
         const currentDateTime = new Date();
         const selectedDateTime = new Date(date);
@@ -50,8 +49,6 @@ function SpaScreen({ navigation, route }) {
                 currentTime.setMinutes(currentTime.getMinutes() + massageDuration);
             }
         }
-
-        console.log('Generated time slots:', slots); // Debug log
         setAvailableTimeSlots(slots);
     };
 

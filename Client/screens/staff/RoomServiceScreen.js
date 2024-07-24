@@ -2,6 +2,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, ImageBackground } f
 import React, { useEffect, useState } from 'react';
 import { getRequests, sendDeleteRequest, sendUpdateRequest } from '../../API/RequestCalls';
 import { Ionicons } from '@expo/vector-icons';
+import LogoutButton from '../../components/LogoutButton';
 
 const RoomServiceScreen = ({ route }) => {
     const [requests, setRequests] = useState([]);
@@ -104,6 +105,7 @@ const RoomServiceScreen = ({ route }) => {
                     <Text style={styles.noRequestsText}>No requests for Room Services at {route.params.staffData.hotel.hotelName}, {route.params.staffData.hotel.city}</Text>
                 )}
                 <View style={styles.staffDetailsContainer}>
+                    <LogoutButton />
                     <Text style={styles.staffDetailsText}>
                         Name: {route.params.staffData.employeeName}
                     </Text>

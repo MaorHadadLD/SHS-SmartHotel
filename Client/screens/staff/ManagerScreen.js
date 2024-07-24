@@ -80,9 +80,10 @@ const ManagerScreen = ({ route }) => {
   return (
       <ScrollView contentContainerStyle={styles.container}>
         <Appbar.Header>
-          <Appbar.Content title="Manager Panel" />
+          <Appbar.Content title="Manager Panel"/>
         </Appbar.Header>
-
+        <Title style={{alignSelf:'center'}}>{hotel.hotelName}, {hotel.city}</Title>
+        
         <Card style={styles.card}>
           <Card.Content>
             <Title>Add New Employee</Title>

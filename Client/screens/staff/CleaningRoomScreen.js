@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { getRequests, sendDeleteRequest, sendUpdateRequest } from '../../API/RequestCalls';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import LogoutButton from '../../components/LogoutButton';
 
 const backgroundImageUri = require('../../assets/resort_cleaning.jpg');
 
@@ -104,6 +105,7 @@ const CleaningRoomScreen = ({ route }) => {
           <Text style={styles.detailText}>
             Hotel: {route.params.staffData.hotel.hotelName} {route.params.staffData.hotel.city}
           </Text>
+          <LogoutButton />
         </View>
       </View>
     </ImageBackground>

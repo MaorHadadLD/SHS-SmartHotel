@@ -1,59 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet, ImageBackground, ScrollView } from 'react-native';
 import { getDatabase, ref, update, onValue, child } from 'firebase/database';
 import firebaseApp from '../../firebaseConfig';
 import { Calendar } from 'react-native-calendars';
+import { Ionicons } from '@expo/vector-icons';
+import LogoutButton from '../../components/LogoutButton';
 
-function SpaStaffScreen() {
+function SpaStaffScreen({ route }) {
   const [requests, setRequests] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]); // Initial selected date
+  const { staffData } = route.params;
+  const [isCalendarVisible, setIsCalendarVisible] = useState(true); // State to toggle calendar visibility
 
   useEffect(() => {
     // Fetch spa requests from the database
     const db = getDatabase(firebaseApp);
     const requestsRef = ref(db, 'appointments');
+
     // Listen for changes in the requests data
     const unsubscribe = onValue(requestsRef, (snapshot) => {
       const data = snapshot.val();
-      console.log('Requests data:', data);
       if (data) {
-        const requestsList = Object.values(data);
-        console.log('Requests list:', requestsList);
+        const requestsList = Object.values(data).filter(request => 
+          request.hotel.hotelName === staffData.hotel.hotelName &&
+          request.hotel.city === staffData.hotel.city
+        );
         setRequests(requestsList);
       } else {
         setRequests([]);
       }
     });
+
     return () => unsubscribe();
-  }, []);
+  }, [staffData.hotel.hotelName, staffData.hotel.city]);
 
   const handleApproveRequest = (requestId) => {
-    console.log('Approve request:', requestId);
     // Update the status of the request to 'approved' in the database
     const db = getDatabase(firebaseApp);
     const requestsRef = ref(db, 'appointments');
     update(child(requestsRef, requestId), { status: 'approved' });
     Alert.alert('Success', 'Request approved successfully');
-    // Notify the client about the approval
-    // Implement notification logic here (using FCM or other service)
   };
 
   const handleDeclineRequest = (requestId) => {
     // Update the status of the request to 'declined' in the database
-    console.log('Decline request:', requestId);
     const db = getDatabase(firebaseApp);
     const requestsRef = ref(db, 'appointments');
     update(child(requestsRef, requestId), { status: 'declined' });
     Alert.alert('Success', 'Request declined successfully');
-    // Notify the client about the decline
-    // Implement notification logic here (using FCM or other service)
   };
 
   const renderRequestItem = ({ item }) => (
     <View style={styles.requestItemContainer}>
       <Text style={styles.requestItemText}>{`Guest: ${item.guest}`}</Text>
       <Text style={styles.requestItemText}>{`Hotel: ${item.hotel.hotelName}, ${item.hotel.city}`}</Text>
-      {/* <Text style={styles.requestItemText}>{`Date: ${item.date}`}</Text> */}
       <Text style={styles.requestItemText}>{`Time: ${item.time}`}</Text>
       <Text style={styles.requestItemText}>{`Massage Type: ${item.massageType}`}</Text>
       <Text style={styles.requestItemText}>{`Therapist Gender: ${item.therapistGender}`}</Text>
@@ -81,57 +81,157 @@ function SpaStaffScreen() {
         markedDates[date] = { marked: true, dotColor: '#FF6B3C' }; // Change dotColor as desired
       }
     });
+    markedDates[selectedDate] = {
+      ...markedDates[selectedDate],
+      selected: true,
+      selectedColor: '#FF6B3C',
+    };
     return markedDates;
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Spa Staff Dashboard</Text>
-      <Calendar
-       style={{ borderRadius: 10, elevation: 4, marginBottom: 20 }}
-        markedDates={mapDatesWithRequests()}
-        onDayPress={(day) => setSelectedDate(day.dateString)}
-      />
-      <FlatList
-        data={requests.filter((item) => item.date === selectedDate)} // Filter requests based on selected date
-        keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
-        renderItem={renderRequestItem}
-      />
-    </View>
+    <ImageBackground source={require('../../assets/Spa-background.jpg')} style={styles.backgroundImage}>
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Spa Staff Dashboard</Text>
+
+        <View style={styles.header}>
+
+          <Text style={styles.headerText}>{`${staffData.hotel.hotelName}, ${staffData.hotel.city}`}</Text>
+          <Text style={styles.headerSubText}>{`Employee: ${staffData.employeeName}`}</Text>
+          <LogoutButton />
+        </View>
+        <TouchableOpacity
+          style={styles.toggleButton}
+          onPress={() => setIsCalendarVisible(!isCalendarVisible)}
+        >
+          <Ionicons name={isCalendarVisible ? "chevron-up" : "chevron-down"} size={24} color="#FF6B3C" />
+        </TouchableOpacity>
+        {isCalendarVisible && (
+          <View style={styles.calendarContainer}>
+            <Calendar
+              style={styles.calendar}
+              markedDates={mapDatesWithRequests()}
+              onDayPress={(day) => setSelectedDate(day.dateString)}
+              theme={{
+                calendarBackground: 'rgba(255, 255, 255, 0.9)',
+                textSectionTitleColor: '#b6c1cd',
+                selectedDayBackgroundColor: '#FF6B3C',
+                selectedDayTextColor: '#ffffff',
+                todayTextColor: '#FF6B3C',
+                dayTextColor: '#2d4150',
+                textDisabledColor: '#d9e1e8',
+                dotColor: '#FF6B3C',
+                selectedDotColor: '#ffffff',
+                arrowColor: 'orange',
+                monthTextColor: '#FF6B3C',
+                indicatorColor: '#FF6B3C',
+                textDayFontFamily: 'monospace',
+                textMonthFontFamily: 'monospace',
+                textDayHeaderFontFamily: 'monospace',
+                textDayFontWeight: '300',
+                textMonthFontWeight: 'bold',
+                textDayHeaderFontWeight: '300',
+                textDayFontSize: 16,
+                textMonthFontSize: 16,
+                textDayHeaderFontSize: 16
+              }}
+            />
+          </View>
+        )}
+        <FlatList
+          data={requests.filter((item) => item.date === selectedDate)} // Filter requests based on selected date
+          keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
+          renderItem={renderRequestItem}
+          ListEmptyComponent={<Text style={styles.noRequestsText}>No requests for this date.</Text>}
+          contentContainerStyle={styles.requestList}
+        />
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    padding: 30,
-    marginTop: 10,
+    resizeMode: 'cover',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 20,
-    color: 'black',
+    color: '#333',
+  },
+  header: {
+    backgroundColor: '#fff',
+    padding: 15,
+    borderRadius: 10,
+    // marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 5,
+  },
+  headerSubText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  toggleButton: {
+    alignSelf: 'center',
+    marginVertical: 10,
+  },
+  calendarContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  calendar: {
+    borderRadius: 10,
+    elevation: 4,
+    width: 320,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  requestList: {
+    // paddingBottom: 20,
   },
   requestItemContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   requestItemText: {
     fontSize: 16,
+    color: '#333',
     marginBottom: 5,
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 10,
+    justifyContent: 'space-between',
+    marginTop: 5,
   },
   button: {
-    paddingVertical: 8,
-    paddingHorizontal: 20,
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 5,
+    marginHorizontal: 5,
   },
   buttonText: {
     color: '#fff',
@@ -144,6 +244,12 @@ const styles = StyleSheet.create({
   },
   declineButton: {
     backgroundColor: 'red',
+  },
+  noRequestsText: {
+    textAlign: 'center',
+    color: '#666',
+    fontSize: 16,
+    marginTop: 20,
   },
 });
 

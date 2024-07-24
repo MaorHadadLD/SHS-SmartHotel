@@ -24,7 +24,7 @@ function GuestAppointmentsScreen({ route }) {
         };
 
         fetchAppointments();
-    }, [guestEmail]);
+    }, [appointments]);
 
     const handleCancelAppointment = (appointmentId) => {
         const db = getDatabase(firebaseApp);

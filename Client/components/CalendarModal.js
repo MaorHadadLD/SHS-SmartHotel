@@ -10,7 +10,6 @@ function CalendarModal({ route, onSelectDate, availableTimeSlots, spaClosed }) {
     const [markedDates, setMarkedDates] = useState({}); // State to manage marked dates
 
     useEffect(() => {
-        console.log('Available time slots:', availableTimeSlots); // Debug log
     }, [availableTimeSlots]);
 
     const handleDateSelect = date => {
@@ -20,14 +19,11 @@ function CalendarModal({ route, onSelectDate, availableTimeSlots, spaClosed }) {
     };
 
     const handleTimeSelect = time => {
-        // console.log('Selected time:', ); // Debug log
         setSelectedDateTime(prevState => ({ ...prevState, time }));
-        // console.log('Selected date and time:', selectedDateTime); // Debug log
         setIsModalVisible(true);
     };
 
     const renderTimeSlot = ({ item }) => (
-        // console.log('Time slot:', item), // Debug log
         <TouchableOpacity
             style={styles.timeSlotButton}
             onPress={() => handleTimeSelect(item.time)}

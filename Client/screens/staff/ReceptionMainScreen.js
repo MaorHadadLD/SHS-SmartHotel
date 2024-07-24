@@ -5,6 +5,7 @@ import { onValue, ref, getDatabase } from 'firebase/database';
 import { Picker } from '@react-native-picker/picker';
 import { getAvailableRooms, updateRoomStatusAndGuestRoom } from '../../API/StaffCalls';
 import { Banner } from 'react-native-paper';
+import LogoutButton from '../../components/LogoutButton';
 
 
 
@@ -121,6 +122,7 @@ const ReceptionMainScreen = ({ route, navigation }) => {
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.header}>Reception Screen</Text>
+      <LogoutButton/>
       <FlatList
         data={requests}
         keyExtractor={(item) => item.guestEmail}
@@ -129,6 +131,7 @@ const ReceptionMainScreen = ({ route, navigation }) => {
       <View style={staffHomeStyles.staffDetailsContainer}>
         <Text style={staffHomeStyles.detailText}>Receptionist: {staffData.employeeName}</Text>
         <Text style={staffHomeStyles.detailText}>&emsp;&emsp;{staffData.hotel.hotelName} {staffData.hotel.city}</Text>
+      
       </View>
       <Banner
         visible={bannerVisible}

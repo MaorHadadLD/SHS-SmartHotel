@@ -2,6 +2,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, ImageBackground } f
 import React, { useEffect, useState } from 'react';
 import { getRequests, sendDeleteRequest, sendUpdateRequest } from '../../API/RequestCalls';
 import { Ionicons } from '@expo/vector-icons';
+import LogoutButton from '../../components/LogoutButton';
 
 const PoolBarScreen = ({ route }) => {
     const [requests, setRequests] = useState([]);
@@ -90,7 +91,7 @@ const PoolBarScreen = ({ route }) => {
     return (
         <ImageBackground source={require('../../assets/pool_bar_background.jpg')} style={styles.backgroundImage}>
             <View style={styles.container}>
-                <Text style={styles.header}>Pool Bar Screen</Text>
+                <Text style={styles.header}>Pool Bar Staff</Text>
                 {requests.length > 0 ? (
                     <FlatList
                         data={requests}
@@ -110,6 +111,7 @@ const PoolBarScreen = ({ route }) => {
                     <Text style={styles.staffDetailsText}>
                         Hotel: {route.params.staffData.hotel.hotelName} {route.params.staffData.hotel.city}
                     </Text>
+                    <LogoutButton />
                 </View>
             </View>
         </ImageBackground>
