@@ -29,6 +29,12 @@ export default function CategoryList({ setSelectedCategory }) {
             Value: 'shopping_mall',
             icon: require('../../assets/mall.png'),
         },
+        {
+            id: 5,
+            name: 'Restaurant',
+            Value: 'restaurant',
+            icon: require('../../assets/restaurant.png'),
+        },
     ]
 
     return (
