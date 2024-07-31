@@ -59,9 +59,10 @@ function HotelSelection({ navigation }) {
             I agree to the <Text style={{ textDecorationLine: 'underline', color: '#FF6B3C' }}>Terms and Conditions</Text>
           </Text>
           <CheckBox
-            style={{ marginLeft: 10 }}
+            style={styles.checkbox}
             value={isAgreed}
             onValueChange={setIsAgreed}
+            tintColors={{ true: '#FF6B3C', false: 'white' }}
           />
         </View>
         
@@ -102,8 +103,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#fff',
-    justifyContent: 'center',  
-    alignItems: 'center',      
+    justifyContent: 'center',  // Center content vertically
+    alignItems: 'center',      // Center content horizontally
   },
   title: {
     fontSize: 20,
@@ -159,6 +160,9 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+  },
+  checkbox: {
+    marginLeft: 10,
   },
 });
 
