@@ -2,7 +2,7 @@
   "expo": {
     "name": "Client",
     "slug": "Client",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/ic_launcher.png",
     "backgroundColor": "#24180f",
