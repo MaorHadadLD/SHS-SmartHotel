@@ -4,10 +4,14 @@ import firebase from '../../firebaseConfig';
 import { getDatabase, ref, get } from 'firebase/database';
 import BackGround from '../../components/BackGround';
 import Btn from '../../components/Btn';
+import CheckBox from '@react-native-community/checkbox';
+import TermsAndConditions from '../../components/TermsAndConditions'; // Ensure this path is correct
 
 function HotelSelection({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [hotelData, setHotelData] = useState([]);
+  const [isAgreed, setIsAgreed] = useState(false);
+  const [termsVisible, setTermsVisible] = useState(false);
 
   useEffect(() => {
     const fetchHotelData = async () => {
@@ -47,25 +51,48 @@ function HotelSelection({ navigation }) {
 
   return (
     <BackGround>
-    <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'center' }}>
-      <Text style={{ color: "white", fontSize: 35}}>Choose the hotel where you are staying</Text>
-      <Btn bgColor="#FF6B3C" btnLabel="Hotel List" textColor="white" Press={()=> setModalVisible(true)}/>
-      <Modal animationType="slide" transparent={true} visible={modalVisible}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Hotel List</Text>
-          <FlatList
-            data={hotelData}
-            keyExtractor={(item) =>`${item.hotelName}-${item.city}`}
-            renderItem={renderClassHotelItem}
-            numColumns={1}
-            key={(item, index) => index.toString()}
+      <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'center' }}>
+        <Text style={{ color: "white", fontSize: 35}}>Choose the hotel where you are staying</Text>
+        
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
+          <Text style={{ color: 'white', marginLeft: 10 }} onPress={() => setTermsVisible(true)}>
+            I agree to the <Text style={{ textDecorationLine: 'underline', color: '#FF6B3C' }}>Terms and Conditions</Text>
+          </Text>
+          <CheckBox
+            style={{ marginLeft: 10 }}
+            value={isAgreed}
+            onValueChange={setIsAgreed}
           />
-          <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
-            <Text style={styles.closeModalButtonText}>Close</Text>
-          </TouchableOpacity>
         </View>
-      </Modal>
-    </View>
+        
+        <Btn
+          bgColor={isAgreed ? "#FF6B3C" : "gray"}
+          btnLabel="Hotel List"
+          textColor="white"
+          Press={()=> isAgreed && setModalVisible(true)}
+        />
+
+        <Modal animationType="slide" transparent={true} visible={modalVisible}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Hotel List</Text>
+            <FlatList
+              data={hotelData}
+              keyExtractor={(item) =>`${item.hotelName}-${item.city}`}
+              renderItem={renderClassHotelItem}
+              numColumns={1}
+              key={(item, index) => index.toString()}
+            />
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
+              <Text style={styles.closeModalButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      </View>
+
+      <TermsAndConditions
+        visible={termsVisible}
+        onClose={() => setTermsVisible(false)}
+      />
     </BackGround>
   );
 }
@@ -75,8 +102,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#fff',
-    justifyContent: 'center',  // Center content vertically
-    alignItems: 'center',      // Center content horizontally
+    justifyContent: 'center',  
+    alignItems: 'center',      
   },
   title: {
     fontSize: 20,
