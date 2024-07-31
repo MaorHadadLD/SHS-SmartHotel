@@ -4,7 +4,7 @@
     "slug": "Client",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ic_launcher.png",
     "backgroundColor": "#24180f",
     "userInterfaceStyle": "light",
     "splash": {
