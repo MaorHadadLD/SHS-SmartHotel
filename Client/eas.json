@@ -12,7 +12,11 @@
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_BASE_URL": "https://shs-smarthotel.onrender.com/",
+        "EXPO_PUBLIC_GOOGLE_MAP_API_KEY" : "AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0"
+      }
     },
     "production": {
       "env": {
