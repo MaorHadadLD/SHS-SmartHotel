@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Client",
+    "name": "SHS",
     "slug": "Client",
     "version": "1.0.3",
     "orientation": "portrait",
@@ -23,7 +23,7 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/ic_launcher.png",
         "backgroundColor": "#ffffff",
         "package": "com.shs.smarthotel",
         "googleMapsApiKey": "AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0"
