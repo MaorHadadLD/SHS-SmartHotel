@@ -3,6 +3,7 @@ import { View, Alert, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react
 import { TextInput, Button, Appbar, Card, Title, Paragraph } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import { addEmployee, deleteEmployee } from '../../API/StaffCalls';
+import LogoutButton from '../../components/LogoutButton';
 
 const ManagerScreen = ({ route }) => {
   const { staffData } = route.params;
@@ -81,7 +82,10 @@ const ManagerScreen = ({ route }) => {
       <ScrollView contentContainerStyle={styles.container}>
         <Appbar.Header>
           <Appbar.Content title="Manager Panel"/>
+          <LogoutButton />
+
         </Appbar.Header>
+
         <Title style={{alignSelf:'center'}}>{hotel.hotelName}, {hotel.city}</Title>
         
         <Card style={styles.card}>

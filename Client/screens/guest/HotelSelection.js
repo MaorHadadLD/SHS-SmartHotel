@@ -4,7 +4,7 @@ import firebase from '../../firebaseConfig';
 import { getDatabase, ref, get } from 'firebase/database';
 import BackGround from '../../components/BackGround';
 import Btn from '../../components/Btn';
-import CheckBox from '@react-native-community/checkbox';
+import Checkbox from 'expo-checkbox';
 import TermsAndConditions from '../../components/TermsAndConditions'; // Ensure this path is correct
 
 function HotelSelection({ navigation }) {
@@ -58,11 +58,11 @@ function HotelSelection({ navigation }) {
           <Text style={{ color: 'white', marginLeft: 10 }} onPress={() => setTermsVisible(true)}>
             I agree to the <Text style={{ textDecorationLine: 'underline', color: '#FF6B3C' }}>Terms and Conditions</Text>
           </Text>
-          <CheckBox
+          <Checkbox
             style={styles.checkbox}
             value={isAgreed}
             onValueChange={setIsAgreed}
-            tintColors={{ true: '#FF6B3C', false: 'white' }}
+            color={isAgreed ? '#FF6B3C' : "white"}
           />
         </View>
         

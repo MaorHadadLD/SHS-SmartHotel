@@ -4,7 +4,7 @@
     "slug": "Client",
     "version": "1.0.3",
     "orientation": "portrait",
-    "icon": "./assets/ic_launcher.png",
+    "icon": "./assets/icon.png",
     "backgroundColor": "#24180f",
     "userInterfaceStyle": "light",
     "splash": {
@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
@@ -22,16 +20,13 @@
     },
     "android": {
       "googleServicesFile": "./google-services.json",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/ic_launcher.png",
-        "backgroundColor": "#ffffff",
-        "package": "com.shs.smarthotel",
-        "googleMapsApiKey": "AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0"
-      },
-      "permissions": [
-        "android.permission.NFC"
-      ],
-      "package": "com.shs.smarthotel"
+      "permissions": ["android.permission.NFC"],
+      "package": "com.shs.smarthotel",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
