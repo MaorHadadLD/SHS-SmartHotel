@@ -1,11 +1,12 @@
 import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons'; // Import Material Icons for camera flip and cancel icons
 
 export default function CodeQRScreen(route) {
-  const  selectedHotel = route.route.params;
+  const selectedHotel = route.route.params;
   const { hotelName, city } = selectedHotel || {};
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -21,7 +22,9 @@ export default function CodeQRScreen(route) {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <TouchableOpacity style={styles.permissionButton} onPress={requestPermission}>
+          <Text style={styles.permissionButtonText}>Grant Permission</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -40,7 +43,14 @@ export default function CodeQRScreen(route) {
       console.log('Scanned data is not a valid URL.');
       // Handle other types of data if needed
     }
-    // Navigate to the "ClientMainMenu" screen
+
+    // Navigate to the "VerificationScreen" screen
+    navigation.navigate('VerificationScreen', { selectedHotel: selectedHotel.selectedHotel });
+  }
+
+  // New function to handle cancel button click
+  function handleCancel() {
+    // Navigate to the "VerificationScreen" screen
     navigation.navigate('VerificationScreen', { selectedHotel: selectedHotel.selectedHotel });
   }
 
@@ -56,7 +66,13 @@ export default function CodeQRScreen(route) {
       >
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
+            <MaterialIcons name="flip-camera-android" size={30} color="#fff" />
             <Text style={styles.text}>Flip Camera</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={handleCancel}>
+            <MaterialIcons name="cancel" size={30} color="#fff" />
+            <Text style={styles.text}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </Camera>
@@ -68,24 +84,40 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#000', // Ensure the background is black
   },
   camera: {
     flex: 1,
   },
   buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
+    position: 'absolute', // Position at the bottom
+    bottom: 0,
+    flexDirection: 'row', // Align buttons in a row
+    justifyContent: 'space-around', // Space buttons evenly
+    alignItems: 'center',
+    width: '100%', // Full width
+    paddingVertical: 20, // Vertical padding
+    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Semi-transparent background
   },
   button: {
-    flex: 1,
-    alignSelf: 'flex-end',
     alignItems: 'center',
+    padding: 10,
   },
   text: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#fff', // White text color
+    marginTop: 5, // Space between icon and text
+  },
+  permissionButton: {
+    backgroundColor: '#fff',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 20,
+  },
+  permissionButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
   },
 });
