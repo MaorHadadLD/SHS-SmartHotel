@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+
 // / Configure the transporter
     let transporter = nodemailer.createTransport({
         service: 'gmail', 
@@ -7,6 +8,7 @@ import nodemailer from 'nodemailer';
             pass: 'cogr wqtj uipe ipwg', 
         }
     });
+
     export const sendEmail = async (recipientEmail, otp) => {
 
         // Email options
