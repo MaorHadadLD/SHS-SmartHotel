@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)', // Even lighter overlay
+    backgroundColor: 'rgba(0, 0, 0, 0.05)', 
     paddingHorizontal: 20,
     justifyContent: 'center',
   },
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 10,
     alignItems: 'center',
-    flexDirection: 'row-reverse', // Ensure icon is always on the left
+    flexDirection: 'row', 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -156,11 +156,11 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: 18,
     fontWeight: 'bold',
-    marginRight: 20, // Ensure text is to the right of the icon
-    textAlign: 'left', // Ensure text alignment is consistent
+    marginLeft: 50, 
+    textAlign: 'left', 
   },
   icon: {
-    marginLeft: 20, // Ensure icon is always to the left of the text
+    marginLeft: 5, 
   },
 });
 
