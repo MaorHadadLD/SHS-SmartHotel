@@ -19,6 +19,9 @@ const addRouters = () => {
   app.use('/', guestRouter);
   app.use('/', requestRouter);
   app.use('/chats', chatRouter);
+  app.get('/', (req, res) => {
+    res.send('Welcome to the Hotel Services API!');
+  });
 };
 
 const startServer = async () => {
