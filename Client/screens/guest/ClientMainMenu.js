@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity, I18nManager, Alert } from "react-native";
+import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { getGuestDetails } from '../../API/GuestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,26 +7,26 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 function ClientMainMenu({ route }) {
   const guestEmail = route.params.guestData.email || {};
-  const [guestData, setGuestData] = useState([]);
+  const [guestData, setGuestData] = useState(null); // Set initial state to null
+  const [isLoading, setIsLoading] = useState(true); // Loading state
   const navigation = useNavigation();
   const { hotelName, city } = route.params.selectedHotel;
 
   useEffect(() => {
     const getGuestData = async () => {
+      setIsLoading(true); // Start loading
       try {
         const storedGuestData = await AsyncStorage.getItem('guestData');
         if (storedGuestData) {
           const updatedGuestData = await getGuestDetails(guestEmail);
           if (updatedGuestData.success) {
-            // console.log('updatedGuestData:', updatedGuestData.data);
-           // compare if guest data array is the same as the stored data array
             if (JSON.stringify(updatedGuestData.data) !== storedGuestData) {
               setGuestData(updatedGuestData.data);
               await AsyncStorage.setItem('guestData', JSON.stringify(updatedGuestData.data));
             } else {
               setGuestData(JSON.parse(storedGuestData));
             }
-          } else{
+          } else {
             await AsyncStorage.removeItem('guestData');
             navigation.navigate('Login');
           }
@@ -39,14 +39,16 @@ function ClientMainMenu({ route }) {
         }
       } catch (error) {
         console.error('Error retrieving guest data:', error.message);
+      } finally {
+        setIsLoading(false); // Stop loading after data is fetched
       }
     };
     getGuestData();
-  }, [guestData]);
+  }, []);
 
   const handleNavigate = (screen) => {
     if (screen === 'HotelServicesScreen') {
-      if(guestData.roomNumber === 'waiting for room assignment' || guestData.roomNumber === 'Your request for your room has been sent to the hotel reception'){
+      if (guestData.roomNumber === 'waiting for room assignment' || guestData.roomNumber === 'Your request for your room has been sent to the hotel reception') {
         Alert.alert('Room Assignment', 'Please wait for your room to be assigned before accessing hotel services');
         return;
       }
@@ -59,7 +61,6 @@ function ClientMainMenu({ route }) {
 
   const menuItems = [
     { id: '1', title: "Hotel Information", screen: "HotelInfoScreen", icon: 'info-circle' },
-    // { id: '2', title: "Room Key", screen: "RoomKeyScreen", icon: 'key' },
     { id: '2', title: "Hotel Services", screen: "HotelServicesScreen", icon: 'concierge-bell' },
     { id: '3', title: "Request Tracking", screen: "RequestTrackingScreen", icon: 'clipboard-list' },
     { id: '4', title: "Nearby Activities", screen: "NearbyActivitiesScreen", icon: 'map-marker-alt' },
@@ -76,6 +77,14 @@ function ClientMainMenu({ route }) {
     );
   };
 
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FF6B3C" />
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground source={require('../../assets/reception2.jpg')} style={styles.backgroundImage}>
@@ -85,7 +94,7 @@ function ClientMainMenu({ route }) {
           </Text>
           <View style={styles.guestInfo}>
             <Text style={styles.guestName}>
-              {guestData.firstname + ' ' + guestData.lastname}
+              {guestData ? `${guestData.firstname} ${guestData.lastname}` : ''}
             </Text>
           </View>
           <FlatList
@@ -161,6 +170,12 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 5, 
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.8)', // Add a background to the loading screen
   },
 });
 
