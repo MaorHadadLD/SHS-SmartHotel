@@ -17,6 +17,7 @@ const Login = () => {
   useEffect(() => {
     const getGuestData = async () => {
       try {
+        // await AsyncStorage.clear();
         const storedGuestData = await AsyncStorage.getItem('guestData');
         const storedHotelData = await AsyncStorage.getItem('selectedHotel');
         const storedStaffData = await AsyncStorage.getItem('staffData');
@@ -25,6 +26,8 @@ const Login = () => {
         } else if (storedStaffData) {
           const staffData = JSON.parse(storedStaffData);
           navigateToStaffScreen(staffData);
+        }else {
+          navigation.navigate('Login'); // Navigate to the login screen
         }
       } catch (error) {
         console.error('Error retrieving data:', error.message);
