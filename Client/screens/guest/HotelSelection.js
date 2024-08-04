@@ -52,25 +52,25 @@ function HotelSelection({ navigation }) {
   return (
     <BackGround>
       <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'center' }}>
-        <Text style={{ color: "white", fontSize: 35}}>Choose the hotel where you are staying</Text>
+        <Text style={{ color: "white", fontSize: 35 }}>Choose the hotel where you are staying</Text>
         
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
-          <Text style={{ color: 'white', marginLeft: 10 }} onPress={() => setTermsVisible(true)}>
-            I agree to the <Text style={{ textDecorationLine: 'underline', color: '#FF6B3C' }}>Terms and Conditions</Text>
-          </Text>
           <Checkbox
             style={styles.checkbox}
             value={isAgreed}
             onValueChange={setIsAgreed}
             color={isAgreed ? '#FF6B3C' : "white"}
           />
+          <Text style={{ color: 'white', marginLeft: 10 }} onPress={() => setTermsVisible(true)}>
+            I agree to the <Text style={{ textDecorationLine: 'underline', color: '#FF6B3C' }}>Terms and Conditions</Text>
+          </Text>
         </View>
         
         <Btn
           bgColor={isAgreed ? "#FF6B3C" : "gray"}
           btnLabel="Hotel List"
           textColor="white"
-          Press={()=> isAgreed && setModalVisible(true)}
+          Press={() => isAgreed && setModalVisible(true)}
         />
 
         <Modal animationType="slide" transparent={true} visible={modalVisible}>
@@ -78,7 +78,7 @@ function HotelSelection({ navigation }) {
             <Text style={styles.modalTitle}>Hotel List</Text>
             <FlatList
               data={hotelData}
-              keyExtractor={(item) =>`${item.hotelName}-${item.city}`}
+              keyExtractor={(item) => `${item.hotelName}-${item.city}`}
               renderItem={renderClassHotelItem}
               numColumns={1}
               key={(item, index) => index.toString()}
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
   },
   checkbox: {
-    marginLeft: 10,
+    marginRight: 10,
   },
 });
 
