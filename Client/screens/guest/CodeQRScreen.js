@@ -21,7 +21,7 @@ export default function CodeQRScreen(route) {
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
+        <Text style={{ textAlign: 'center', color:"white", fontWeight:'bold' }}>We need your permission to open your camera</Text>
         <TouchableOpacity style={styles.permissionButton} onPress={requestPermission}>
           <Text style={styles.permissionButtonText}>Grant Permission</Text>
         </TouchableOpacity>
@@ -66,12 +66,12 @@ export default function CodeQRScreen(route) {
       >
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-            <MaterialIcons name="flip-camera-android" size={30} color="#fff" />
+            <MaterialIcons name="flip-camera-android" size={30} color="#FF6B3C" />
             <Text style={styles.text}>Flip Camera</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={handleCancel}>
-            <MaterialIcons name="cancel" size={30} color="#fff" />
+            <MaterialIcons name="cancel" size={30} color="#FF6B3C" />
             <Text style={styles.text}>Cancel</Text>
           </TouchableOpacity>
         </View>
@@ -110,14 +110,17 @@ const styles = StyleSheet.create({
     marginTop: 5, // Space between icon and text
   },
   permissionButton: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FF6B3C',
     padding: 12,
+    width: 200,
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: 30,
+    alignSelf: 'center',
   },
   permissionButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
+    color: '#ffffff',
+    textAlign: 'center',
   },
 });
