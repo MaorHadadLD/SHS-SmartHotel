@@ -1,4 +1,4 @@
-import  { StaffLogin, getAvailableRooms, updateRoomStatus, getMealByHotel, updateMealByHotel,addEmployee, deleteEmployee } from '../actions/StaffAction.js';
+import  { StaffLogin, getAvailableRooms, updateRoomStatus, getMealByHotel, updateMealByHotel,addEmployee, deleteEmployee , fetchFeedbackForHotel} from '../actions/StaffAction.js';
 import { updateGuestRoomNumber } from '../actions/GuestAction.js';
 import { deleteRoomRequest } from '../actions/RequestAction.js';
 import { sendEmailRoom } from '../routes/MailRoute.js';
@@ -90,6 +90,18 @@ export const deleteEmployeeController = async (req, res) => {
     const employeeNumber  = req.employeeNumber;
     const result = await deleteEmployee(employeeNumber);
     if (result.success) {
+        return requestSuccess(result);
+    }
+    else {
+        return requestFailure(result);
+    }
+}
+
+export const getFeedBackController = async (req, res) => {
+    console.log("getFeedBackController", req);
+  
+    const result = await fetchFeedbackForHotel(req.hotelName, req.city);
+    if (result !== null) {
         return requestSuccess(result);
     }
     else {

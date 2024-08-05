@@ -223,3 +223,31 @@ export const deleteEmployee = async (employeeNumber) => {
     return { success: false, message: error.message };
   }
 };
+
+export const fetchFeedbackForHotel = async (hotelName, city) => {
+    try {
+      // Query feedbacks by hotelName
+      const feedbackRef = ref(db, 'feedbacks');
+      const feedbackQuery = query(feedbackRef, orderByChild('selectedHotel/hotelName'), equalTo(hotelName));
+      const snapshot = await get(feedbackQuery);
+  
+      if (snapshot.exists()) {
+        // Filter the feedbacks to include only those matching the city
+        const allFeedbacks = snapshot.val();
+        const filteredFeedbacks = Object.entries(allFeedbacks).filter(([key, feedback]) => {
+          return feedback.selectedHotel.city === city;
+        });
+  
+        // Convert filtered feedbacks back to an object
+        const feedbacksForCity = Object.fromEntries(filteredFeedbacks);
+        console.log('Feedbacks for hotel:', feedbacksForCity);
+        return feedbacksForCity;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
+      return null;
+    }
+  };
+  

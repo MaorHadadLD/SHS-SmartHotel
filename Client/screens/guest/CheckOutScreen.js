@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Animated } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Animated, TextInput, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { sendCheckOutRequest } from '../../API/GuestCalls';
+import { AirbnbRating } from 'react-native-ratings'; // Importing the rating component
 
 const CheckOutScreen = () => {
   const navigation = useNavigation();
   const [guestData, setGuestData] = useState({});
   const [isChecked, setIsChecked] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0));
-  
+  const [rating, setRating] = useState(0); // State for rating
+  const [feedback, setFeedback] = useState(''); // State for feedback text
 
   useEffect(() => {
     const getGuestData = async () => {
@@ -32,24 +34,40 @@ const CheckOutScreen = () => {
   const handleCheckOut = async () => {
     console.log('Checked:', isChecked);
     if (isChecked) {
-      try{
+      if (rating === 0) {
+        Alert.alert('Rating Required', 'Please provide a rating for your stay.');
+        return;
+      }
+      try {
         const storedGuestData = await AsyncStorage.getItem('guestData');
         const guestData = JSON.parse(storedGuestData);
-        console.log('Rha[p',guestData);
-        const result = await sendCheckOutRequest(guestData);
-       
+        
+        // Prepare the feedback data
+        const feedbackData = {
+          ...guestData,
+          rating,
+          feedback,
+        }; 
+        
+        // Send checkout request with feedback
+        const result = await sendCheckOutRequest(feedbackData);
+
+        // Clear AsyncStorage and navigate
+        await AsyncStorage.clear();
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
       } catch (error) {
         console.error('Error checking out:', error.message);
       }
-    }else {
-      alert('Please agree to the check-out statement.');
-      return; 
+    } else {
+      Alert.alert('Agreement Required', 'Please agree to the check-out statement.');
     }
-    await AsyncStorage.clear();
-    navigation.reset({
-    index: 0,
-    routes: [{ name: 'Home' }], // Replace with the name of your login screen
-  });
+  };
+
+  const handleRatingCompleted = (rating) => {
+    setRating(rating);
   };
 
   return (
@@ -97,6 +115,26 @@ const CheckOutScreen = () => {
                 <Text style={styles.value}>{guestData.roomNumber}</Text>
               </View>
             </View>
+          </View>
+
+          <View style={styles.feedbackContainer}>
+            <Text style={styles.feedbackTitle}>Rate Your Stay</Text>
+            <AirbnbRating
+              count={5}
+              defaultRating={0}
+              size={30}
+              showRating={false}
+              onFinishRating={handleRatingCompleted}
+            />
+
+            <TextInput
+              style={styles.feedbackInput}
+              placeholder="Write your feedback here..."
+              value={feedback}
+              onChangeText={setFeedback}
+              multiline={true}
+              numberOfLines={4}
+            />
           </View>
 
           <View style={styles.reminderContainer}>
@@ -192,6 +230,27 @@ const styles = StyleSheet.create({
   value: {
     flex: 1,
     fontSize: 16,
+    color: '#333',
+  },
+  feedbackContainer: {
+    backgroundColor: '#e8f5e9',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+  },
+  feedbackTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#4A90E2',
+  },
+  feedbackInput: {
+    height: 100,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    textAlignVertical: 'top',
     color: '#333',
   },
   reminderContainer: {

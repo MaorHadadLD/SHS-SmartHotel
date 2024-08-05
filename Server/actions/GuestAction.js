@@ -1,5 +1,5 @@
 import firebaseApp from '../firebaseConfig.js';
-import { getDatabase, ref, get, query, orderByChild, equalTo ,update, remove} from 'firebase/database';
+import { getDatabase, ref, get, query, orderByChild, equalTo ,update, remove, push} from 'firebase/database';
 import { sendEmail } from '../routes/MailRoute.js';
 
 const db = getDatabase(firebaseApp);
@@ -174,3 +174,30 @@ export const deleteGuest = async (email) => {
     }
     
 }
+
+export const saveFeedback = async (feedbackData) => {
+    const feedbackRef = ref(db, 'feedbacks'); // Reference to the 'feedbacks' node
+    
+    try {
+        // Push creates a new child node with a unique key under 'feedbacks'
+        const newFeedbackRef = await push(feedbackRef, {
+            email: feedbackData.email,
+            firstname: feedbackData.firstname,
+            lastname: feedbackData.lastname,
+            checkIn: feedbackData.checkIn,
+            checkOut: feedbackData.checkOut,
+            phone: feedbackData.phone,
+            rating: feedbackData.rating,
+            feedback: feedbackData.feedback,
+            selectedHotel: feedbackData.selectedHotel,
+            roomNumber: feedbackData.roomNumber,
+            timestamp: new Date().toISOString(),
+        });
+
+        console.log('Feedback saved successfully');
+        return true;
+    } catch (error) {
+        console.error('Error saving feedback:', error);
+        return false;
+    }
+};

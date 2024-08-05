@@ -74,3 +74,13 @@ export const deleteEmployee = async (employeeNumber) => {
     console.error("deleteEmployee", error);
   }
 }
+
+export const fetchFeedbackForHotel = async (hotelName, city) => {
+  console.log("fetchFeedbackForHotel", hotelName, city);
+  try {
+    const response = await axios.post(`${BaseURL}fetchFeedbackForHotel`, { hotelName, city });
+    return response.data;
+  } catch (error) {
+    console.error("fetchFeedbackForHotel", error);
+  }
+}

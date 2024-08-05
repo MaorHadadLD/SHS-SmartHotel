@@ -1,5 +1,5 @@
 import express from 'express';
-import { StaffLoginController, availableRooms, updateRoomController,getMealsHotelController,updateMealHotelController,addEmployeeController,deleteEmployeeController  } from '../controllers/StaffController.js';
+import { StaffLoginController, availableRooms, updateRoomController,getMealsHotelController,updateMealHotelController,addEmployeeController,deleteEmployeeController,getFeedBackController } from '../controllers/StaffController.js';
 import { respond } from './utils.js';
 
 const staffRouter = express.Router();
@@ -31,6 +31,12 @@ staffRouter.post('/addEmployee', async (req, res) => {
 );
 staffRouter.post('/deleteEmployee', async (req, res) => {
     respond(await deleteEmployeeController(req.body), res);
+}
+);
+
+staffRouter.post('/fetchFeedbackForHotel',async (req, res) => {
+    respond(await getFeedBackController(req.body), res);
+
 }
 );
 
