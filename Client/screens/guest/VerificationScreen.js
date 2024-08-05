@@ -92,9 +92,9 @@ const VerificationScreen = (route) => {
         </View>
         {/* <Button title="Verify" onPress={handleVerification} /> */}
 
-        <View style={{ alignItems: 'flex-end', width: '100%' }}>
-          <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>Didn't receive OTP?</Text>
-          {/* <Button title="Resend OTP" onPress={handleResendOTP} /> */}
+        <View style={{ alignItems: 'center', width: '100%' }}>
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 16}}>Didn't receive OTP?</Text>
+         
         </View>
         <View style={{ alignItems: 'center', width: '100%' }}>
 

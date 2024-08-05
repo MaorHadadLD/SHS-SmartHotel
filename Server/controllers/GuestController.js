@@ -55,7 +55,6 @@ export const requestOTP = async (body) => {
 }
 
 export const CheckOutGuestController = async (body) => {
-    console.log("CheckOutGuestController", body);
     try {
         // Save feedback first
         const feedbackSaved = await saveFeedback(body);
