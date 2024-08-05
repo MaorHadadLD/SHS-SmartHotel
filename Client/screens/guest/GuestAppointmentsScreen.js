@@ -32,7 +32,7 @@ function GuestAppointmentsScreen({ route }) {
 
         update(appointmentRef, { status: 'canceled' })
             .then(() => {
-                Alert.alert('Appointment Canceled', 'Your appointment has been canceled successfully.');
+                Alert.alert('Treatments Canceled', 'Your treatment has been canceled successfully.');
                 setAppointments((prevAppointments) =>
                     prevAppointments.map((appointment) =>
                         appointment.id === appointmentId ? { ...appointment, status: 'canceled' } : appointment
@@ -40,8 +40,8 @@ function GuestAppointmentsScreen({ route }) {
                 );
             })
             .catch((error) => {
-                Alert.alert('Error', 'There was an error canceling your appointment. Please try again.');
-                console.error('Error canceling appointment:', error);
+                Alert.alert('Error', 'There was an error canceling your treatments. Please try again.');
+                console.error('Error canceling treatments:', error);
             });
     };
 
@@ -68,7 +68,7 @@ function GuestAppointmentsScreen({ route }) {
                             style={styles.cancelButton}
                             onPress={() => handleCancelAppointment(item.id)}
                         >
-                            <Text style={styles.cancelButtonText}>Cancel Appointment</Text>
+                            <Text style={styles.cancelButtonText}>Cancel treatments</Text>
                         </TouchableOpacity>
                     )}
                 </View>
@@ -84,7 +84,7 @@ function GuestAppointmentsScreen({ route }) {
                     style={styles.overlay}
                 />
                 <View style={styles.container}>
-                    <Text style={styles.title}>Your Appointments</Text>
+                    <Text style={styles.title}>My Treatments</Text>
                     <FlatList
                         data={appointments}
                         renderItem={renderAppointment}
