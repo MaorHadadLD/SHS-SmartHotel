@@ -13,6 +13,7 @@ const CheckOutScreen = () => {
   const [fadeAnim] = useState(new Animated.Value(0));
   const [rating, setRating] = useState(0); // State for rating
   const [feedback, setFeedback] = useState(''); // State for feedback text
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false); // State to show/hide feedback form
 
   useEffect(() => {
     const getGuestData = async () => {
@@ -32,37 +33,40 @@ const CheckOutScreen = () => {
   }, [fadeAnim]);
 
   const handleCheckOut = async () => {
-    console.log('Checked:', isChecked);
     if (isChecked) {
-      if (rating === 0) {
-        Alert.alert('Rating Required', 'Please provide a rating for your stay.');
-        return;
-      }
-      try {
-        const storedGuestData = await AsyncStorage.getItem('guestData');
-        const guestData = JSON.parse(storedGuestData);
-        
-        // Prepare the feedback data
-        const feedbackData = {
-          ...guestData,
-          rating,
-          feedback,
-        }; 
-        
-        // Send checkout request with feedback
-        const result = await sendCheckOutRequest(feedbackData);
-
-        // Clear AsyncStorage and navigate
-        await AsyncStorage.clear();
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Home' }],
-        });
-      } catch (error) {
-        console.error('Error checking out:', error.message);
-      }
+      setShowFeedbackForm(true);
     } else {
       Alert.alert('Agreement Required', 'Please agree to the check-out statement.');
+    }
+  };
+
+  const handleConfirmCheckOut = async () => {
+    if (rating === 0) {
+      Alert.alert('Rating Required', 'Please provide a rating for your stay.');
+      return;
+    }
+    try {
+      const storedGuestData = await AsyncStorage.getItem('guestData');
+      const guestData = JSON.parse(storedGuestData);
+
+      // Prepare the feedback data
+      const feedbackData = {
+        ...guestData,
+        rating,
+        feedback,
+      };
+
+      // Send checkout request with feedback
+      const result = await sendCheckOutRequest(feedbackData);
+
+      // Clear AsyncStorage and navigate
+      await AsyncStorage.clear();
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
+    } catch (error) {
+      console.error('Error checking out:', error.message);
     }
   };
 
@@ -117,53 +121,63 @@ const CheckOutScreen = () => {
             </View>
           </View>
 
-          <View style={styles.feedbackContainer}>
-            <Text style={styles.feedbackTitle}>Rate Your Stay</Text>
-            <AirbnbRating
-              count={5}
-              defaultRating={0}
-              size={30}
-              showRating={false}
-              onFinishRating={handleRatingCompleted}
-            />
+          {showFeedbackForm && (
+            <View style={styles.feedbackContainer}>
+              <Text style={styles.feedbackTitle}>Rate Your Stay</Text>
+              <AirbnbRating
+                count={5}
+                defaultRating={0}
+                size={30}
+                showRating={false}
+                onFinishRating={handleRatingCompleted}
+              />
 
-            <TextInput
-              style={styles.feedbackInput}
-              placeholder="Write your feedback here..."
-              value={feedback}
-              onChangeText={setFeedback}
-              multiline={true}
-              numberOfLines={4}
-            />
-          </View>
+              <TextInput
+                style={styles.feedbackInput}
+                placeholder="Write your feedback here..."
+                value={feedback}
+                onChangeText={setFeedback}
+                multiline={true}
+                numberOfLines={4}
+              />
 
-          <View style={styles.reminderContainer}>
-            <Text style={styles.reminderTitle}>Before Leaving, Don't Forget:</Text>
-            {[
-              'Check all drawers and closets for personal belongings.',
-              'Settle any outstanding bills or payments.',
-              'Return room keys, access cards, or any hotel property.',
-              'Provide feedback about your stay to help us improve.',
-            ].map((reminder, index) => (
-              <Text key={index} style={styles.reminderItem}>- {reminder}</Text>
-            ))}
-          </View>
+              <TouchableOpacity style={styles.checkOutButton} onPress={handleConfirmCheckOut}>
+                <Text style={styles.buttonText}>Submit Feedback and Check Out</Text>
+              </TouchableOpacity>
+            </View>
+          )}
 
-          <View style={styles.agreementContainer}>
-            <TouchableOpacity
-              style={styles.checkbox}
-              onPress={() => setIsChecked(!isChecked)}
-            >
-              {isChecked && <View style={styles.checkedIcon} />}
-            </TouchableOpacity>
-            <Text style={styles.agreementText}>
-              I confirm that I am checking out and agree to the hotel's terms and conditions.
-            </Text>
-          </View>
+          {!showFeedbackForm && (
+            <>
+              <View style={styles.reminderContainer}>
+                <Text style={styles.reminderTitle}>Before Leaving, Don't Forget:</Text>
+                {[
+                  'Check all drawers and closets for personal belongings.',
+                  'Settle any outstanding bills or payments.',
+                  'Return room keys, access cards, or any hotel property.',
+                  'Provide feedback about your stay to help us improve.',
+                ].map((reminder, index) => (
+                  <Text key={index} style={styles.reminderItem}>- {reminder}</Text>
+                ))}
+              </View>
 
-          <TouchableOpacity style={styles.checkOutButton} onPress={handleCheckOut}>
-            <Text style={styles.buttonText}>Confirm Check Out</Text>
-          </TouchableOpacity>
+              <View style={styles.agreementContainer}>
+                <TouchableOpacity
+                  style={styles.checkbox}
+                  onPress={() => setIsChecked(!isChecked)}
+                >
+                  {isChecked && <View style={styles.checkedIcon} />}
+                </TouchableOpacity>
+                <Text style={styles.agreementText}>
+                  I confirm that I am checking out and agree to the hotel's terms and conditions.
+                </Text>
+              </View>
+
+              <TouchableOpacity style={styles.checkOutButton} onPress={handleCheckOut}>
+                <Text style={styles.buttonText}>Confirm Check Out</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </ScrollView>
       </Animated.View>
     </ImageBackground>
