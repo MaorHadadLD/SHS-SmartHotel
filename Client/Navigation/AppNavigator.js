@@ -17,7 +17,6 @@ import PoolBarRequestScreen from '../screens/guest/HotelServices/PoolBarRequestS
 import NearbyActivitiesScreen from '../screens/guest/NearbyActivitiesScreen';
 import CodeQRScreen from '../screens/guest/CodeQRScreen';
 import VerificationScreen from '../screens/guest/VerificationScreen';
-import RoomKeyScreen from '../screens/guest/RoomKeyScreen';
 import CleaningRoomScreen from '../screens/staff/CleaningRoomScreen';
 import HomeNavigation from './HomeNavigation';
 import Search from '../screens/guest/ActivityNearBy/Search';
@@ -49,7 +48,6 @@ const MainStack = () => (
     <Stack.Screen name="VerificationScreen" component={VerificationScreen} />
     <Stack.Screen name="ClientMainMenu" component={ClinetMainMenu} />
     <Stack.Screen name="HotelInfoScreen" component={HotelInfoScreen} />
-    <Stack.Screen name="RoomKeyScreen" component={RoomKeyScreen} />
     <Stack.Screen
       name="HotelServicesScreen"
       component={HotelServicesScreen}

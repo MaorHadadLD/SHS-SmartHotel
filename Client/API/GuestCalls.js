@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { BaseURL } from "../config";
+
 const BaseURL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export const sendLoginGuest = async (email, password, selectedHotel) => {
@@ -12,7 +12,6 @@ export const sendLoginGuest = async (email, password, selectedHotel) => {
 };
 
 export const sendRooomStatus = async (email) => {
-  console.log("sendRooomStatus", email);
   try {
     const response = await axios.post(`${BaseURL}roomstatus`, { email});
     return response.data;

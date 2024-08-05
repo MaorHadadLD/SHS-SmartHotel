@@ -12,8 +12,6 @@ const SharePlace=(place)=>{
         })
 }
 
-
-
 export default{
     SharePlace
 }

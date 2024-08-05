@@ -12,7 +12,6 @@ export const sendRoomRequest = async (guest, hotel) => {
   };
 
   export const sendPostRequest = async ( bodyrequest) => {
-    console.log('sendPostRequest bodyrequestTest1:', bodyrequest);
     try {
       const response = await axios.post(`${BaseURL}request/post`, { bodyrequest });
       return response.data;
@@ -24,7 +23,6 @@ export const sendRoomRequest = async (guest, hotel) => {
   export const getRequests = async (hotel, type) => {
     try {
       const response = await axios.post(`${BaseURL}request/get`, { hotel, type });
-      // console.log("getRequests", response.data.data);
       return response.data.data;
     } catch (error) {
       console.error("getRequests", error);
@@ -42,7 +40,6 @@ export const getAllRequstsByRoomNumberGuest = async (roomNumber) => {
 
   export const checkStatusReq = async (body) => {
     try {
-      console.log("checkStatusReq:::body:", body);
       const response = await axios.post(`${BaseURL}request/status`, {body});
       return response.data.data;
     } catch (error) {
