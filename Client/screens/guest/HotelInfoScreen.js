@@ -31,7 +31,9 @@ const HotelInfoScreen = ({ route }) => {
   return (
     <ImageBackground source={require("../../assets/mod1.jpg")} style={styles.background}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.header}>Hotel Information</Text>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Hotel Information</Text>
+        </View>
 
         {!showHotelResturantInfo && (
           <TouchableOpacity style={styles.btn} onPress={() => setShowHotelResturantInfo(true)}>
@@ -147,11 +149,18 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
   },
+  headerContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark background with some opacity
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 20,
+    marginTop: 20, // Adjust this value to move the header down
+  },
   header: {
     fontSize: 36,
     color: "#fff",
     fontWeight: 'bold',
-    marginBottom: 20,
     textAlign: 'center',
   },
   btn: {
