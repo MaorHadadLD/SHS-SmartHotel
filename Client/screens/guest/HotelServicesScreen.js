@@ -91,10 +91,6 @@ const HotelServicesScreen = ({ route, navigation }) => {
 
   return (
     <BackGround>
-      {/* <ImageBackground
-        source={{ uri: 'https://example.com/your-background-image.jpg' }} // Add your background image URL here
-        style={styles.backgroundImage}
-      > */}
         <LinearGradient
           colors={['rgba(0,0,0,0.8)', 'transparent']}
           style={styles.headerGradient}
@@ -110,7 +106,6 @@ const HotelServicesScreen = ({ route, navigation }) => {
           numColumns={2}
           contentContainerStyle={styles.grid}
         />
-      {/* </ImageBackground> */}
     </BackGround>
   );
 };
@@ -132,9 +127,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 30,
     color: 'white',
     fontWeight: 'bold',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    marginTop: 45,
   },
 });
 
