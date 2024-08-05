@@ -34,7 +34,7 @@ function SpaMainScreen({ navigation, route }) {
           <Text style={styles.buttonText}>Prices</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleViewAppointments}>
-          <Text style={styles.buttonText}>View Appointments</Text>
+          <Text style={styles.buttonText}>View Treatments</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
