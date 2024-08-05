@@ -18,7 +18,7 @@ const VerificationScreen = (route) => {
   const handleVerification = async () => {
     try {
       const results = await sendLoginGuest(email, otp, route.route.params);
-      console.log("handleVerification results", results.data.email);
+     
       if (results.success) {
         if (results.data.roomNumber === "waitaing for room assignment") {
           await sendRoomRequest(results.data, route.route.params);
@@ -26,8 +26,7 @@ const VerificationScreen = (route) => {
         await AsyncStorage.setItem('guestData', JSON.stringify(results.data));
         await AsyncStorage.setItem('selectedHotel', JSON.stringify(route.route.params.selectedHotel));
         const datacheck = await AsyncStorage.getItem('guestData');
-        console.log("datacheck: ", datacheck);
-        console.log("handleVerification results", route.route.params.selectedHotel);
+        console.log("Guest are successfully logged in");
         navigation.reset({
           index: 0,
           routes: [{ name: 'ClientMainMenu', params: { selectedHotel: route.route.params.selectedHotel, guestData: results.data } }],
@@ -90,8 +89,6 @@ const VerificationScreen = (route) => {
 
           <Btn bgColor="#FF6B3C" btnLabel="Verify" textColor="white" Press={handleVerification} />
         </View>
-        {/* <Button title="Verify" onPress={handleVerification} /> */}
-
         <View style={{ alignItems: 'center', width: '100%' }}>
           <Text style={{ color: "white", fontWeight: "bold", fontSize: 16}}>Didn't receive OTP?</Text>
          
