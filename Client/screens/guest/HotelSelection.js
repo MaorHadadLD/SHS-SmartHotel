@@ -5,7 +5,8 @@ import { getDatabase, ref, get } from 'firebase/database';
 import BackGround from '../../components/BackGround';
 import Btn from '../../components/Btn';
 import Checkbox from 'expo-checkbox';
-import TermsAndConditions from '../../components/TermsAndConditions'; // Ensure this path is correct
+import TermsAndConditions from '../../components/TermsAndConditions';
+import { FontAwesome } from '@expo/vector-icons';
 
 function HotelSelection({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,29 +41,32 @@ function HotelSelection({ navigation }) {
     setModalVisible(false);
   };
 
-  const renderClassHotelItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleSelectHotel(item)}>
-      <View style={styles.hotelItem}>
-        <Text>{item.hotelName}</Text>
-        <Text>{item.city}</Text>
+  const renderHotelItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleSelectHotel(item)} style={styles.card}>
+      <View style={styles.iconContainer}>
+        <FontAwesome name="hotel" size={24} color="#FF6B3C" />
+      </View>
+      <View style={styles.cardContent}>
+        <Text style={styles.hotelName}>{item.hotelName}</Text>
+        <Text style={styles.hotelCity}>{item.city}</Text>
       </View>
     </TouchableOpacity>
   );
 
   return (
     <BackGround>
-      <View style={{ marginHorizontal: 40, marginVertical: 100, alignItems: 'center' }}>
-        <Text style={{ color: "white", fontSize: 35 }}>Choose the hotel where you are staying</Text>
+      <View style={styles.container}>
+        <Text style={styles.headerText}>Choose the hotel where you are staying</Text>
         
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
+        <View style={styles.checkboxContainer}>
           <Checkbox
             style={styles.checkbox}
             value={isAgreed}
             onValueChange={setIsAgreed}
             color={isAgreed ? '#FF6B3C' : "white"}
           />
-          <Text style={{ color: 'white', marginLeft: 10 }} onPress={() => setTermsVisible(true)}>
-            I agree to the <Text style={{ textDecorationLine: 'underline', color: '#FF6B3C' }}>Terms and Conditions</Text>
+          <Text style={styles.checkboxLabel} onPress={() => setTermsVisible(true)}>
+            I agree to the <Text style={styles.link}>Terms and Conditions</Text>
           </Text>
         </View>
         
@@ -79,9 +83,8 @@ function HotelSelection({ navigation }) {
             <FlatList
               data={hotelData}
               keyExtractor={(item) => `${item.hotelName}-${item.city}`}
-              renderItem={renderClassHotelItem}
+              renderItem={renderHotelItem}
               numColumns={1}
-              key={(item, index) => index.toString()}
             />
             <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
               <Text style={styles.closeModalButtonText}>Close</Text>
@@ -100,21 +103,30 @@ function HotelSelection({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#fff',
-    justifyContent: 'center',  // Center content vertically
-    alignItems: 'center',      // Center content horizontally
+    marginHorizontal: 40,
+    marginVertical: 100,
+    alignItems: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
+  headerText: {
+    color: "white",
+    fontSize: 35,
+    fontWeight: 'bold', 
+    marginBottom: 20,
   },
-  showModalButton: {
-    fontSize: 16,
-    color: '#007bff',
-    marginBottom: 16,
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  checkbox: {
+    marginRight: 10,
+  },
+  checkboxLabel: {
+    color: 'white',
+  },
+  link: {
+    textDecorationLine: 'underline',
+    color: '#FF6B3C',
   },
   modalContainer: {
     marginTop: 64,
@@ -126,7 +138,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 460, height: 700 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     justifyContent: 'center',
@@ -156,13 +168,39 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
   },
-  hotelItem: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+  card: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    marginBottom: 10,
+    borderRadius: 10,
+    padding: 20,
+    width: '77%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#FF6B3C',
   },
-  checkbox: {
-    marginRight: 10,
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  cardContent: {
+    flex: 1,
+  },
+  hotelName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FF6B3C',
+  },
+  hotelCity: {
+    fontSize: 16,
+    color: '#FF6B3C',
   },
 });
 
