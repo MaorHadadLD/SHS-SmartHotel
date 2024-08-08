@@ -58,17 +58,16 @@ const RoomServiceScreen = ({ route }) => {
         <View style={styles.requestCard}>
             <Text style={styles.requestHeader}>Room Number: {item.roomNumber}</Text>
             <Text style={styles.requestStatus}>Status: {item.status}</Text>
-            <Text style={styles.requestHotel}>Hotel: {item.hotel.hotelName}, {item.hotel.city}</Text>
+            
             {item.cart && item.cart.length > 0 ? (
-                <FlatList
+                <><Text style={styles.requestHotel}>Order</Text><FlatList
                     data={item.cart}
                     renderItem={({ item }) => (
                         <Text style={styles.requestItem}>
-                            {item.productName}: {item.quantity}
+                         &nbsp;&nbsp;&nbsp;&nbsp;x{item.quantity} {item.productName} 
                         </Text>
                     )}
-                    keyExtractor={(cartItem) => cartItem.productId.toString()}
-                />
+                    keyExtractor={(cartItem) => cartItem.productId.toString()} /></>
             ) : (
                 <Text style={styles.requestItem}>No items in the cart</Text>
             )}
@@ -163,11 +162,13 @@ const styles = StyleSheet.create({
     },
     requestStatus: {
         fontSize: 16,
+        // fontWeight: 'bold',
         color: '#555',
     },
     requestHotel: {
         fontSize: 16,
-        color: '#777',
+        // fontWeight: 'bold',
+        color: '#000',
     },
     requestItem: {
         fontSize: 14,
