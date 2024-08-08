@@ -87,7 +87,7 @@ const ReceptionMainScreen = ({ route, navigation }) => {
       <Text style={styles.requestStatus}>Check-in: {item.checkInDate}</Text>
       <Text style={styles.requestStatus}>Check-out: {item.checkOutDate}</Text>
       <Text style={styles.requestStatus}>Status: {item.status}</Text>
-      <Text style={styles.requestStatus}>Hotel: {item.hotel.hotelName} {item.hotel.city}</Text>
+      
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.startButton]}

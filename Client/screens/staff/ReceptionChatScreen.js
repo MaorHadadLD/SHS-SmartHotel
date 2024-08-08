@@ -12,7 +12,7 @@ import {
 import { Appbar, Banner } from 'react-native-paper';
 import io from 'socket.io-client';
 import { getChatMessages, sendChatMessage, getActiveChats } from '../../API/chatCalls';
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, onValue, set } from 'firebase/database';
 
 
 const socket = io('http://192.168.1.250:3002/');
@@ -25,6 +25,7 @@ const ReceptionChatScreen = ({ route }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [bannerVisible, setBannerVisible] = useState(false);
+  const [messagesText, setMessagesText] = useState("Loading chats...");
   const [unreadMessages, setUnreadMessages] = useState({});
   const database = getDatabase();
 
@@ -32,7 +33,18 @@ const ReceptionChatScreen = ({ route }) => {
     const fetchActiveChats = async () => {
       try {
         const chats = await getActiveChats();
-        const chatList = chats ? Object.entries(chats[hotel]).map(([roomNumber, value]) => ({ roomNumber, ...value })) : [];
+        if (!chats || !chats[hotel]) {
+          setActiveChats([]);
+          setMessagesText("No active chats");
+          return;
+        }
+
+        const chatList = chats ? Object.entries(chats[hotel]).map(([roomNumber, value]) => ({ roomNumber, ...value })): [];
+        if (!chatList || chatList.length === 0) {
+          setMessagesText("No active chats");
+          return;
+        }
+        setMessagesText("Select a chat to start messaging");
         setActiveChats(chatList);
       } catch (error) {
         console.error("Error fetching active chats:", error.message);
@@ -67,7 +79,7 @@ const ReceptionChatScreen = ({ route }) => {
     return () => {
       socket.off('message');
     };
-  }, [selectedRoom, hotel]);
+  }, [selectedRoom, hotel,activeChats]);
 
   useEffect(() => {
     if (selectedRoom) {
@@ -84,7 +96,7 @@ const ReceptionChatScreen = ({ route }) => {
           console.error("Error fetching messages:", error.message);
         }
       };
-
+ 
       fetchMessages();
       socket.emit('joinRoom', hotel, selectedRoom);
 
@@ -101,13 +113,14 @@ const ReceptionChatScreen = ({ route }) => {
         unsubscribe();
       };
     }
-  }, [selectedRoom, hotel]);
+  }, [selectedRoom, hotel],activeChats);
 
   const sendMessageHandler = async () => {
     if (!selectedRoom) return;
 
     const msg = { room: selectedRoom, sender: 'reception', message, hotel, timestamp: new Date().toISOString() };
     try {
+      if(message.trim() === '') return;
       await sendChatMessage(hotel, selectedRoom, 'reception', message);
       socket.emit('chatMessage', msg);
       setMessage('');
@@ -174,7 +187,7 @@ const ReceptionChatScreen = ({ route }) => {
             </>
           ) : (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>Select a chat to start messaging</Text>
+              <Text style={styles.emptyStateText}>{messagesText}</Text>
             </View>
           )}
         </View>
@@ -198,6 +211,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: '#ccc',
     backgroundColor: '#fff',
+  
   },
   chatContainer: {
     width: '70%',

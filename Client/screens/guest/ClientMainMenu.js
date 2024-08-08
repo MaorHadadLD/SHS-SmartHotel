@@ -7,29 +7,17 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 function ClientMainMenu({ route }) {
   const guestEmail = route.params.guestData.email || {};
-  const [guestData, setGuestData] = useState(null); // Set initial state to null
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [guestData, setGuestData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
   const { hotelName, city } = route.params.selectedHotel;
 
   useEffect(() => {
-    const getGuestData = async () => {
-      setIsLoading(true); // Start loading
+    const fetchGuestData = async () => {
       try {
         const storedGuestData = await AsyncStorage.getItem('guestData');
         if (storedGuestData) {
-          const updatedGuestData = await getGuestDetails(guestEmail);
-          if (updatedGuestData.success) {
-            if (JSON.stringify(updatedGuestData.data) !== storedGuestData) {
-              setGuestData(updatedGuestData.data);
-              await AsyncStorage.setItem('guestData', JSON.stringify(updatedGuestData.data));
-            } else {
-              setGuestData(JSON.parse(storedGuestData));
-            }
-          } else {
-            await AsyncStorage.removeItem('guestData');
-            navigation.navigate('Login');
-          }
+          setGuestData(JSON.parse(storedGuestData));
         } else {
           const results = await getGuestDetails(guestEmail);
           if (results.success) {
@@ -43,8 +31,23 @@ function ClientMainMenu({ route }) {
         setIsLoading(false); // Stop loading after data is fetched
       }
     };
-    getGuestData();
-  }, []);
+
+    fetchGuestData();
+
+    const intervalId = setInterval(async () => {
+      try {
+        const results = await getGuestDetails(guestEmail);
+        if (results.success) {
+          setGuestData(results.data);
+          await AsyncStorage.setItem('guestData', JSON.stringify(results.data));
+        }
+      } catch (error) {
+        console.error('Error retrieving guest data:', error.message);
+      }
+    }, 3000); // Fetch data every 30 seconds
+
+    return () => clearInterval(intervalId); // Clear interval on unmount
+  }, [guestEmail]);
 
   const handleNavigate = (screen) => {
     if (screen === 'HotelServicesScreen') {

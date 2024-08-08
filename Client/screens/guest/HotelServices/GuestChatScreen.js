@@ -66,6 +66,7 @@ const GuestChatScreen = ({ route, navigation }) => {
 
     const msg = { room: roomNumber, sender: 'guest', message, hotel, timestamp: new Date().toISOString() };
     try {
+      if (message.trim() === '') return;
       await sendChatMessage(hotel, roomNumber, 'guest', message);
       socket.emit('chatMessage', msg);
       setMessage('');
