@@ -20,7 +20,7 @@ const VerificationScreen = (route) => {
       const results = await sendLoginGuest(email, otp, route.route.params);
      
       if (results.success) {
-        if (results.data.roomNumber === "waitaing for room assignment") {
+        if (results.data.roomNumber === "waiting for room assignment") {
           await sendRoomRequest(results.data, route.route.params);
         }
         await AsyncStorage.setItem('guestData', JSON.stringify(results.data));

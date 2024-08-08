@@ -42,7 +42,7 @@ export const updateGuestSelectedHotel = async (guestEmail, hotelName, city) => {
                 hotelName: hotelName,
                 city: city
             },
-            roomNumber: "waitaing for room assignment",
+            roomNumber: "waiting for room assignment",
         };
     }
         const guestRef = ref(db, `guests/${guestKey}`);
