@@ -52,6 +52,8 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
             const appointmentData = {
                 id: '',
                 guest: route.guestData.email,
+                phone: route.guestData.phone,
+                name: route.guestData.firstname + ' ' + route.guestData.lastname,
                 hotel: route.guestData.selectedHotel,
                 date: selectedDate,
                 time: selectedTime,
@@ -60,7 +62,7 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
                 therapistGender: therapistGender,
                 secondTherapistGender: secondTherapistGender,
                 additionalComments: additionalComments,
-                treatmentType: selectedTreatment,  // Add the selected treatment type
+                treatmentType: selectedTreatment,
             };
 
             const newAppointmentRef = push(appointmentsRef);

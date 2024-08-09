@@ -58,9 +58,10 @@ const CleaningRoomScreen = ({ route }) => {
 
   const renderRequestItem = ({ item }) => (
     <View style={styles.requestItem}>
-      <Text style={styles.requestItemText}>Description: {item.notice}</Text>
-      <Text style={styles.requestItemText}>Room Number: {item.roomNumber}</Text>
+      <Text style={styles.requestHeader}>Room Number: {item.roomNumber}</Text>
       <Text style={styles.requestItemText}>Status: {item.status}</Text>
+      <Text style={styles.requestItemText}>Description: {item.notice}</Text>
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.startButton}
@@ -165,6 +166,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
   },
+  requestHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+},
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

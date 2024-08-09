@@ -52,14 +52,16 @@ function SpaStaffScreen({ route }) {
 
   const renderRequestItem = ({ item }) => (
     <View style={styles.requestItemContainer}>
-      <Text style={styles.requestItemText}>{`Guest: ${item.guest}`}</Text>
-      <Text style={styles.requestItemText}>{`Hotel: ${item.hotel.hotelName}, ${item.hotel.city}`}</Text>
+      <Text style={styles.requestItemTextMass}>{`${item.massageType} massage`}</Text>
+      <Text style={styles.requestItemText}>{`Name: ${item.name}`}</Text>
+      <Text style={styles.requestItemText}>{`Email: ${item.guest}`}</Text>
+      <Text style={styles.requestItemText}>{`Phone: ${item.phone}`}</Text>
       <Text style={styles.requestItemText}>{`Time: ${item.time}`}</Text>
-      <Text style={styles.requestItemText}>{`Massage Type: ${item.massageType}`}</Text>
+      <Text style={styles.requestItemText}>{`Treatment: ${item.treatmentType}`}</Text>
       <Text style={styles.requestItemText}>{`Therapist Gender: ${item.therapistGender}`}</Text>
       {item.massageType === 'double' && <Text style={styles.requestItemText}>{`Second Therapist Gender: ${item.secondTherapistGender}`}</Text>}
       <Text style={styles.requestItemText}>{`Additional Comments: ${item.additionalComments}`}</Text>
-      {item.status === 'pending' && (
+      {item.status === 'pending' ? (
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, styles.approveButton]} onPress={() => handleApproveRequest(item.id)}>
             <Text style={styles.buttonText}>Approve</Text>
@@ -68,6 +70,8 @@ function SpaStaffScreen({ route }) {
             <Text style={styles.buttonText}>Decline</Text>
           </TouchableOpacity>
         </View>
+      ): (
+        <Text style={styles.requestItemTextApproved}>{`${item.status}`}</Text>
       )}
     </View>
   );
@@ -77,7 +81,7 @@ function SpaStaffScreen({ route }) {
     const markedDates = {};
     requests.forEach((item) => {
       const date = item.date;
-      if (!markedDates[date]) {
+      if (!markedDates[date] && item.status !== 'declined') {
         markedDates[date] = { marked: true, dotColor: '#FF6B3C' }; // Change dotColor as desired
       }
     });
@@ -139,7 +143,7 @@ function SpaStaffScreen({ route }) {
           </View>
         )}
         <FlatList
-          data={requests.filter((item) => item.date === selectedDate)} // Filter requests based on selected date
+          data={requests.filter((item) => item.date === selectedDate && item.status !== 'declined')} // Filter requests based on selected date
           keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
           renderItem={renderRequestItem}
           ListEmptyComponent={<Text style={styles.noRequestsText}>No requests for this date.</Text>}
@@ -220,6 +224,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     marginBottom: 5,
+  },
+  requestItemTextMass: {
+    fontSize: 16,
+    color: '#FF6B3C',
+    marginBottom: 5,
+    fontWeight: 'bold',
+  },
+  requestItemTextApproved: {
+    fontSize: 16,
+    color: 'green',
+    marginBottom: 5,
+    fontWeight: 'bold',
   },
   buttonContainer: {
     flexDirection: 'row',

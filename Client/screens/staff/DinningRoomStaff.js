@@ -103,11 +103,11 @@ function DinningRoomStaff({ route }) {
 
   const renderRequestItem = ({ item }) => (
     <View style={styles.requestItem}>
+      <Text style={styles.requestHeader}>Room Number: {item.roomNumber}</Text>
       <Text style={styles.requestItemText}>Arrival Time: {item.arrivalTime}</Text>
-      <Text style={styles.requestItemText}>Number of Diners: {item.numberOfDiners}</Text>
-      <Text style={styles.requestItemText}>Room Number: {item.roomNumber}</Text>
-      <Text style={styles.requestItemText}>Hotel: {item.hotel.hotelName}, {item.hotel.city}</Text>
       <Text style={styles.requestItemText}>Table Number: {item.tableId}</Text>
+      <Text style={styles.requestItemText}>Number of Diners: {item.numberOfDiners}</Text>
+      
       <TouchableOpacity
         style={styles.completeButton}
         onPress={() => handleRequestStatusChange(item)}
@@ -287,8 +287,14 @@ const styles = StyleSheet.create({
   requestItemText: {
     color: "#333333",
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: 6,
   },
+  requestHeader: {
+    marginBottom: 6,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+},
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -303,6 +309,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   completeButton: {
+    marginTop: 6,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#2ecc71',
