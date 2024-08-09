@@ -29,8 +29,10 @@ function BookingSpaModal({ route, time, date, isVisible, closeModal }) {
         const guestAppointmentsQuery = query(appointmentsRef, orderByChild('guest'), equalTo(route.guestData.email));
         get(guestAppointmentsQuery).then((snapshot) => {
             const appointments = snapshot.val();
-            const hasValidAppointmentToday = appointments && Object.values(appointments).some(appt => appt.date === selectedDate && appt.status !== 'declined');
-
+            console.log("Appointments: ", appointments);
+            console.log("Selected date: ", selectedDate);
+            const hasValidAppointmentToday = appointments && Object.values(appointments).some(appt => appt.date === selectedDate && (appt.status === 'pending'|| appt.status === 'approved'));
+            console.log("Has valid appointment today: ", hasValidAppointmentToday);
             if (hasValidAppointmentToday) {
                 Alert.alert('Attention!', 'You can only book one massage per day unless your previous appointment was refused.');
                 return;

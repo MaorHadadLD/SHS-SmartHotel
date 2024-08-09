@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity, Alert } from 'react-native';
-import { getDatabase, ref, query, orderByChild, equalTo, get, update } from 'firebase/database';
+import { getDatabase, ref, query, orderByChild, equalTo, get, update, remove } from 'firebase/database';
 import firebaseApp from '../../firebaseConfig';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -45,34 +45,76 @@ function GuestAppointmentsScreen({ route }) {
             });
     };
 
+    const handleDeleteAppointment = (appointmentId) => {
+        const db = getDatabase(firebaseApp);
+        const appointmentRef = ref(db, `appointments/${appointmentId}`);
+
+        remove(appointmentRef)
+            .then(() => {
+                Alert.alert('Treatments Deleted', 'Your treatment has been deleted successfully.');
+                setAppointments((prevAppointments) =>
+                    prevAppointments.filter((appointment) => appointment.id !== appointmentId)
+                );
+            })
+            .catch((error) => {
+                Alert.alert('Error', 'There was an error deleting your treatments. Please try again.');
+                console.error('Error deleting treatments:', error);
+            });
+    };
+
     const renderAppointment = ({ item }) => {
-        const appointmentTime = new Date(`${item.date}T${item.time}`);
+        let hour;
+        let minute;
+        if(item.time.split('A')[1]) {
+            const time = item.time.split('A')[0];
+            hour = time.split(':')[0];
+            minute = time.split(':')[1];
+        }else {
+            const time = item.time.split('P')[0];
+            hour = time.split(':')[0];
+            minute = time.split(':')[1];
+            if(hour < 12) {
+                hour = parseInt(hour) + 12;
+            }
+        }
+        const appointmentTime = new Date(`${item.date}`);
+        appointmentTime.setHours(hour+3);
+        appointmentTime.setMinutes(minute);
         const currentTime = new Date();
+        currentTime.setHours(currentTime.getHours() + 3);
         const canCancel = (appointmentTime - currentTime) > 60 * 60 * 1000; // Check if more than 1 hour before appointment
 
         return (
-            <View style={styles.appointmentContainer}>
-                <LinearGradient
-                    colors={['#83a4d4', '#b6fbff']}
-                    style={styles.gradient}
-                />
-                <View style={styles.appointmentContent}>
-                    <Text style={styles.appointmentDate}>{item.date}</Text>
-                    <Text style={styles.appointmentTime}>Time: {item.time}</Text>
-                    <Text style={styles.appointmentStatus}>Status: <Text style={styles.statusText(item.status)}>{item.status}</Text></Text>
-                    <Text style={styles.appointmentMasseuse}>Masseuse: {item.therapistGender} {item.massageType === 'double' ? `and ${item.secondTherapistGender}` : ''}</Text>
-                    <Text style={styles.appointmentTreatment}>Treatment Type: {item.treatmentType}</Text>
-                    <Text style={styles.appointmentComments}>Comments: {item.additionalComments ? item.additionalComments : 'No Comments Entered'}</Text>
-                    {canCancel && item.status !== 'canceled' && (
-                        <TouchableOpacity
-                            style={styles.cancelButton}
-                            onPress={() => handleCancelAppointment(item.id)}
-                        >
-                            <Text style={styles.cancelButtonText}>Cancel treatments</Text>
-                        </TouchableOpacity>
-                    )}
+            <TouchableOpacity
+                onLongPress={() => item.status === 'declined' && handleDeleteAppointment(item.id)}
+            >
+                <View style={styles.appointmentContainer}>
+                    <LinearGradient
+                        colors={['#83a4d4', '#b6fbff']}
+                        style={styles.gradient}
+                    />
+                    <View style={styles.appointmentContent}>
+                        <Text style={styles.appointmentDate}>{item.date}</Text>
+                        <Text style={styles.appointmentTime}>Time: {item.time}</Text>
+                        <Text style={styles.appointmentStatus}>Status: <Text style={styles.statusText(item.status)}>{item.status}</Text></Text>
+                        <Text style={styles.appointmentMassageType}>{item.massageType === 'double' ? 'Double' : 'Single'} Massage</Text>
+                        <Text style={styles.appointmentMasseuse}>Primary Masseuse: {item.therapistGender}</Text>
+                        {item.massageType === 'double' && (
+                            <Text style={styles.appointmentMasseuse}>Secondary Masseuse: {item.secondTherapistGender}</Text>
+                        )}
+                        <Text style={styles.appointmentTreatment}>Treatment Type: {item.treatmentType}</Text>
+                        <Text style={styles.appointmentComments}>Comments: {item.additionalComments ? item.additionalComments : 'No Comments Entered'}</Text>
+                        {canCancel && item.status !== 'canceled' && item.status !== 'declined' && (
+                            <TouchableOpacity
+                                style={styles.cancelButton}
+                                onPress={() => handleCancelAppointment(item.id)}
+                            >
+                                <Text style={styles.cancelButtonText}>Cancel treatments</Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     };
 
@@ -163,6 +205,11 @@ const styles = StyleSheet.create({
         color: status === 'declined' ? '#ff3b30' : status === 'approved' ? '#2e8b57' : status === 'pending' ? '#ffcc00' : '#555',
         fontWeight: 'bold',
     }),
+    appointmentMassageType: {
+        fontSize: 16,
+        marginBottom: 8,
+        color: '#555',
+    },
     appointmentMasseuse: {
         fontSize: 16,
         marginBottom: 8,
