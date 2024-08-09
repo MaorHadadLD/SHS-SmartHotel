@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet, ImageBackground, ScrollView } from 'react-native';
-import { getDatabase, ref, update, onValue, child } from 'firebase/database';
+import { getDatabase, ref, update, onValue, child,set } from 'firebase/database';
 import firebaseApp from '../../firebaseConfig';
 import { Calendar } from 'react-native-calendars';
 import { Ionicons } from '@expo/vector-icons';
@@ -49,7 +49,21 @@ function SpaStaffScreen({ route }) {
     update(child(requestsRef, requestId), { status: 'declined' });
     Alert.alert('Success', 'Request declined successfully');
   };
-
+  const handleDeleteRequest = (requestId) => {
+    // Delete the request from the database by setting it to null
+    const db = getDatabase(firebaseApp);
+    const requestRef = ref(db, `appointments/${requestId}`);
+    set(requestRef, null)
+      .then(() => {
+        Alert.alert('Success', 'Request deleted successfully');
+      })
+      .catch((error) => {
+        console.error('Error deleting request:', error);
+        Alert.alert('Error', 'There was an error deleting the request. Please try again.');
+      });
+  };
+  
+  
   const renderRequestItem = ({ item }) => (
     <View style={styles.requestItemContainer}>
       <Text style={styles.requestItemTextMass}>{`${item.massageType} massage`}</Text>
@@ -70,11 +84,19 @@ function SpaStaffScreen({ route }) {
             <Text style={styles.buttonText}>Decline</Text>
           </TouchableOpacity>
         </View>
-      ): (
-        <Text style={styles.requestItemTextApproved}>{`${item.status}`}</Text>
+      ) : (
+        <View style={styles.canceledRequestContainer}>
+          <Text style={styles.requestItemTextApproved}>{`${item.status}`}</Text>
+          {item.status === 'canceled' && (
+            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteRequest(item.id)}>
+              <Text style={styles.buttonText}>Delete</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       )}
     </View>
   );
+  
 
   // Create a function to map dates with requests to marked dates for the Calendar
   const mapDatesWithRequests = () => {
@@ -266,6 +288,23 @@ const styles = StyleSheet.create({
     color: '#666',
     fontSize: 16,
     marginTop: 20,
+  },
+  canceledRequestContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  deleteButton: {
+    backgroundColor: '#FF6B3C', // Use a color that stands out for delete
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
