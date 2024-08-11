@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, ImageBackground, ScrollView } from 'react-native';
-import { sendPostRequest } from '../../../API/RequestCalls'; // Ensure you have this API function
-import BackGround from '../../../components/BackGround';
+import { View, StyleSheet, Platform, ImageBackground, ScrollView } from 'react-native';
+import { sendPostRequest } from '../../../API/RequestCalls';
 import CategoryListRoomService from '../../../components/CategoryListRoomService';
 import CartScreen from './CartScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';

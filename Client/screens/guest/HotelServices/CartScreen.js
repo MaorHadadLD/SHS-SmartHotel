@@ -24,7 +24,7 @@ const CartScreen = ({ cart, handleRemoveFromCart, handleUpdateQuantity, handleSe
         <ScrollView style={styles.cartContainer}>
             {cart.map(item => (
                 <View key={item.product.id} style={styles.cartItem}>
-                    {/* <Image style={styles.productImage} source={require(`../../../assets/${item.product.image}`)} /> */}
+                    <Image style={styles.productImage} source={item.product.image} />
                     <Text style={styles.productName}>{item.product.name}</Text>
                     <Text style={styles.productPrice}>${(item.product.price * item.quantity).toFixed(2)}</Text>
                     <View style={styles.quantityContainer}>

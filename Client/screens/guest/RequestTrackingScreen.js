@@ -4,7 +4,6 @@ import { getAllRequstsByRoomNumberGuest } from '../../API/RequestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackGround from '../../components/BackGround';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { set } from 'firebase/database';
 
 function RequestTracking() {
     const [requests, setRequests] = useState([]);

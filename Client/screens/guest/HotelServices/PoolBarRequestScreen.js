@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { categoryList, products } from '../../../data/PoolBarMenu';
-import { sendPostRequest } from '../../../API/RequestCalls'; // Ensure you have this API function
+import { sendPostRequest } from '../../../API/RequestCalls';
 
 const PoolBarRequestScreen = ({ route }) => {
     const [cart, setCart] = useState([]);

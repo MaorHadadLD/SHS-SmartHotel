@@ -1,8 +1,6 @@
-// HotelInfoScreen.js
 import React, { useState } from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
-import BackGround from "../../components/BackGround";
-import Btn from "../../components/Btn";
+
 
 const HotelInfoScreen = ({ route }) => {
   const {

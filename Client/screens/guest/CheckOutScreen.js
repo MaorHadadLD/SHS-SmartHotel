@@ -4,16 +4,16 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { sendCheckOutRequest } from '../../API/GuestCalls';
-import { AirbnbRating } from 'react-native-ratings'; // Importing the rating component
+import { AirbnbRating } from 'react-native-ratings'; 
 
 const CheckOutScreen = () => {
   const navigation = useNavigation();
   const [guestData, setGuestData] = useState({});
   const [isChecked, setIsChecked] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0));
-  const [rating, setRating] = useState(0); // State for rating
-  const [feedback, setFeedback] = useState(''); // State for feedback text
-  const [showFeedbackForm, setShowFeedbackForm] = useState(false); // State to show/hide feedback form
+  const [rating, setRating] = useState(0);
+  const [feedback, setFeedback] = useState(''); 
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
 
   useEffect(() => {
     const getGuestData = async () => {

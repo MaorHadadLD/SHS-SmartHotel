@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native';
-import { ref, getDatabase, get } from 'firebase/database';
-import { CommonActions, useNavigation } from '@react-navigation/native';
-import firebaseApp from '../../firebaseConfig';
+import { View, TextInput, Alert, StyleSheet, Text } from 'react-native';
+import {  useNavigation } from '@react-navigation/native';
 import { sendLoginGuest } from '../../API/GuestCalls';
 import { sendRoomRequest } from '../../API/RequestCalls';
 import AsyncStorage from '@react-native-async-storage/async-storage';

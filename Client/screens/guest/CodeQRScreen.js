@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons'; // Import Material Icons for camera flip and cancel icons
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function CodeQRScreen(route) {
   const selectedHotel = route.route.params;
@@ -84,20 +84,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#000', // Ensure the background is black
+    backgroundColor: '#000', 
   },
   camera: {
     flex: 1,
   },
   buttonContainer: {
-    position: 'absolute', // Position at the bottom
+    position: 'absolute', 
     bottom: 0,
-    flexDirection: 'row', // Align buttons in a row
-    justifyContent: 'space-around', // Space buttons evenly
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
     alignItems: 'center',
-    width: '100%', // Full width
-    paddingVertical: 20, // Vertical padding
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Semi-transparent background
+    width: '100%',
+    paddingVertical: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   button: {
     alignItems: 'center',
@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff', // White text color
-    marginTop: 5, // Space between icon and text
+    color: '#fff',
+    marginTop: 5, 
   },
   permissionButton: {
     backgroundColor: '#FF6B3C',

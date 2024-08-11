@@ -15,7 +15,7 @@ export default function CategoryListPool({ categoryList, products, onAddToCart }
             setSelectedSubcategory(null);
         } else {
             setSelectedCategory(category.name);
-            setSelectedSubcategory(null); // Reset selected subcategory when a category is selected
+            setSelectedSubcategory(null); 
         }
     };
 
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         marginVertical: 10,
         marginHorizontal: 5,
-        borderRadius: 50, // Rounder shape like the example
+        borderRadius: 50, 
         borderColor: '#333',
         borderWidth: 1,
         borderStyle: 'solid',
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         marginTop: 10,
         marginHorizontal: 5,
-        borderRadius: 50, // Rounder shape like the example
+        borderRadius: 50, 
         borderColor: '#333',
         borderWidth: 1,
         borderStyle: 'solid',
