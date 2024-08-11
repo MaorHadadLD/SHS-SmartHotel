@@ -18,7 +18,7 @@ jest.mock('../controllers/RequestController.js');
 
 const app = express();
 app.use(express.json());
-app.use('/request', requestRouter);
+app.use('/', requestRouter);
 
 describe('Request Route Tests', () => {
   beforeEach(() => {
