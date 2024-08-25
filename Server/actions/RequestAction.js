@@ -122,11 +122,11 @@ export const getRequestByDepartment = async (reqBody) => {
             const requestList = [];
             
             // Call getRequestByDepartment for each department type
-            const departmentTypes = ["CleaningRoom", "PoolBar", "RoomService", "dining"]; // Add more department types if needed
+            const departmentTypes = ["CleaningRoom", "PoolBar", "RoomService", "dining"];
             for (const type of departmentTypes) {
                 const res = await getRequestByDepartment({ type, hotel: guestData.selectedHotel });
                 if (res.success) {
-                    requestList.push(...res.data); // Add the requests from this department to the request list
+                    requestList.push(...res.data);
                 } else {
                     console.error(`Failed to fetch requests for department ${type}`);
                 }
