@@ -6,10 +6,8 @@ const database = getDatabase(app);
 export const getActiveChats = async (req, res) => {
   try {
     const activeChatsRef = ref(database, 'activeChats');
-    
     const snapshot = await get(activeChatsRef);
     console.log(snapshot.val());
-    // console.log('existssss',snapshot.exists());
     if (snapshot.val()) {
       res.status(200).json(snapshot.val());
     } else {

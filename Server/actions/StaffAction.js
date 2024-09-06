@@ -5,17 +5,11 @@ import { getDatabase, ref, get, orderByChild, equalTo, query, update,push, set, 
 const db = getDatabase(firebaseApp);
 export const StaffLogin = async (employeeNumber, password) => {
     try {
-        // Remove the duplicate declaration of employeeRef
-        // const employeeRef = ref(db, `staff/${employeeNumber}`);
-
-        // Move the declaration to the correct position
         const employeeRef = ref(db, `staff/${employeeNumber}`);
-
         const snapshot = await get(employeeRef);
         if (snapshot.exists()) {
             // Employee exists, check the password
             const employeeData = snapshot.val();
-            // console.log("employeeData", employeeData);
             // Ensure employeeData.password is a string before trimming
             const trimmedPassword = String(employeeData.password).trim();
           
