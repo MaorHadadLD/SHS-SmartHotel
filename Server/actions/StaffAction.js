@@ -157,27 +157,12 @@ export const updateMealByHotel = async (hotel, meals) => {
         const hotelRefold = await getHotelByNameAndCity(hotel.hotelName, hotel.city);
         if (hotelRefold && hotelRefold.hotel.meals) {
             const updatedMeals = { meals };
-            //get ref hotel acording to hotel name and city
-            // const hotelsRef = ref(db, 'Hotels');
-            // const hotelsQuery = query(hotelsRef, orderByChild('hotelName'),equalTo(hotel.hotelName));
-            // const snapshot = await get(hotelsQuery);
-            // if (snapshot.exists()) {
-            //     const hotels = snapshot.val();
-            //     // Find the hotel with matching city
-            //     const hotelKey = Object.keys(hotels).find(key => {
-            //     const hotelFound = hotels[key];
-            //     const hotelCity = hotelFound.city || ''; // Handle the case where the city property might not be present
-            //     return hotelCity === hotel.city;
-            // }
-            // );
-            // if (hotelKey) {
-                const hotelRef = ref(db, `Hotels/${hotelRefold.hotelKey}`);
-                await update(hotelRef, {meals: updatedMeals.meals});
-                return { success: true, data: 'Meals updated successfully' };
-                
-            } else {
-                return { success: false, data: 'Hotel or meals not found' };
-            }
+            const hotelRef = ref(db, `Hotels/${hotelRefold.hotelKey}`);
+            await update(hotelRef, {meals: updatedMeals.meals});
+            return { success: true, data: 'Meals updated successfully' };
+        } else {
+            return { success: false, data: 'Hotel or meals not found' };
+        }
         } catch (error) {
         console.error('Error updating meal:', error.message);
         return { success: false, data: error.message };

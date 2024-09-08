@@ -8,7 +8,6 @@ export const requestFailure = (data) => ({ success: false, data });
 
 
 export const StaffLoginController = async (req, res) => {
-    // console.log("StaffLoginController", req);
     const { employeeNumber, password } = req;
     const result = await StaffLogin(employeeNumber, password);
     if (result.sucess) {
@@ -53,7 +52,6 @@ export const updateRoomController = async (req, res) => {
 
 export const getMealsHotelController = async (req, res) => {
     const { hotel } = req;
-    // console.log("getMealsHotelController", req);
     const result = await getMealByHotel(hotel);
     if (result !== null) {
         return requestSuccess(result);

@@ -176,7 +176,7 @@ export const deleteGuest = async (email) => {
 }
 
 export const saveFeedback = async (feedbackData) => {
-    const feedbackRef = ref(db, 'feedbacks'); // Reference to the 'feedbacks' node
+    const feedbackRef = ref(db, 'feedbacks');
     
     try {
         // Push creates a new child node with a unique key under 'feedbacks'

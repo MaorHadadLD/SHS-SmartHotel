@@ -27,7 +27,6 @@ export const getRequestsRoomByHotel = async (hotel) => {
         }
     }   
 export const postRoomRequest = async (request) => {
-    // console.log("postRoomRequest", request);
     try {
         const requestRef = ref(db, `roomRequests/`);
         const newRef = push(requestRef);
