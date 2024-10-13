@@ -14,7 +14,7 @@ export default function BusinessItem({place}) {
           "?maxwidth=400" +
           "&photo_reference=" +
           place?.photos[0]?.photo_reference +
-          "&key=AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0",
+          "&key=AIzaSyCbktfGGo03VzN-MeOt7ee4js4jYSM9vqg",
         }}
         style={{ width: 120, height: 80, borderRadius: 10 }}
       />:

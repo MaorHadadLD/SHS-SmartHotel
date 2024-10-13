@@ -20,7 +20,7 @@ export default function PlaceItem({ place }) {
             "?maxwidth=400" +
             "&photo_reference=" +
             place?.photos[0]?.photo_reference +
-            "&key=AIzaSyDioy4gegMTQd1NGjlZe2l9ZpVpEnVUCW0",
+            "&key=" + process.env.EXPO_PUBLIC_GOOGLE_MAP_API_KEY,
         }}
         style={{ width: 110, height: 110, borderRadius: 15 }}
       /> :
