@@ -1,5 +1,14 @@
-# SHS - Smart Hotel System
-A mobile platform enhancing hotel management with self-service features, enabling guests to independently manage their stay, communicate with staff, and enjoy a seamless hospitality experience.
+<h1 align="center">
+  SHS - Smart Hotel System
+</h1>
+<p align="center">
+    <img width="200" src="/Client/assets/icon.png" alt="Material Bread logo">
+</p>
+<p align="center">
+  A mobile platform enhancing hotel management with self-service features, enabling guests to independently manage their stay, communicate with staff, and enjoy a seamless hospitality experience.
+</p>
+
+
 
 ## Table of Contents
 - [ Overview ](#over)
